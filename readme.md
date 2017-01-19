@@ -1,3 +1,7 @@
-create executables with
+two hello world programs
 
-gfortran test.f
+compile and create executables with the following commands
+
+gfortran -o f.exe test.f
+
+g++ -o c.exe test.c
