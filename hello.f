@@ -1,9 +1,8 @@
       program hello
       print *, "hello world"
       print *, "fortan"
-      print *, " beep!", char(7)
-      call sleep(1)
-      print *, " beep!", char(7)
-      call sleep(1)
-      print *, " beep!", char(7)
+      do 10 i=0,2,1
+         print *, " beep!", char(7)
+         call sleep(1)
+ 10   continue
       end program hello
