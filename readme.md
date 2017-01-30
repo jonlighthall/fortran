@@ -6,4 +6,4 @@ gfortran -o f.exe hello.f
 
 g++ -o c.exe hello.c
 
-edited using svn
+these commands can be executed by using the make command
