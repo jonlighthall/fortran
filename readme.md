@@ -1,6 +1,6 @@
 two hello world programs
 
-check out the folder with the following command
+check out the folder from the repository with the following command
 
   svn co https://github.com/jonlighthall/hello.git/trunk/test ./hello
 
