@@ -2,7 +2,7 @@ two hello world programs
 
 check out the folder from the repository with the following command
 
-  svn co https://github.com/jonlighthall/hello.git/trunk/test ./hello
+  svn co https://github.com/jonlighthall/hello.git/trunk/ ./hello
 
 compile and create executables with the following commands
 
