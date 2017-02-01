@@ -19,5 +19,3 @@ the compiled executables can be run using the following commands
   ./c.exe
   
   ./f.exe
-
-added line
