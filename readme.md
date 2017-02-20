@@ -2,9 +2,13 @@ two hello world programs
 
 check out the folder from the repository with either of the following commands
 
->`svn co https://github.com/jonlighthall/hello.git/trunk/ ./hello`
+```bash
+svn co https://github.com/jonlighthall/hello.git/trunk/ ./hello
+```
 
->`git clone https://github.com/jonlighthall/hello`
+```bash
+git clone https://github.com/jonlighthall/hello
+```
 
 compile and create executables with the following commands
 
