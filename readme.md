@@ -1,20 +1,24 @@
-two hello world programs
+#Hello
+This repsoitory contains two "hello world" programs.
 
-check out the folder from the repository with either of the following commands
+##Install
+Check out the folder from the repository with either of the following commands.
 
-`svn co https://github.com/jonlighthall/hello.git/trunk/ ./hello`
+`svn co https://github.com/jonlighthall/hello.git/trunk/ ./hello` (SVN)
 
-`git clone https://github.com/jonlighthall/hello`
+`git clone https://github.com/jonlighthall/hello` (Git)
 
-compile and create executables with the following commands
+##Compile
+Compile the source files and create executables with the following commands.
 
-`g++ -o c.exe hello.c`
+`g++ -o c.exe hello.c` (C++)
 
-`gfortran -o f.exe hello.f`
+`gfortran -o f.exe hello.f` (Fortran)
 
-these commands can be executed by using the make command
+Alternatively, these commands can be executed by using the `make` command.
 
-the compiled executables can be run using the following commands
+##Execute
+The compiled executables can be run using the following commands.
   
 `./c.exe`
   
