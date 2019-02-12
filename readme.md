@@ -1,4 +1,4 @@
-# Hello
+# Hello World
 This repsoitory contains two "hello world" programs.
 
 ## Installation
