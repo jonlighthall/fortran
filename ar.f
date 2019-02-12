@@ -1,25 +1,25 @@
-SUBROUTINE f(N)
-   IMPLICIT NONE
+      SUBROUTINE f(N)
+      IMPLICIT NONE
 
-   INTEGER N
+      INTEGER N
 
-   REAL, DIMENSION(N) :: A	!! You can define arrays using
-                                !! VARIABLES in Fortran 90.... like Ada    
+      REAL, DIMENSION(N) :: A	!! You can define arrays using
+!! VARIABLES in Fortran 90.... like Ada    
 
-   INTEGER i
+      INTEGER i
 
-   DO i = 1, N
-      A(i) = i
-   END DO
+      DO i = 1, N
+         A(i) = i
+      END DO
 
-   print *, A			!! Print an entire array
+      print *, A                !! Print an entire array
 
-  END SUBROUTINE
+      END SUBROUTINE
 
-  PROGRAM main
-   IMPLICIT NONE
+      PROGRAM main
+      IMPLICIT NONE
 
-   CALL f(2)			!! Create array of size 2
+      CALL f(2)			!! Create array of size 2
 
-   CALL f(3)			!! Create array of size 3
-  END
+      CALL f(3)			!! Create array of size 3
+      END
