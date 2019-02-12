@@ -4,8 +4,13 @@ C     Declarations for main program
       REAL AV, AVSQ1, AVSQ2
       REAL AVRAGE
 C     Enter the data
-      DATA A,B,C/5.0,2.0,3.0/
-
+      PRINT *,'Enter A'
+      READ*, A 
+      PRINT *,'Enter B'
+      READ*, B 
+      PRINT *,'Enter C'
+      READ*, C
+      
 C     Calculate the average of the numbers
       AV = AVRAGE(A,B,C)
       AVSQ1 = AV**2
