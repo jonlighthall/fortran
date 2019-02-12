@@ -4,7 +4,9 @@ C     Declarations for main program
       REAL AV, AVSQ1, AVSQ2
       REAL AVRAGE
 C     Enter the data
-      PRINT *,'Enter A'
+      DATA A,B,C/5.0,2.0,3.0/
+      PRINT *,'Three Number Averager'
+      PRINT *,'Enter A'  
       READ*, A 
       PRINT *,'Enter B'
       READ*, B 
@@ -25,10 +27,11 @@ C     Calculate the average of the numbers
 
       REAL FUNCTION AVRAGE(X,Y,Z)
       REAL X,Y,Z,SUM
-      WRITE(*,'(A,F5.2,F5.2,F5.2)') ' The inputs are:',X,Y,Z
+C     Use WRITEs for debugging
+C     WRITE(*,'(A,3(F5.2))') ' The inputs are:',X,Y,Z
       SUM = X + Y + Z
-      WRITE(*,100) ' The sum is:',SUM
- 100  FORMAT (A,F5.2)
+C     WRITE(*,200) ' The sum is:',SUM
+ 200  FORMAT (A,F7.2)
       AVRAGE = SUM /3.0
       RETURN
       END
