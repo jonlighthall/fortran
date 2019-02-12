@@ -17,16 +17,18 @@ C     Calculate the average of the numbers
       AVSQ2 = AVRAGE(A**2,B**2,C**2)
 
       PRINT *,'Statistical Analysis'
-      PRINT *,'The average of the numbers is:',AV
-      PRINT *,'The average squared of the numbers:',AVSQ1
-      PRINT *,'The average of the squares is:',AVSQ2
+      WRITE(*,100) '       The average of the numbers is: ',AV
+ 100  FORMAT (A,F5.2)
+      WRITE(*,100)'  The average squared of the numbers: ',AVSQ1
+      WRITE(*,100)'       The average of the squares is: ',AVSQ2
       END
 
       REAL FUNCTION AVRAGE(X,Y,Z)
       REAL X,Y,Z,SUM
-      PRINT *,'The inputs are:',X,Y,Z
+      WRITE(*,'(A,F5.2,F5.2,F5.2)') ' The inputs are:',X,Y,Z
       SUM = X + Y + Z
-      PRINT *, 'The sum is:',SUM
+      WRITE(*,100) ' The sum is:',SUM
+ 100  FORMAT (A,F5.2)
       AVRAGE = SUM /3.0
       RETURN
       END
