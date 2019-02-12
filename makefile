@@ -1,12 +1,9 @@
-all: c.exe f.exe
+all: hello.exe
 
-c.exe:
-	@echo compiling C++...
-	g++ -o c.exe hello.c
-f.exe:
-	@echo compiling fortan...
-	gfortran -o f.exe hello.f
+hello.exe:
+	@echo compiling hello...
+	gfortran -o hello.exe hello.f
 
 clean:
 	@echo removing files...
-	rm c.exe f.exe
+	rm hello.exe
