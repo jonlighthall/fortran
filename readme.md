@@ -2,11 +2,20 @@
 This repsoitory contains two "hello world" programs.
 
 ## Install
-Check out the folder from the repository with either of the following commands.
+
+### Prerequisites
+
+Requies GNU Compilers for C++ and Fortran.
+
+### Clone
+
+Check out the folder from the repository with one of the following commands.
 
 `svn co https://github.com/jonlighthall/hello.git/trunk/ ./hello` (SVN)
 
-`git clone https://github.com/jonlighthall/hello` (Git)
+`git clone https://github.com/jonlighthall/hello` (Git HTTPS)
+
+`git clone git@github.com:jonlighthall/hello.git` (Git SSH)
 
 ## Compile
 Compile the source files and create executables with the following commands.
