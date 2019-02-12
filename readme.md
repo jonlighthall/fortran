@@ -1,15 +1,13 @@
-# Hello World
-This repsoitory contains two "hello world" programs.
+# Fortran
+This repsoitory contains basic programs written in FORTRAN.
 
 ## Installation
 
 ### Prerequisites
 
-Requies GNU Compilers for C++ and Fortran.
+Requies the GNU Compiler for Fortran.
 
 `sudo apt install gfortran`
-
-`sudo apt install g++`
 
 ### Cloning
 
@@ -24,15 +22,11 @@ Check out the folder from the repository with one of the following commands.
 ## Compiling
 Compile the source files and create executables with the following commands.
 
-`g++ -o c.exe hello.c` (C++)
-
-`gfortran -o f.exe hello.f` (Fortran)
+`gfortran -o hello.exe hello.f` 
 
 Alternatively, these commands can be executed by using the `make` command.
 
 ## Executing
 The compiled executables can be run using the following commands.
   
-`./c.exe`
-  
-`./f.exe`
+`./hello.exe`
