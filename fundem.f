@@ -13,7 +13,7 @@ C     Calculate the average of the numbers
 
       PRINT *,'Statistical Analysis'
       PRINT *,'The average of the numbers is:',AV
-      PRINT *,'The average squared of the numbers: ',AVSQl
+      PRINT *,'The average squared of the numbers: ', AVSQ1
       PRINT *,'The average of the squares is: ', AVSQ2
       END
 
