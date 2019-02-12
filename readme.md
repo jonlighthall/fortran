@@ -1,13 +1,17 @@
 # Hello
 This repsoitory contains two "hello world" programs.
 
-## Install
+## Installation
 
 ### Prerequisites
 
 Requies GNU Compilers for C++ and Fortran.
 
-### Clone
+`sudo apt install gfortran`
+
+`sudo apt install g++`
+
+### Cloning
 
 Check out the folder from the repository with one of the following commands.
 
@@ -17,7 +21,7 @@ Check out the folder from the repository with one of the following commands.
 
 `git clone git@github.com:jonlighthall/hello.git` (Git SSH)
 
-## Compile
+## Compiling
 Compile the source files and create executables with the following commands.
 
 `g++ -o c.exe hello.c` (C++)
@@ -26,7 +30,7 @@ Compile the source files and create executables with the following commands.
 
 Alternatively, these commands can be executed by using the `make` command.
 
-## Execute
+## Executing
 The compiled executables can be run using the following commands.
   
 `./c.exe`
