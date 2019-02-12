@@ -9,17 +9,17 @@ C     Enter the data
 C     Calculate the average of the numbers
       AV = AVRAGE(A,B,C)
       AVSQ1 = AVRAGE(A,B,C) **2
-   	  AVSQ2 = AVRAGE(A**2,B**2,C**2)
+      AVSQ2 = AVRAGE(A**2,B**2,C**2)
 
-	  PRINT *,'Statistical Analysis'
+      PRINT *,'Statistical Analysis'
       PRINT *,'The average of the numbers is:',AV
       PRINT *,'The average squared of the numbers: ',AVSQl
       PRINT *,'The average of the squares is: ', AVSQ2
       END
 
-     REAL FUNCTION AVRAGE(X,Y,Z)
-     REAL X,Y,Z,SUM
-     SUM = X + Y + Z
-     AVRAGE = SUM /3.0
-     RETURN
-     END
+      REAL FUNCTION AVRAGE(X,Y,Z)
+      REAL X,Y,Z,SUM
+      SUM = X + Y + Z
+      AVRAGE = SUM /3.0
+      RETURN
+      END
