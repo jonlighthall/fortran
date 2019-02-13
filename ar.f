@@ -1,6 +1,6 @@
       SUBROUTINE f(N)
-      REAL, DIMENSION(N) :: A	!! You can define arrays using
-                                !! VARIABLES in Fortran 90.... like Ada    
+      REAL, DIMENSION(N) :: A
+      WRITE(*,'(A,I2)') 'Creating array of size',N
       DO i = 1, N
          A(i) = i
       END DO
@@ -14,13 +14,15 @@
       END DO
       END
 
-      SUBROUTINE f2(N,M)
+      SUBROUTINE f2(M,N)
       REAL, DIMENSION(N,M) :: A	
-      INTEGER i,j
-      DO i = 1, N
+      WRITE(*,'(A,I2,A,I2)') 'Creating array of size',N,' x ',M
+      DO i = 1, M
          DO j = 1, N
             A(i,j) = i
          END DO
       END DO
-      print *, A                !! Print an entire array
+      DO i = 1, M
+        write(*,'(100f5.2)') ( A(i,j), j=1,n )
+      END DO
       END SUBROUTINE
