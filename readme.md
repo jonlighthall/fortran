@@ -13,11 +13,11 @@ Requies the GNU Compiler for Fortran.
 
 Check out the folder from the repository with one of the following commands.
 
-`svn co https://github.com/jonlighthall/hello.git/trunk/ ./hello` (SVN)
+`svn co https://github.com/jonlighthall/fortran.git/trunk/ ./fortran` (SVN)
 
-`git clone https://github.com/jonlighthall/hello` (Git HTTPS)
+`git clone https://github.com/jonlighthall/fortran` (Git HTTPS)
 
-`git clone git@github.com:jonlighthall/hello.git` (Git SSH)
+`git clone git@github.com:jonlighthall/fortran.git` (Git SSH)
 
 ## Compiling
 Compile the source files and create executables with the following commands.
