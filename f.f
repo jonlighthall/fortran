@@ -1,6 +1,6 @@
       SUBROUTINE f(N)
       REAL, DIMENSION(N) :: A
-      parameter (maxN=100)
+      parameter (maxN=10)
       A=0
       WRITE(*,'(A,I6)') 'Creating array of size ',N
       if(N.gt.maxN)then
@@ -12,8 +12,10 @@
       DO i = 1, j
          A(i) = i
       END DO
-c      print *, A                !! Print an entire array
-      do i=1,N
+
+      k=size(A)
+      write(*,*) 'array is of size', k
+      do i=1,k
          if(A(i).ne.0)then
             write(*,*) A(i)
          end if
