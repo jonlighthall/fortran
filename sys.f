@@ -12,7 +12,7 @@ c     base file name
 c     for each iteration, copy the input file with unique name
          write(cmd,'(3a,i0.3,a)')'cp ',trim(sfx),' nspe',cg_itr
      &        ,'.in'
-         write(*,*) 'command is', cmd
+         write(*,*) 'command is: ', cmd
          call system(cmd)
  10   continue
 c     test variable format
@@ -22,7 +22,7 @@ c     test variable format
          else
             fmt = "(A,I2)"
          endif
-c         fmt = '(a,i0.2)'
+c     fmt = '(a,i0.2)'
          write (filename,fmt) "sys", i
          print *, trim(filename)
       enddo
