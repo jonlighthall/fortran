@@ -1,3 +1,10 @@
+      PROGRAM ar
+      DO i = 2, 4
+         CALL f(i)              !! Create array of size i
+         CALL f2(i,i)           !! Create array of size ixi
+      END DO
+      END
+
       SUBROUTINE f(N)
       REAL, DIMENSION(N) :: A
       WRITE(*,'(A,I2)') 'Creating array of size',N
@@ -6,14 +13,7 @@
       END DO
       print *, A                !! Print an entire array
       END SUBROUTINE
-
-      PROGRAM main
-      DO i = 2, 4
-         CALL f(i)              !! Create array of size i
-         CALL f2(i,i)           !! Create array of size ixi
-      END DO
-      END
-
+      
       SUBROUTINE f2(M,N)
       REAL, DIMENSION(N,M) :: A	
       WRITE(*,'(A,I2,A,I2)') 'Creating array of size',N,' x ',M
