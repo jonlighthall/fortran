@@ -1,34 +1,29 @@
-      program hello
-      character(256) sfx, sysstr
+      program sys
+      character(256) sfx, cmd
       character(len=1024) :: filename
-      character(len=1024) :: format_string
+      character(len=1024) :: fmt
       integer cg_itr
-c      integer system
-      print *, "hello world"
-      print *, "fortan"
+      print *, "system command test"
+c     base file name
       sfx = 'nspe.in'
-      write(*,*) 'file name is', sfx, len_trim(sfx)
-      
-      do 10 i=0,2,1 !print beeps at end of program
-         print *, " beep!", char(7)
-         write(sysstr,'(a,i0.3)') trim(sfx), i
+      write(*,*) 'input file name is', sfx, len_trim(sfx)
+      do 10 i=0,2,1 
          cg_itr=i
-c         write(sysstr,'(3xa,i0.3,a)')'cp ',trim(sfx),' nspe',cg_itr
-         write(sysstr,'(3a,i0.3,a)')'cp ',trim(sfx),' nspe',cg_itr
-	1     ,'.in'
-         write(*,*) sysstr
-         call system(sysstr)
-c         call sleep(1)
+c     for each iteration, copy the input file with unique name
+         write(cmd,'(3a,i0.3,a)')'cp ',trim(sfx),' nspe',cg_itr
+     &        ,'.in'
+         write(*,*) 'command is', cmd
+         call system(cmd)
  10   continue
-
+c     test variable format
       do i=1, 10
          if (i < 10) then
-            format_string = "(A,I1)"
+            fmt = "(A,I1)"
          else
-            format_string = "(A5,I2)"
+            fmt = "(A,I2)"
          endif
-
-         write (filename,format_string) "hello", i
+c         fmt = '(a,i0.2)'
+         write (filename,fmt) "sys", i
          print *, trim(filename)
       enddo
-      end program hello
+      end program sys
