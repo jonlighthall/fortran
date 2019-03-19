@@ -1,20 +1,24 @@
-all: hello.exe fundem.exe ar.exe global.exe
+all: hello.exe fundem.exe ar.exe global.exe sys.exe
 
 hello.exe: hello.f
 	@echo compiling hello...
-	gfortran -o hello.exe hello.f
+	gfortran $^ -o $@
 
-fundem.exe:
+fundem.exe: fundem.f
 	@echo compiling fundem...
-	gfortran -o fundem.exe fundem.f
+	gfortran $^ -o $@
 
-ar.exe:
+ar.exe: ar.f
 	@echo compiling ar...
-	gfortran -o ar.exe ar.f
+	gfortran $^ -o $@
 
 global.exe: global.f araydim.inc
 	gfortran global.f -o $@
 
+sys.exe: sys.f
+	gfortran $^ -o $@
+
 clean:
 	@echo removing files...
-	rm hello.exe fundem.exe ar.exe
+	rm *.exe
+	rm *.o
