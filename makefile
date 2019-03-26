@@ -5,7 +5,7 @@ fcflags =
 # (fortran )link flags
 flflags = -c $(fcflags)
 
-all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe
+all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe test_abs.exe
 
 hello.exe: hello.f
 	@echo compiling hello...
@@ -30,6 +30,9 @@ subs.exe: subs.o f.o f2.o
 
 globsubs.exe: globsubs.o f.o araydim.inc
 	$(your_f77) $(fcflags) globsubs.o f.o  -o $@	
+
+test_abs.exe: test_abs.f
+	$(your_f77) $(fcflags) $^ -o $@	
 
 clean:
 	@echo removing files...
