@@ -11,4 +11,13 @@
       write(*,*) 'z = ',z
       x = abs(z)
       write(*,*) 'abs z = ',x
+      x = real(z)
+      write(*,*) 'real z = ',x
+c     redefine z to have mod z > 1
+      z = (-1,-1)
+      write(*,*) 'z = ',z
+      x = abs(z)
+      write(*,*) 'abs z = ',x
+      x = real(z)
+      write(*,*) 'real z = ',x
       end program test_abs
