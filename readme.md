@@ -13,6 +13,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`subs.f    `](subs.f	   ) | subroutines | `call`
 | [`globsubs.f`](globsubs.f) | global variable | `include` `call`
 | [`test_abs.f`](test_abs.f) | absolute value | `abs` `real`
+| [`io.f      `](io.f      ) | input/output | `inquire` `open`
 
 ## Installation
 
