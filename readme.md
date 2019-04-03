@@ -9,10 +9,10 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`fundem.f  `](fundem.f  ) | fundamental
 | [`ar.f      `](ar.f	   ) | array
 | [`global.f  `](global.f  ) | global variable 
-| [`sys.f     `}(sys.f	   ) | system
-| [`subs.f    `}(subs.f	   ) | subroutines
+| [`sys.f     `](sys.f	   ) | system
+| [`subs.f    `](subs.f	   ) | subroutines
 | [`globsubs.f`](globsubs.f) | global variable 
-| [`test_abs.f`}(test_abs.f) | absolute value
+| [`test_abs.f`](test_abs.f) | absolute value
 
 ## Installation
 
