@@ -18,7 +18,8 @@ This repsoitory contains basic programs written in FORTRAN.
 
 ### Prerequisites
 
-Requies the GNU Compiler for Fortran.
+Requies the a compiler for Fortran, such as GNU Fortran.
+Use the following command to install GFortran on Linux.
 
 `sudo apt install gfortran`
 
@@ -33,13 +34,13 @@ Check out the folder from the repository with one of the following commands.
 `git clone git@github.com:jonlighthall/fortran.git` (Git SSH)
 
 ## Compiling
-Compile the source files and create executables with the following commands.
+Compile the source files and create executables with commands such as the following.
 
 `gfortran -o hello.exe hello.f` 
 
 Alternatively, these commands can be executed by using the `make` command.
 
 ## Executing
-The compiled executables can be run using the following commands.
+The compiled executables can be run using commands such as the following.
   
 `./hello.exe`
