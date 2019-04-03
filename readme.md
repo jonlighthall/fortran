@@ -3,16 +3,16 @@ This repsoitory contains basic programs written in FORTRAN.
 
 ## Contents
 
-| program              | description                           | 
-| -------------------- | ------------------------------------  | 
-| [`hello.f   `](hello.f   ) | hello world
-| [`fundem.f  `](fundem.f  ) | fundamental
-| [`ar.f      `](ar.f	   ) | array
-| [`global.f  `](global.f  ) | global variable 
-| [`sys.f     `](sys.f	   ) | system
-| [`subs.f    `](subs.f	   ) | subroutines
-| [`globsubs.f`](globsubs.f) | global variable 
-| [`test_abs.f`](test_abs.f) | absolute value
+| program              | description                           | command tested |
+| -------------------- | ------------------------------------  | ---- | 
+| [`hello.f   `](hello.f   ) | hello world | `print`
+| [`fundem.f  `](fundem.f  ) | fundamental | `read` `function`
+| [`ar.f      `](ar.f	   ) | array | `subroutine`
+| [`global.f  `](global.f  ) | global variable | `include`
+| [`sys.f     `](sys.f	   ) | system | `system`
+| [`subs.f    `](subs.f	   ) | subroutines | `call`
+| [`globsubs.f`](globsubs.f) | global variable | `include` `call`
+| [`test_abs.f`](test_abs.f) | absolute value | `abs` `real`
 
 ## Installation
 
