@@ -15,6 +15,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`test_abs.f`](test_abs.f) | absolute value | `abs` `real`
 | [`sign.f    `](sign.f    ) | sign control | `ss` `sp`
 | [`io.f      `](io.f      ) | input/output | `inquire` `open`
+| [`timedate.f`](timedate.f) | input/output | `inquire` `open`
 
 ## Installation
 
