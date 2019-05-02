@@ -1,6 +1,13 @@
       program collatz
+      integer n
+      write(*,*)'enter arbitrary positive integer'
+      read *,n
+      write(*,*)'received input ',n
+      bak=n
       do i=1,10
-         write(*,*)'i = ',i,seq(i)
+         write(*,*)'i = ',i,n
+         n=seq(n)
+
       enddo
       end
 
