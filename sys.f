@@ -1,3 +1,4 @@
+c     program to test executing system commands from within fortran 
       program sys
       character(256) sfx, cmd
       character(len=1024) :: filename
@@ -22,7 +23,7 @@ c     test variable format
          else
             fmt = "(A,I2)"
          endif
-c     fmt = '(a,i0.2)'
+      fmt = '(a,i0.2)' ! add leading zero
          write (filename,fmt) "sys", i
          print *, trim(filename)
       enddo
