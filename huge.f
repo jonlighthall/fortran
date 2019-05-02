@@ -1,13 +1,15 @@
       program huge
       implicit none
       integer*1 i, j
-      logical mono
-      i=1                       ! 2147483600
-      mono=.true.
-      do while (mono)
+      i=1 
+      j=0
+      do while (i.gt.j)
          j=i
          i=i+1
-         if (i.le.j) mono=.false. ! check if monotonically increasing
       enddo
       write(*,*)i,j
       end
+
+c     1 byte  127
+c     2 bytes 32767
+c     4 bytes 2147483647
