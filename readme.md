@@ -15,7 +15,11 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`test_abs.f`](test_abs.f) | absolute value | `abs` `real`
 | [`sign.f    `](sign.f    ) | sign control | `ss` `sp`
 | [`io.f      `](io.f      ) | input/output | `inquire` `open`
-| [`timedate.f`](timedate.f) | input/output | `date_and_time`
+| [`timedate.f`](timedate.f) | date and time | `date_and_time`
+| [`pause.f`](pause.f) | pause | `pause`
+| [`test_system_clock.f`](test_system_clock.f) | system clock | `system_clock`
+| [`make_svp.f`](make_svp.f) |  | `system_clock` `srand` `rand`
+| [`collatz.f`](collatz.f) |  | `system_clock`
 
 ## Installation
 
