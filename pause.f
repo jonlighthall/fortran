@@ -1,8 +1,9 @@
       program pause
       print *, "hello world"
       print *, "fortan"
-      do 10 i=0,2,1 !print beeps at end of program
-         print *, " beep!", char(7)
-         pause 
+      do 10 i=1,3
+         write(*,'(i2,a,a)')i,' beeps!'
+     &        ,char(7)          ! print beeps at end of program
+         pause 'pause'
  10   continue
       end 
