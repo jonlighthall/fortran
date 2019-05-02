@@ -9,4 +9,9 @@
      &     ,values(4)/60,' UTC'
       start=values(6)*60.+values(7)+values(8)/1000.
       write(*,*) 'start time is ', start
+      call date_and_time(VALUES=values)
+      finish=values(6)*60.+values(7)+values(8)/1000.
+      write(*,*) 'end time is ', finish
+      write(*,*) 'run time is ', finish-start
+
       end program test_time_and_date
