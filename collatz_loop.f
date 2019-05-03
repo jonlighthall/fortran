@@ -1,19 +1,11 @@
       program collatz_loop
       implicit none
-      integer*16 n,seq,nmax,steps,j,findnmax,i
+      integer*16 nmax,steps,findnmax
 
-      
-      j=findnmax()
-      n=j
-      nmax=(j-1)/3
-
-      write(*,*) '          the largest integer is', n
+      nmax=(findnmax()-1)/3
       write(*,*) 'the largest hailstone integer is', nmax
 
-      n=nmax
-
-      i=steps(n,nmax)
-      write(*,*)'i = ',i
+      write(*,*)'i = ',steps(nmax,nmax)
       end
 
       integer*16 function findnmax()
@@ -35,6 +27,7 @@ c     find maximum integer size without any a priori knowldege
          enddo
       enddo
       findnmax=j
+      write(*,*) '          the largest integer is', j
       return
       end
 
