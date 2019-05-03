@@ -22,6 +22,10 @@ pause.exe: pause.f
 	@echo compiling $<...	
 	 $(your_f77) -std=legacy  $^ -o $@	
 
+collatz.exe: collatz.f
+	@echo compiling $<...	
+	 $(your_f77) -fno-range-check $^ -o $@
+
 clean:
 	@echo removing files...
 	rm -f *.exe
