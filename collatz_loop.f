@@ -31,7 +31,7 @@
                n=n/2
             else
                if(n.gt.nmx) then
-                  write(*,*)'ERROR ',n,dly,sd
+c                 write(*,*)'ERROR ',n,dly,sd
                   write(1,*)'ERROR ',n,dly,sd
                   n=1           ! exit loop
                else
@@ -49,3 +49,11 @@
       enddo
       close(1)
       end
+
+c     bt | rec dly  sd
+c     -- | --- --- ---
+c      1 |   7  23  25
+c      2 |  17 144 649
+c      4 |  
+c      8 |  
+c     16 |  
