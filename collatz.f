@@ -15,7 +15,7 @@
 
       integer*16 function seq(n)
       implicit none
-      integer*16 n,seq,nmax
+      integer*16 n,nmax
       nmax=42                   ! 1 bit
       nmax=10922                ! 2 bit
       nmax=715827882            ! 4 bit
