@@ -1,6 +1,6 @@
       program collatz_loop
       implicit none
-      integer*2 i,j,k,n,nmax,maxdelay,delay_record,seed,delay
+      integer*2 i,j,k,n,nmx,dly,dlymx,dlyrec,sd
       i=1 
       j=0
       do while (i.gt.j)
@@ -16,30 +16,30 @@
          enddo
       enddo
       write(*,*) '          the largest integer is', j
-      nmax=(j-1)/3
-      write(*,*) 'the largest hailstone integer is', nmax
-      maxdelay=0
-      delay_record=0
-      do seed=0,nmax
-         n=seed
-         delay=0
+      nmx=(j-1)/3
+      write(*,*) 'the largest hailstone integer is', nmx
+      dlymx=0                   ! delay max
+      dlyrec=0                  ! delay record
+      do sd=0,nmx               ! seed range
+         n=sd
+         dly=0
          do while (n.gt.1)
             if (mod(n,2).eq.0) then
                n=n/2
             else
-               if(n.gt.nmax) then
-                  write(*,*)'ERROR ',n,delay,seed
-                  n=1
+               if(n.gt.nmx) then
+                  write(*,*)'ERROR ',n,dly,sd
+                  n=1           ! exit loop
                else
                   n=3*n+1
                endif
             endif
-            delay=delay+1
+            dly=dly+1         
          enddo
-         if (delay>maxdelay) then
-            delay_record=delay_record+1
-            write(*,*)'max = ',delay_record,delay,seed
-            maxdelay=delay
+         if (dly>dlymx) then
+            dlyrec=dlyrec+1  
+            write(*,*)'mx = ',dlyrec,dly,sd
+            dlymx=dly
          endif
       enddo
       end
