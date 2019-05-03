@@ -1,6 +1,6 @@
       program collatz_loop
       implicit none
-      integer*4 i,j,k,n,nmx,dly,dlymx,dlyrec,sd,erc
+      integer*16 i,j,k,n,nmx,dly,dlymx,dlyrec,sd
       logical error
       i=1 
       j=0
@@ -17,15 +17,14 @@
          enddo
       enddo
       error=.false.
-      erc=0
       open(1,file = 'collatz.out',status='unknown',action='write')
       write(*,*) '          the largest integer is', j
       write(1,*) '          the largest integer is', j
       nmx=(j-1)/3
       write(*,*) 'the largest hailstone integer is', nmx
       write(1,*) 'the largest hailstone integer is', nmx
-      write(*,*) 'record delay seed errors'
-      write(1,*) 'record delay seed errors'
+      write(*,*) 'record delay seed'
+      write(1,*) 'record delay seed'
       dlymx=0                   ! delay max
       dlyrec=0                  ! delay record
       do sd=0,nmx               ! seed range
@@ -36,11 +35,10 @@
                n=n/2
             else
                if(n.gt.nmx) then
-c                  write(*,*)'ERROR ',n,dly,sd,erc
-                  write(1,*)'ERROR ',n,dly,sd,erc
+                  write(*,*)'ERROR ',n,dly,sd
+                  write(1,*)'ERROR ',n,dly,sd
                   n=1           ! exit loop
                   error=.true.
-                  erc=erc+1
                else
                   n=3*n+1
                endif
@@ -49,12 +47,11 @@ c                  write(*,*)'ERROR ',n,dly,sd,erc
          enddo
          if (dly>dlymx) then
             dlyrec=dlyrec+1  
-            write(*,*)dlyrec,dly,sd,erc,real(erc)/dlyrec
-            write(1,*)dlyrec,dly,sd,erc
+            write(*,*)dlyrec,dly,sd
+            write(1,*)dlyrec,dly,sd
             dlymx=dly
          endif
-c        if (error) exit
-c         if (erc.gt.(dlyrec*3)) exit
+         if (error) exit
       enddo
       close(1)
       end
