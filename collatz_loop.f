@@ -39,20 +39,21 @@ c     find maximum integer size without any a priori knowldege
       end
 
       integer*16 function steps(n,nmax)
+c     calculate number of steps
       implicit none
-      integer*16 i,n,seq,nmax
+      integer*16 n,seq,nmax
 c     write(*,*)'received input ',n
-       i=0
+      steps=0
       do while (n.gt.1)
-c         write(*,*)'i = ',i,n
+c     write(*,*)'steps = ',steps,n
          n=seq(n,nmax)
-         i=i+1
+         steps=steps+1
       enddo
-      steps=i
       return
       end
 
       integer*16 function seq(n,nmax)
+c     calculate sequence
       implicit none
       integer*16 n,seq,nmax
       if (mod(n,2).eq.0) then
