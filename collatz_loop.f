@@ -24,8 +24,8 @@
       nmx=(j-1)/3
       write(*,*) 'the largest hailstone integer is', nmx
       write(1,*) 'the largest hailstone integer is', nmx
-      write(*,*) 'record delay seed'
-      write(1,*) 'record delay seed'
+      write(*,*) 'record delay seed errors'
+      write(1,*) 'record delay seed errors'
       dlymx=0                   ! delay max
       dlyrec=0                  ! delay record
       do sd=0,nmx               ! seed range
@@ -36,8 +36,8 @@
                n=n/2
             else
                if(n.gt.nmx) then
-c                  write(*,*)'ERROR ',n,dly,sd
-                  write(1,*)'ERROR ',n,dly,sd
+c                  write(*,*)'ERROR ',n,dly,sd,erc
+                  write(1,*)'ERROR ',n,dly,sd,erc
                   n=1           ! exit loop
                   error=.true.
                   erc=erc+1
@@ -49,13 +49,12 @@ c                  write(*,*)'ERROR ',n,dly,sd
          enddo
          if (dly>dlymx) then
             dlyrec=dlyrec+1  
-            write(*,*)dlyrec,dly,sd
-            write(1,*)dlyrec,dly,sd
+            write(*,*)dlyrec,dly,sd,erc,real(erc)/dlyrec
+            write(1,*)dlyrec,dly,sd,erc
             dlymx=dly
          endif
 c        if (error) exit
-         if (dlyrec.gt.50) exit
-c        if (erc.gt.50) exit
+c         if (erc.gt.(dlyrec*3)) exit
       enddo
       close(1)
       end
