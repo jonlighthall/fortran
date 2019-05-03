@@ -1,6 +1,6 @@
       program collatz_loop
       implicit none
-      integer*16 n,nmax,iter
+      integer*16 n,nmax,iter,maxstep,nstep
       integer*16 i, j, k
       i=1 
       j=0
@@ -20,12 +20,14 @@
       nmax=(j-1)/3
       write(*,*) 'the largest hailstone integer is', nmax
       n=nmax
-      do iter=0,100
+      maxstep=0
+      nstep=0
+      do iter=0,1000000
          n=iter
-         write(*,*)'received input ',n
+c         write(*,*)'received input ',n
          i=0
          do while (n.gt.1)
-            write(*,*)'i = ',i,n
+c            write(*,*)'i = ',i,n
             if (mod(n,2).eq.0) then
                n=n/2
             else
@@ -42,6 +44,10 @@
             endif
             i=i+1
          enddo
-         write(*,*)'i = ',i
+         if (i>maxstep) then
+            nstep=nstep+1
+            write(*,*)'i = ',nstep,i,iter
+            maxstep=i
+         endif
       enddo
       end
