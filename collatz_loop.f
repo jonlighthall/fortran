@@ -18,7 +18,7 @@
          enddo
       enddo
       error=.false.
-      open(1,file = 'collatz.out')!,status='unknown',action='write')
+      open(1,file = 'collatz.out',status='unknown',action='write')
       write(*,*) '          the largest integer is', j
       write(1,*) '          the largest integer is', j
       nmx=(j-1)/3
@@ -26,6 +26,7 @@
       write(1,*) 'the largest hailstone integer is', nmx
       write(*,*) 'record delay seed time'
       write(1,*) 'record delay seed time'
+      close(1)
       dlymx=0                   ! delay max
       dlyrec=0                  ! delay record
       call system_clock(t1)
@@ -51,8 +52,11 @@
             dlyrec=dlyrec+1
             call system_clock(t2)
             t=t2-t1
+            open(1,file = 'collatz.out',status="old", position="append",
+     &           action="write")
             write(*,*)dlyrec,dly,sd,t
             write(1,*)dlyrec,dly,sd
+            close(1)
             dlymx=dly
             call system_clock(t1)
          endif
