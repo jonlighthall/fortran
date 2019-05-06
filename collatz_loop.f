@@ -1,21 +1,16 @@
       program collatz_loop
       implicit none
       integer dly,dlymx,dlyrec,t1,t2,t
-      integer*1 i,j,k,n,nmx,sd,inmx,start
+      integer*8 i,j,k,n,nmx,sd,inmx,start
       logical error
       integer irec,idly,isd,iostat
-      character(64) dum,fmt
+      character(64) dum
 c     read in existing file
       open(1,file = 'collatz.out',status='old',action='read',iostat
      &     =iostat)
-      write(*,*)'reading...'
-      write(*,*)iostat
       if (iostat.le.0) then
-         write(*,*)'succeed'
          read(1,'(34x,a)')dum   ! read line 1
-         write(*,*)dum
          read(dum,*)inmx        ! convert to integer
-         write(*,*)inmx
          read(1,*) 
          read(1,*) 
          do 
@@ -24,7 +19,6 @@ c     read in existing file
          enddo
          close(1)
       else
-         write(*,*)'fail'
          inmx=0
          close(1)
       endif
@@ -47,16 +41,16 @@ c     find maximum integer
 
 c     test match      
       if(j.eq.inmx) then
-         write(*,*)j,' eq ',inmx
          dlymx=idly             ! delay max
          dlyrec=irec            ! delay record
          start=isd+1
-         write(*,*)'starting from previous delay record '
-         write(*,*)irec,idly,isd
-c         write(*,*)dlyrec,dlymx,isd
+         write(*,*) '          the largest integer is', j
          nmx=(j-1)/3
+         write(*,*) 'the largest hailstone integer is', nmx
+         write(*,*)'starting from previous delay record '
+         write(*,*) 'record delay seed time'
+         write(*,*)irec,idly,isd
       else
-         write(*,*)j,' ne ',inmx
          open(1,file = 'collatz.out',status='unknown',action='write')
          write(*,*) '          the largest integer is', j
          write(1,*) '          the largest integer is', j
