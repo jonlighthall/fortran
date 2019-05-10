@@ -17,9 +17,11 @@
       open(1,file='state',status='old',action='read',iostat=stat)
       if (stat.eq.0) then
          read(1,*),the_start
+         write(*,*)'coninuing from ',the_start
       else
 !     Otherwise bootstrap at 1 
          the_start=1
+         write(*,*)'starting from ',the_start
       end if
       close(1)
 
@@ -27,19 +29,16 @@
       interrupted = .false.
       write(*,*) 'before loop, interrupted = ',interrupted
       do i = the_start,the_end
-         write(*,*) 'in loop, interrupted = ',interrupted
          if(interrupted) then
             write(*,*) 'in if, interrupted = ',interrupted
             exit
-         else
-            write(*,*) 'in if, interrupted = ',interrupted
          endif
 !     Heavy computations
-         write(*,'(i2)') i
+         write(*,*) i,interrupted
          call Sleep(1)
       end do
       if (i.ge.the_end) write(*,*)'end reached',the_end
-      write(*,*)'exit loop'
+      write(*,*)'exit loop',interrupted
 
 !     Save current state
       open(1,file='state',status='REPLACE',action='WRITE',iostat=stat)
