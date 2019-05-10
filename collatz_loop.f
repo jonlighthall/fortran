@@ -19,7 +19,6 @@ c     read in existing file
          do i=1,3
             read(1,'(a)') dum
             write(2,'(a)')dum
-            write(*,'(a)')dum
          enddo
          ln=3
          do 
@@ -52,7 +51,7 @@ c     write(*,*)'start',isd,start
          enddo
          do i=4,ln-1
             read(2,*) irec,idly,isd
-            write(*,*)i,irec,idly,isd
+            write(*,*)irec,idly,isd
             write(1,*)irec,idly,isd
          enddo
          close(1)
@@ -83,18 +82,11 @@ c     test match
       if(j.eq.inmx) then
          dlymx=idly             ! delay max
          dlyrec=irec            ! delay record
-c     start=isd+1
-         write(*,*) '          the largest integer is', j
          nmx=(j-1)/3
-         write(*,*) 'the largest hailstone integer is', nmx
-         if (start.gt.(isd+1)) then
-            write(*,*)'starting from previous position ',start
-         else
-            write(*,*)'starting from previous delay record ',isd
-         endif
          write(*,*) 'record delay seed time'
-         write(*,*)irec,idly,isd
+         write(*,*)-1,-1,isd,0
       else
+         write(*,*)'starting over...'
          open(1,file = 'collatz.out',status='unknown',action='write')
          write(*,*) '          the largest integer is', j
          write(1,*) '          the largest integer is', j
@@ -108,10 +100,10 @@ c     start=isd+1
          dlymx=0          
          dlyrec=0         
       endif
-      write(*,*) 'start = ',start,'mx',dlymx,'rec',dlyrec
+
+c     initialize controls
       error=.false.
       call system_clock(t1)
-c     set interrupt
       call signal (2,handler)
       interrupt = .false.
 
@@ -151,20 +143,19 @@ c     loop over all possible numbers
          endif
          if (error) exit
          if (interrupt) then
-            write(*,*)'INTERRUPT!'
             print*,'Saving current position...'
             open(1,file = 'collatz.out',status='old',action='write'
      &           ,position="append")
             write(1,*)-1,-1,sd
             close(1)
-            write(*,*)sd
+            write(*,*)dly,sd
             exit
          endif
       enddo
       write(*,*)'exited loop'
       write(*,*)'found',dlyrec,'delay records'
       write(*,*)'max delay is ',dlymx
-      write(*,*)'last calculation',sd,dly
+      write(*,*)'last calculation',dly,sd
       end
 
 c     bt | rec dly   seed
@@ -180,5 +171,4 @@ c     16 |
       common interrupt
       interrupt = .true.
       print*,'Ctrl+C pressed',interrupt
-c     return
       end function handler
