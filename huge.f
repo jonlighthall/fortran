@@ -1,6 +1,8 @@
       program huge
       implicit none
       integer*16 i, j, k
+      integer*1 sz,ln
+      character(64) fmt
       i=1 
       j=0
       do while (i.gt.j)
@@ -15,9 +17,22 @@
             i=i+10**k
          enddo
       enddo
-      write(*,*) 'the largest integer is', j
-      end
 
+c     print summary with calculated formats
+      sz=sizeof(i)
+      ln=ceiling(log10(real(sz)))
+      write(fmt,*)'(a,i',ln,',a)'
+      write(*,fmt)'in ',sz,' bytes'
+      ln=ceiling(log10(real(j)))
+      write(fmt,*)'(a,sp,i',ln+1,')'
+      write(*,fmt) 'the highest signed integer is ', j
+      write(*,fmt) ' the lowest signed integer is ', i
+      k=ceiling(log10(real(ln)))
+      if(ln.eq.10**k)k=k+1      ! needed for 4 bit
+      write(fmt,*)'(i',ln,',a,i',k,',a)'
+      write(*,fmt)j,' is ',ln,' digits long'
+      end
+      
 c      1 byte    8 bits 127
 c      2 bytes  16 bits 32767
 c      4 bytes  32 bits 2147483647
