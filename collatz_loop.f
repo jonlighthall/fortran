@@ -4,22 +4,63 @@
       integer*8 i,j,k,n,nmx,sd,inmx,start
       logical error, interrupt
       common interrupt
-      integer irec,idly,isd,iostat,ln
+      integer irec,idly,isd,iostat,ln,ilen
       character(64) dum
       intrinsic signal
       external handler
+c     find maximum integer
+      i=1 
+      j=0
+      do while (i.gt.j)
+         j=i
+         i=i*2
+      enddo
+      do k=floor(log10(real(j))),0,-1
+         i=j
+         j=i-1
+         do while (i.gt.j)
+            j=i
+            i=i+10**k
+         enddo
+      enddo
+
 c     read in existing file
       open(1,file = 'collatz.out',status='old',action='read',iostat
      &     =iostat)
       open(2,status='scratch')
       if (iostat.le.0) then
-         read(1,'(34x,a)')dum   ! read line 1
+         read(1,'(33x,a)')dum   ! read line 1
+         dum=adjustl(dum)
+c     check if input max exceeds sys max w/o invoking overflow
+         ilen=len(trim(dum))
+         k=ceiling(log10(real(j)))
+         if (ilen.gt.k) then
+            write(*,*)'length of file maximim ',trim(dum),ilen
+            write(*,*)'length of system maximum ',k
+            write(*,*)'ERROR: Overflow imminent.',ilen,k
+            inmx=0
+            start=1
+            close(1)
+         else
          read(dum,*)inmx        ! convert to integer
          rewind(1)
+         if(inmx.lt.j)then
+            write(*,*)'file maximim ',inmx
+            write(*,*)'system maximum ',j
+            read(1,'(a)') dum
+            write(2,*) '          the largest integer is', j
+            nmx=(j-1)/3
+            read(1,'(a)') dum
+            write(2,*) 'the largest hailstone integer is', nmx
+            read(1,'(a)') dum
+            write(2,'(a)')dum
+            inmx=j
+         else
          do i=1,3
             read(1,'(a)') dum
             write(2,'(a)')dum
          enddo
+         endif
          ln=3
          do 
             read(1,*,iostat=iostat)irec,idly,isd
@@ -52,28 +93,13 @@ c     read in existing file
             write(1,*)irec,idly,isd
          enddo
          close(1)
+         endif
       else
          inmx=0
          start=1
          close(1)
       endif
       close(2)
-
-c     find maximum integer
-      i=1 
-      j=0
-      do while (i.gt.j)
-         j=i
-         i=i*2
-      enddo
-      do k=floor(log10(real(j))),0,-1
-         i=j
-         j=i-1
-         do while (i.gt.j)
-            j=i
-            i=i+10**k
-         enddo
-      enddo
 
 c     test match      
       if(j.eq.inmx) then
@@ -116,8 +142,8 @@ c     loop over all possible numbers
                if(n.gt.nmx) then
                   open(1,file = 'collatz.out',status="old", position 
      &                 ="append",action="write") 
-                  write(*,*)'ERROR ',n,dly,sd
-                  write(1,*)'ERROR ',n,dly,sd
+                  write(*,*)-1,dly,sd,'ERROR ',n,'Overflow imminent.'
+                  write(1,*)-1,dly,sd,'ERROR ',n
                   close(1)
                   n=1           ! exit loop
                   error=.true.
@@ -144,7 +170,7 @@ c     loop over all possible numbers
             print*,'Saving current position...'
             open(1,file = 'collatz.out',status='old',action='write'
      &           ,position="append")
-            write(1,*)-1,-1,sd
+            write(1,*)-1,dly,sd
             close(1)
             write(*,*)dly,sd
             exit
