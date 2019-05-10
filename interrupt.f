@@ -2,6 +2,7 @@
       logical :: interrupted
       common interrupted
       interrupted = .true.
+      write(*,*) 'in catch, interrupted = ',interrupted
       end subroutine catch_signal
 
       program crcount
@@ -27,10 +28,15 @@
 
       the_end=10
       interrupted = .false.
-      
+      write(*,*) 'before loop, interrupted = ',interrupted
       do i = the_start,the_end
-         if(interrupted) exit
-
+         write(*,*) 'in loop, interrupted = ',interrupted
+         if(interrupted) then
+            write(*,*) 'in if, interrupted = ',interrupted
+            exit
+         else
+            write(*,*) 'in if, interrupted = ',interrupted
+         endif
 !     Heavy computations
          write(*,'(i2)') i
          call Sleep(1)
