@@ -24,7 +24,6 @@ c     read in existing file
          do 
             read(1,*,iostat=iostat)irec,idly,isd
             ln=ln+1
-c     write(*,*)ln,irec,idly,isd
             if (irec.eq.-1) then
                start=isd
                rewind(1)
@@ -32,13 +31,11 @@ c     write(*,*)ln,irec,idly,isd
                   read(1,*)
                enddo
                read(1,*)irec,idly,isd
-               write(*,*)'found last',irec,idly,isd,start
                exit
             else
                write(2,*)irec,idly,isd
             endif
             start=isd+1
-c     write(*,*)'start',isd,start
             if (iostat.lt.0) exit
          enddo
          close(1)
@@ -84,7 +81,7 @@ c     test match
          dlyrec=irec            ! delay record
          nmx=(j-1)/3
          write(*,*) 'record delay seed time'
-         write(*,*)-1,-1,isd,0
+         write(*,*)-1,-1,start,0
       else
          write(*,*)'starting over...'
          open(1,file = 'collatz.out',status='unknown',action='write')
@@ -104,7 +101,8 @@ c     test match
 c     initialize controls
       error=.false.
       call system_clock(t1)
-      call signal (2,handler)
+      call signal (2,handler)   ! interrupt
+      call signal (3,handler)   ! quit
       interrupt = .false.
 
 c     loop over all possible numbers      
