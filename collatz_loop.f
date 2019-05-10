@@ -11,11 +11,16 @@
 c     read in existing file
       open(1,file = 'collatz.out',status='old',action='read',iostat
      &     =iostat)
+      open(2,status='scratch')
       if (iostat.le.0) then
          read(1,'(34x,a)')dum   ! read line 1
          read(dum,*)inmx        ! convert to integer
-         read(1,*) 
-         read(1,*) 
+         rewind(1)
+         do i=1,3
+            read(1,'(a)') dum
+            write(2,'(a)')dum
+            write(*,'(a)')dum
+         enddo
          ln=3
          do 
             read(1,*,iostat=iostat)irec,idly,isd
@@ -30,10 +35,25 @@ c     write(*,*)ln,irec,idly,isd
                read(1,*)irec,idly,isd
                write(*,*)'found last',irec,idly,isd,start
                exit
+            else
+               write(2,*)irec,idly,isd
             endif
             start=isd+1
 c     write(*,*)'start',isd,start
             if (iostat.lt.0) exit
+         enddo
+         close(1)
+         rewind(2)
+         open(1,file = 'collatz.out',status='old',action='write')
+         do i=1,3
+            read(2,'(a)') dum
+            write(1,'(a)')dum
+            write(*,'(a)')dum
+         enddo
+         do i=4,ln-1
+            read(2,*) irec,idly,isd
+            write(*,*)i,irec,idly,isd
+            write(1,*)irec,idly,isd
          enddo
          close(1)
       else
@@ -41,6 +61,7 @@ c     write(*,*)'start',isd,start
          start=1
          close(1)
       endif
+      close(2)
 
 c     find maximum integer
       i=1 
@@ -129,8 +150,6 @@ c     loop over all possible numbers
             call system_clock(t1)
          endif
          if (error) exit
-         write(*,*),n,dly,sd,interrupt
-         call sleep(1)
          if (interrupt) then
             write(*,*)'INTERRUPT!'
             print*,'Saving current position...'
