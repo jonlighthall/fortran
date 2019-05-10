@@ -2,9 +2,12 @@
       implicit none
       integer dly,dlymx,dlyrec,t1,t2,t
       integer*8 i,j,k,n,nmx,sd,inmx,start
-      logical error
-      integer irec,idly,isd,iostat
+      logical error, interrupt
+      common interrupt
+      integer irec,idly,isd,iostat,ln
       character(64) dum
+      intrinsic signal
+      external handler
 c     read in existing file
       open(1,file = 'collatz.out',status='old',action='read',iostat
      &     =iostat)
@@ -13,13 +16,29 @@ c     read in existing file
          read(dum,*)inmx        ! convert to integer
          read(1,*) 
          read(1,*) 
+         ln=3
          do 
             read(1,*,iostat=iostat)irec,idly,isd
+            ln=ln+1
+c     write(*,*)ln,irec,idly,isd
+            if (irec.eq.-1) then
+               start=isd
+               rewind(1)
+               do i=1,ln-2,1
+                  read(1,*)
+               enddo
+               read(1,*)irec,idly,isd
+               write(*,*)'found last',irec,idly,isd,start
+               exit
+            endif
+            start=isd+1
+c     write(*,*)'start',isd,start
             if (iostat.lt.0) exit
          enddo
          close(1)
       else
          inmx=0
+         start=1
          close(1)
       endif
 
@@ -43,11 +62,15 @@ c     test match
       if(j.eq.inmx) then
          dlymx=idly             ! delay max
          dlyrec=irec            ! delay record
-         start=isd+1
+c     start=isd+1
          write(*,*) '          the largest integer is', j
          nmx=(j-1)/3
          write(*,*) 'the largest hailstone integer is', nmx
-         write(*,*)'starting from previous delay record '
+         if (start.gt.(isd+1)) then
+            write(*,*)'starting from previous position ',start
+         else
+            write(*,*)'starting from previous delay record ',isd
+         endif
          write(*,*) 'record delay seed time'
          write(*,*)irec,idly,isd
       else
@@ -64,9 +87,12 @@ c     test match
          dlymx=0          
          dlyrec=0         
       endif
-
+      write(*,*) 'start = ',start,'mx',dlymx,'rec',dlyrec
       error=.false.
       call system_clock(t1)
+c     set interrupt
+      call signal (2,handler)
+      interrupt = .false.
 
 c     loop over all possible numbers      
       do sd=start,nmx           ! seed range
@@ -103,8 +129,23 @@ c     loop over all possible numbers
             call system_clock(t1)
          endif
          if (error) exit
+         write(*,*),n,dly,sd,interrupt
+         call sleep(1)
+         if (interrupt) then
+            write(*,*)'INTERRUPT!'
+            print*,'Saving current position...'
+            open(1,file = 'collatz.out',status='old',action='write'
+     &           ,position="append")
+            write(1,*)-1,-1,sd
+            close(1)
+            write(*,*)sd
+            exit
+         endif
       enddo
-      close(1)
+      write(*,*)'exited loop'
+      write(*,*)'found',dlyrec,'delay records'
+      write(*,*)'max delay is ',dlymx
+      write(*,*)'last calculation',sd,dly
       end
 
 c     bt | rec dly   seed
@@ -114,3 +155,11 @@ c      2 |  17 144    649
 c      4 |  41 469 511935
 c      8 |  
 c     16 |  
+
+      function handler()
+      logical interrupt
+      common interrupt
+      interrupt = .true.
+      print*,'Ctrl+C pressed',interrupt
+c     return
+      end function handler
