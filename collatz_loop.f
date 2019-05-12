@@ -1,10 +1,10 @@
       program collatz_loop
       implicit none
       integer dly,dlymx,dlyrec,t1,t2,t
-      integer*8 i,j,k,n,nmx,sd,inmx,start
+      integer*16 i,j,k,n,nmx,sd,inmx,start,isd
       logical error, interrupt
       common interrupt
-      integer irec,idly,isd,iostat,ln,ilen
+      integer irec,idly,iostat,ln,ilen
       character(64) dum
       intrinsic signal
       external handler
@@ -35,7 +35,7 @@ c     check if input max exceeds sys max w/o invoking overflow
          ilen=len(trim(dum))
          k=ceiling(log10(real(j)))
          if (ilen.gt.k) then
-            write(*,*)'length of file maximim ',trim(dum),ilen
+            write(*,*)'  length of file maximim ',trim(dum),ilen
             write(*,*)'length of system maximum ',k
             write(*,*)'ERROR: Overflow imminent.',ilen,k
             inmx=0
@@ -45,7 +45,7 @@ c     check if input max exceeds sys max w/o invoking overflow
          read(dum,*)inmx        ! convert to integer
          rewind(1)
          if(inmx.lt.j)then
-            write(*,*)'file maximim ',inmx
+            write(*,*)'  file maximim ',inmx
             write(*,*)'system maximum ',j
             read(1,'(a)') dum
             write(2,*) '          the largest integer is', j
