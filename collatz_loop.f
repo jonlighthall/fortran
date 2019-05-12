@@ -56,7 +56,8 @@ c     check if input max exceeds sys max w/o invoking overflow
             write(2,'(a)')dum
             inmx=j
          else
-         do i=1,3
+            write(*,*)'file and system maxima match'
+            do i=1,3
             read(1,'(a)') dum
             write(2,'(a)')dum
          enddo
