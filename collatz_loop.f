@@ -1,7 +1,7 @@
       program collatz_loop
       implicit none
-      integer dly,dlymx,dlyrec,t1,t2,t,pthrec
-      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd,mxn,pthmx
+      integer dly,dlymx,dlyrec,t1,t2,t
+      integer*8 i,j,k,n,sysmx,sd,isysmx,start,isd
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
@@ -131,14 +131,11 @@ c     initialize controls
       call signal (2,handler)   ! interrupt
       call signal (3,handler)   ! quit
       interrupt = .false.
-      pthrec=0
-      pthmx=1
 
 c     loop over all possible numbers      
       do sd=start,sysmx           ! seed range
          n=sd
          dly=0
-         mxn=n
          do while (n.gt.1)
             if (mod(n,2).eq.0) then
                n=n/2
@@ -156,10 +153,7 @@ c     loop over all possible numbers
                endif
             endif
             dly=dly+1         
-            if(n.gt.mxn)mxn=n
-c     write(*,*)'for seed',sd,'i = ',dly,'mx(n) = ',mxn ! each step
          enddo
-         write(*,*)'for seed',sd,'delay = ',dly,'mx(n) = ',mxn ! each no 
 c     increment and save delay record
          if (dly>dlymx) then
             dlyrec=dlyrec+1
@@ -172,12 +166,6 @@ c     increment and save delay record
             close(1)
             dlymx=dly
             call system_clock(t1)
-         endif
-c     increment and save path record
-         if (mxn.gt.pthmx) then
-            pthrec=pthrec+1
-            write(*,*)dlyrec,dly,sd,t,pthrec,mxn
-            pthmx=mxn
          endif
 c     check exit flags
          if (error) exit
@@ -195,8 +183,6 @@ c     print summary
       write(*,*)'exited loop'
       write(*,*)'found',dlyrec,'delay records'
       write(*,*)'max delay is ',dlymx
-      write(*,*)'found',pthrec,'delay records'
-      write(*,*)'max delay is ',pthmx
       write(*,*)'last calculation',dly,sd
       end
 
