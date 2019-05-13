@@ -1,7 +1,7 @@
       program collatz_loop
       implicit none
-      integer dly,dlymx,dlyrec,t1,t2,t
-      integer*16 i,j,k,n,nmx,sd,inmx,start,isd
+      integer dly,dlymx,dlyrec,t1,t2,t,pthrec
+      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd,mxn,pthmx
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
@@ -38,23 +38,23 @@ c     check if input max exceeds sys max w/o invoking overflow
             write(*,*)'  length of file maximim ',trim(dum),ilen
             write(*,*)'length of system maximum ',k
             write(*,*)'ERROR: Overflow imminent.',ilen,k
-            inmx=0
+            isysmx=0
             start=1
             close(1)
          else
-         read(dum,*)inmx        ! convert to integer
+         read(dum,*)isysmx        ! convert to integer
          rewind(1)
-         if(inmx.lt.j)then
-            write(*,*)'  file maximim ',inmx
+         if(isysmx.lt.j)then
+            write(*,*)'  file maximim ',isysmx
             write(*,*)'system maximum ',j
             read(1,'(a)') dum
             write(2,*) '          the largest integer is', j
-            nmx=(j-1)/3
+            sysmx=(j-1)/3
             read(1,'(a)') dum
-            write(2,*) 'the largest hailstone integer is', nmx
+            write(2,*) 'the largest hailstone integer is', sysmx
             read(1,'(a)') dum
             write(2,'(a)')dum
-            inmx=j
+            isysmx=j
          else
             write(*,*)'file and system maxima match'
             do i=1,3
@@ -96,17 +96,17 @@ c     check if input max exceeds sys max w/o invoking overflow
          close(1)
          endif
       else
-         inmx=0
+         isysmx=0
          start=1
          close(1)
       endif
       close(2)
 
 c     test match      
-      if(j.eq.inmx) then
+      if(j.eq.isysmx) then
          dlymx=idly             ! delay max
          dlyrec=irec            ! delay record
-         nmx=(j-1)/3
+         sysmx=(j-1)/3
          write(*,*) 'record delay seed time'
          write(*,*)-1,-1,start,0
       else
@@ -114,9 +114,9 @@ c     test match
          open(1,file = 'collatz.out',status='unknown',action='write')
          write(*,*) '          the largest integer is', j
          write(1,*) '          the largest integer is', j
-         nmx=(j-1)/3
-         write(*,*) 'the largest hailstone integer is', nmx
-         write(1,*) 'the largest hailstone integer is', nmx
+         sysmx=(j-1)/3
+         write(*,*) 'the largest hailstone integer is', sysmx
+         write(1,*) 'the largest hailstone integer is', sysmx
          write(*,*) 'record delay seed time'
          write(1,*) 'record delay seed'
          close(1)
@@ -131,16 +131,19 @@ c     initialize controls
       call signal (2,handler)   ! interrupt
       call signal (3,handler)   ! quit
       interrupt = .false.
+      pthrec=0
+      pthmx=1
 
 c     loop over all possible numbers      
-      do sd=start,nmx           ! seed range
+      do sd=start,sysmx           ! seed range
          n=sd
          dly=0
+         mxn=n
          do while (n.gt.1)
             if (mod(n,2).eq.0) then
                n=n/2
             else
-               if(n.gt.nmx) then
+               if(n.gt.sysmx) then
                   open(1,file = 'collatz.out',status="old", position 
      &                 ="append",action="write") 
                   write(*,*)-1,dly,sd,'ERROR ',n,'Overflow imminent.'
@@ -153,7 +156,11 @@ c     loop over all possible numbers
                endif
             endif
             dly=dly+1         
+            if(n.gt.mxn)mxn=n
+c     write(*,*)'for seed',sd,'i = ',dly,'mx(n) = ',mxn ! each step
          enddo
+         write(*,*)'for seed',sd,'delay = ',dly,'mx(n) = ',mxn ! each no 
+c     increment and save delay record
          if (dly>dlymx) then
             dlyrec=dlyrec+1
             call system_clock(t2)
@@ -166,6 +173,13 @@ c     loop over all possible numbers
             dlymx=dly
             call system_clock(t1)
          endif
+c     increment and save path record
+         if (mxn.gt.pthmx) then
+            pthrec=pthrec+1
+            write(*,*)dlyrec,dly,sd,t,pthrec,mxn
+            pthmx=mxn
+         endif
+c     check exit flags
          if (error) exit
          if (interrupt) then
             print*,'Saving current position...'
@@ -177,9 +191,12 @@ c     loop over all possible numbers
             exit
          endif
       enddo
+c     print summary
       write(*,*)'exited loop'
       write(*,*)'found',dlyrec,'delay records'
       write(*,*)'max delay is ',dlymx
+      write(*,*)'found',pthrec,'delay records'
+      write(*,*)'max delay is ',pthmx
       write(*,*)'last calculation',dly,sd
       end
 
