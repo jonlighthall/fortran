@@ -5,7 +5,7 @@
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
-      character(64) dum
+      character(128) dum,fmt
       intrinsic signal
       external handler
 c     find maximum integer
@@ -23,6 +23,8 @@ c     find maximum integer
             i=i+10**k
          enddo
       enddo
+      k=ceiling(log10(real(j)))
+      write(fmt,*)'(a,i',k,')'
 
 c     read in existing file
       open(1,file = 'collatz.out',status='old',action='read',iostat
@@ -33,11 +35,12 @@ c     read in existing file
          dum=adjustl(dum)
 c     check if input max exceeds sys max w/o invoking overflow
          ilen=len(trim(dum))
-         k=ceiling(log10(real(j)))
          if (ilen.gt.k) then
-            write(*,*)'  length of file maximim ',trim(dum),ilen
-            write(*,*)'length of system maximum ',k
-            write(*,*)'ERROR: Overflow imminent.',ilen,k
+            write(*,'(3a,i3)')'  length of file maximim ',trim(dum)
+     &           ,' is ',ilen
+            write(*,fmt)'length of system maximum ',k
+            write(*,'(a,i3,a,i3)')'ERROR: Overflow imminent. ',ilen
+     &           ,' > ',k
             isysmx=0
             start=1
             close(1)
@@ -45,13 +48,13 @@ c     check if input max exceeds sys max w/o invoking overflow
          read(dum,*)isysmx        ! convert to integer
          rewind(1)
          if(isysmx.lt.j)then
-            write(*,*)'  file maximim ',isysmx
-            write(*,*)'system maximum ',j
+            write(*,fmt) '  file maximim ',isysmx
+            write(*,fmt) 'system maximum ',j
             read(1,'(a)') dum
-            write(2,*) '          the largest integer is', j
+            write(2,fmt) '          the largest integer is ', j
             sysmx=(j-1)/3
             read(1,'(a)') dum
-            write(2,*) 'the largest hailstone integer is', sysmx
+            write(2,fmt) 'the largest hailstone integer is ', sysmx
             read(1,'(a)') dum
             write(2,'(a)')dum
             isysmx=j
@@ -112,11 +115,11 @@ c     test match
       else
          write(*,*)'starting over...'
          open(1,file = 'collatz.out',status='unknown',action='write')
-         write(*,*) '          the largest integer is', j
-         write(1,*) '          the largest integer is', j
+         write(*,fmt) '          the largest integer is ', j
+         write(1,fmt) '          the largest integer is ', j
          sysmx=(j-1)/3
-         write(*,*) 'the largest hailstone integer is', sysmx
-         write(1,*) 'the largest hailstone integer is', sysmx
+         write(*,fmt) 'the largest hailstone integer is ', sysmx
+         write(1,fmt) 'the largest hailstone integer is ', sysmx
          write(*,*) 'record delay seed time'
          write(1,*) 'record delay seed'
          close(1)
