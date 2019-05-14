@@ -31,13 +31,6 @@ c     print summary with calculated formats
       if(ln.eq.10**k)k=k+1      ! needed for 4 bit
       write(fmt,*)'(i',ln,',a,i',k,',a)'
       write(*,fmt)j,' is ',ln,' digits long'
-
-      print *, selected_int_kind(1), huge(0_1)
-      print *, selected_int_kind(4), huge(0_2)
-      print *, selected_int_kind(8), huge(0_4)
-      print *, selected_int_kind(16), huge(0_8)
-      print *, selected_int_kind(32), huge(0_16)
-      print *, selected_int_kind(64), huge(0_32)
       end
       
 c      1 byte    8 bits 127
