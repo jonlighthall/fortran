@@ -1,7 +1,7 @@
       program collatz_loop
       implicit none
       integer dly,dlymx,dlyrec,t1,t2,t
-      integer*8 i,j,k,n,sysmx,sd,isysmx,start,isd
+      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
