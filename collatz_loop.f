@@ -112,11 +112,15 @@ c     test match
          dlymx=idly             ! delay max
          dlyrec=irec            ! delay record
          sysmx=(j-1)/3
-         write(*,'(a,t30,a)') ' rec  dly seed',' time'
-         write(dum,*)start
-         
-         
-         write(*,'(i4,1x,i4,1x,a,1x,t30,i5)')-1,-1,trim(adjustl(dum)),0
+         write(*,*)'continuing...'
+         write(*,'(a,t30,a)') ' rec  dly seed',' time date'
+         write(dum,*)start         
+         call date_and_time(VALUES=values)
+         write(*,'(i4,1x,i4,1x,a,1x,t30,i5,1x,i0.2,a,i0.2,a,i4,1x
+     &        ,i0.2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')-1,-1
+     &        ,trim(adjustl(dum)),0,values(2),'/',values(3),'/'
+     &        ,values(1),values(5),':',values(6),':',values(7),'.'
+     &        ,values(8),' ',values(4)/60,' UTC'
       else
          write(*,*)'starting over...'
          open(1,file = 'collatz.out',status='unknown',action='write')
@@ -125,7 +129,7 @@ c     test match
          sysmx=(j-1)/3
          write(*,fmt) 'the largest hailstone integer is ', sysmx
          write(1,fmt) 'the largest hailstone integer is ', sysmx
-         write(*,'(a,t30,a)') ' rec  dly seed',' time'
+         write(*,'(a,t30,a)') ' rec  dly seed',' time date'
          write(1,'(a)') ' rec  dly seed'
          close(1)
          start=0
@@ -171,15 +175,14 @@ c     increment and save delay record
             call system_clock(t2)
             t=t2-t1
             call date_and_time(VALUES=values)
-         write(*,'(1x,i0.2,a,i0.2,a,i4,1x,i0.2,a,i0.2,a,i0.2,a,i0.3,a,
-     &    sp,i0.2,a)')values(2),'/',values(3),'/',values(1),values(5),
-     &    ':',values(6),':',values(7),'.',values(8),' ',values(4)/60
-     $        ,'UTC'
             open(1,file = 'collatz.out',status="old", position="append",
      &           action="write") ! force write at each iteration
             write(dum,*)sd
-            write(*,'(i4,1x,i4,1x,a,1x,t30,i5)')dlyrec,dly
-     &           ,trim(adjustl(dum)),t
+            write(*,'(i4,1x,i4,1x,a,1x,t30,i5,1x,i0.2,a,i0.2,a,i4,1x,i0.
+     &           2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')dlyrec,dly
+     &           ,trim(adjustl(dum)),t,values(2),'/',values(3),'/'
+     &           ,values(1),values(5),':',values(6),':',values(7),'.'
+     &           ,values(8),' ',values(4)/60,' UTC'
             write(1,'(i4,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(dum))
             close(1)
             dlymx=dly
