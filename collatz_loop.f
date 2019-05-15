@@ -1,7 +1,7 @@
       program collatz_loop
       implicit none
       integer dly,dlymx,dlyrec,t1,t2,t
-      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd
+      integer*2 i,j,k,n,sysmx,sd,isysmx,start,isd
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
@@ -94,9 +94,9 @@ c     check if input max exceeds sys max w/o invoking overflow
          do i=4,ln-1
             read(2,*) irec,idly,isd
             write(dum,*)isd
-            write(*,'(i3,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
+            write(*,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
 c            write(*,*)irec,idly,isd
-            write(1,'(i3,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
+            write(1,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
 c            write(1,*)irec,idly,isd
          enddo
          close(1)
@@ -113,9 +113,9 @@ c     test match
          dlymx=idly             ! delay max
          dlyrec=irec            ! delay record
          sysmx=(j-1)/3
-         write(*,'(a)') 'rec  dly seed time'
+         write(*,'(a)') ' rec  dly seed time'
          write(dum,*)start
-         write(*,'(i3,1x,i4,1x,a,1x,i5)')-1,-1,trim(adjustl(dum)),0
+         write(*,'(i4,1x,i4,1x,a,1x,i5)')-1,-1,trim(adjustl(dum)),0
 c         write(*,*)-1,-1,start,0
       else
          write(*,*)'starting over...'
@@ -125,8 +125,8 @@ c         write(*,*)-1,-1,start,0
          sysmx=(j-1)/3
          write(*,fmt) 'the largest hailstone integer is ', sysmx
          write(1,fmt) 'the largest hailstone integer is ', sysmx
-         write(*,'(a)') 'rec  dly seed time'
-         write(1,'(a)') 'rec  dly seed'
+         write(*,'(a)') ' rec  dly seed time'
+         write(1,'(a)') ' rec  dly seed'
          close(1)
          start=0
          dlymx=0          
@@ -151,8 +151,14 @@ c     loop over all possible numbers
                if(n.gt.sysmx) then
                   open(1,file = 'collatz.out',status="old", position 
      &                 ="append",action="write") 
-                  write(*,*)-1,dly,sd,'ERROR ',n,'Overflow imminent.'
-                  write(1,*)-1,dly,sd,'ERROR ',n
+                  write(dum,*)sd
+                  write(*,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dum)
+     &                 ),' ERROR Overflow imminent.'
+c                  write(*,*)-1,dly,sd,'ERROR ',n,'Overflow imminent.'
+                  write(1,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dum)
+     &                 ),' ERROR Overflow imminent.'
+ 
+c                 write(1,*)-1,dly,sd,'ERROR ',n
                   close(1)
                   n=1           ! exit loop
                   error=.true.
@@ -170,10 +176,10 @@ c     increment and save delay record
             open(1,file = 'collatz.out',status="old", position="append",
      &           action="write") ! force write at each iteration
             write(dum,*)sd
-            write(*,'(i3,1x,i4,1x,a,1x,i5)')dlyrec,dly
+            write(*,'(i4,1x,i4,1x,a,1x,i5)')dlyrec,dly
      &           ,trim(adjustl(dum)),t
 c            write(*,*)dlyrec,dly,sd,t
-            write(1,'(i3,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(dum))
+            write(1,'(i4,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(dum))
 c            write(1,*)dlyrec,dly,sd
             close(1)
             dlymx=dly
@@ -189,10 +195,10 @@ c     check exit flags
      &           ,position="append")
             write(dum,*)sd
 c            write(1,*)-1,dly,sd
-            write(1,'(i3,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
+            write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
             close(1)
 c            write(*,*)dly,sd
-            write(*,'(i3,1x,i4,1x,a,1x,i5)')-1,dly
+            write(*,'(i4,1x,i4,1x,a,1x,i5)')-1,dly
      &           ,trim(adjustl(dum)),t
 
             exit
@@ -206,8 +212,8 @@ c     print summary
 
 c     bt | rec dly   seed
 c     -- | --- --- ------
-c      1 |   7  23     25
-c      2 |  17 144    649
+c      1 |   5  19      9
+c      2 |  16 143    327
 c      4 |  41 469 511935
 c      8 |  
 c     16 |  
