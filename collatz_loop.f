@@ -56,13 +56,13 @@ c     check if input max exceeds sys max w/o invoking overflow
             read(1,'(a)') dum
             write(2,fmt) 'the largest hailstone integer is ', sysmx
             read(1,'(a)') dum
-            write(2,'(a)')dum
+            write(2,'(a)')trim(dum)
             isysmx=j
          else
             write(*,*)'file and system maxima match'
             do i=1,3
             read(1,'(a)') dum
-            write(2,'(a)')dum
+            write(2,'(a)')trim(dum)
          enddo
          endif
          ln=3
@@ -88,8 +88,8 @@ c     check if input max exceeds sys max w/o invoking overflow
          open(1,file = 'collatz.out',status='old',action='write')
          do i=1,3
             read(2,'(a)') dum
-            write(1,'(a)')dum
-            write(*,'(a)')dum
+            write(1,'(a)')trim(dum)
+            write(*,'(a)')trim(dum)
          enddo
          do i=4,ln-1
             read(2,*) irec,idly,isd

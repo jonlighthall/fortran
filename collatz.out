@@ -1,6 +1,6 @@
-          the largest integer is 170141183460469231731687303715884105727                                                        
-the largest hailstone integer is  56713727820156410577229101238628035242                                                        
- record delay seed                                                                                                              
+          the largest integer is 170141183460469231731687303715884105727
+the largest hailstone integer is  56713727820156410577229101238628035242
+ record delay seed
            1           1 2
            2           7 3
            3           8 6
@@ -84,4 +84,4 @@ the largest hailstone integer is  56713727820156410577229101238628035242
           81        1242 158294678119
           82        1255 166763117679
           83        1307 202485402111
-          -1         307 269755151570
+          -1         284 326383358782
