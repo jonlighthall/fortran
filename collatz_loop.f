@@ -1,7 +1,7 @@
       program collatz_loop
       implicit none
       integer dly,dlymx,dlyrec,t1,t2,t
-      integer*2 i,j,k,n,sysmx,sd,isysmx,start,isd
+      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
@@ -95,9 +95,7 @@ c     check if input max exceeds sys max w/o invoking overflow
             read(2,*) irec,idly,isd
             write(dum,*)isd
             write(*,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
-c            write(*,*)irec,idly,isd
             write(1,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
-c            write(1,*)irec,idly,isd
          enddo
          close(1)
          endif
@@ -116,7 +114,6 @@ c     test match
          write(*,'(a)') ' rec  dly seed time'
          write(dum,*)start
          write(*,'(i4,1x,i4,1x,a,1x,i5)')-1,-1,trim(adjustl(dum)),0
-c         write(*,*)-1,-1,start,0
       else
          write(*,*)'starting over...'
          open(1,file = 'collatz.out',status='unknown',action='write')
@@ -154,11 +151,8 @@ c     loop over all possible numbers
                   write(dum,*)sd
                   write(*,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dum)
      &                 ),' ERROR Overflow imminent.'
-c                  write(*,*)-1,dly,sd,'ERROR ',n,'Overflow imminent.'
                   write(1,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dum)
      &                 ),' ERROR Overflow imminent.'
- 
-c                 write(1,*)-1,dly,sd,'ERROR ',n
                   close(1)
                   n=1           ! exit loop
                   error=.true.
@@ -178,9 +172,7 @@ c     increment and save delay record
             write(dum,*)sd
             write(*,'(i4,1x,i4,1x,a,1x,i5)')dlyrec,dly
      &           ,trim(adjustl(dum)),t
-c            write(*,*)dlyrec,dly,sd,t
             write(1,'(i4,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(dum))
-c            write(1,*)dlyrec,dly,sd
             close(1)
             dlymx=dly
             call system_clock(t1)
@@ -194,10 +186,8 @@ c     check exit flags
             open(1,file = 'collatz.out',status='old',action='write'
      &           ,position="append")
             write(dum,*)sd
-c            write(1,*)-1,dly,sd
             write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
             close(1)
-c            write(*,*)dly,sd
             write(*,'(i4,1x,i4,1x,a,1x,i5)')-1,dly
      &           ,trim(adjustl(dum)),t
 
@@ -210,12 +200,14 @@ c     print summary
       write(*,'(a,i4)')'max delay is ',dlymx
       end
 
-c     bt | rec dly   seed
-c     -- | --- --- ------
-c      1 |   5  19      9
-c      2 |  16 143    327
-c      4 |  41 469 511935
-c      8 |  
+c     largest sequential delay without overflow error
+c
+c     bt | rec  dly    seed
+c     -- | ---  --- ----------
+c      1 |   5   19          9
+c      2 |  16  143        327
+c      4 |  35  353     106239
+c      8 |  71 1131 8528817511
 c     16 |  
 
       function handler()
