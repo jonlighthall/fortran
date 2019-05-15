@@ -93,8 +93,11 @@ c     check if input max exceeds sys max w/o invoking overflow
          enddo
          do i=4,ln-1
             read(2,*) irec,idly,isd
-            write(*,*)irec,idly,isd
-            write(1,*)irec,idly,isd
+            write(dum,*)isd
+            write(*,'(i3,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
+c            write(*,*)irec,idly,isd
+            write(1,'(i3,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
+c            write(1,*)irec,idly,isd
          enddo
          close(1)
          endif
@@ -110,8 +113,10 @@ c     test match
          dlymx=idly             ! delay max
          dlyrec=irec            ! delay record
          sysmx=(j-1)/3
-         write(*,*) 'record delay seed time'
-         write(*,*)-1,-1,start,0
+         write(*,'(a)') 'rec  dly seed time'
+         write(dum,*)start
+         write(*,'(i3,1x,i4,1x,a,1x,i5)')-1,-1,trim(adjustl(dum)),0
+c         write(*,*)-1,-1,start,0
       else
          write(*,*)'starting over...'
          open(1,file = 'collatz.out',status='unknown',action='write')
@@ -120,8 +125,8 @@ c     test match
          sysmx=(j-1)/3
          write(*,fmt) 'the largest hailstone integer is ', sysmx
          write(1,fmt) 'the largest hailstone integer is ', sysmx
-         write(*,*) 'record delay seed time'
-         write(1,*) 'record delay seed'
+         write(*,'(a)') 'rec  dly seed time'
+         write(1,'(a)') 'rec  dly seed'
          close(1)
          start=0
          dlymx=0          
@@ -164,8 +169,12 @@ c     increment and save delay record
             t=t2-t1
             open(1,file = 'collatz.out',status="old", position="append",
      &           action="write") ! force write at each iteration
-            write(*,*)dlyrec,dly,sd,t
-            write(1,*)dlyrec,dly,sd
+            write(dum,*)sd
+            write(*,'(i3,1x,i4,1x,a,1x,i5)')dlyrec,dly
+     &           ,trim(adjustl(dum)),t
+c            write(*,*)dlyrec,dly,sd,t
+            write(1,'(i3,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(dum))
+c            write(1,*)dlyrec,dly,sd
             close(1)
             dlymx=dly
             call system_clock(t1)
@@ -174,19 +183,25 @@ c     check exit flags
          if (error) exit
          if (interrupt) then
             print*,'Saving current position...'
+            call system_clock(t2)
+            t=t2-t1
             open(1,file = 'collatz.out',status='old',action='write'
      &           ,position="append")
-            write(1,*)-1,dly,sd
+            write(dum,*)sd
+c            write(1,*)-1,dly,sd
+            write(1,'(i3,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
             close(1)
-            write(*,*)dly,sd
+c            write(*,*)dly,sd
+            write(*,'(i3,1x,i4,1x,a,1x,i5)')-1,dly
+     &           ,trim(adjustl(dum)),t
+
             exit
          endif
       enddo
 c     print summary
       write(*,*)'exited loop'
-      write(*,*)'found',dlyrec,'delay records'
-      write(*,*)'max delay is ',dlymx
-      write(*,*)'last calculation',dly,sd
+      write(*,'(a,i3,a)')'found ',dlyrec,' delay records'
+      write(*,'(a,i4)')'max delay is ',dlymx
       end
 
 c     bt | rec dly   seed
