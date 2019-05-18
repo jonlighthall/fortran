@@ -113,10 +113,10 @@ c     test match
          dlyrec=irec            ! delay record
          sysmx=(j-1)/3
          write(*,*)'continuing...'
-         write(*,'(a,t30,a)') ' rec  dly seed',' time date'
+         write(*,'(a,t30,a)') ' rec  dly seed','     time date'
          write(dum,*)start         
          call date_and_time(VALUES=values)
-         write(*,'(i4,1x,i4,1x,a,1x,t30,i5,1x,i0.2,a,i0.2,a,i4,1x
+         write(*,'(i4,1x,i4,1x,a,1x,t30,i9,1x,i0.2,a,i0.2,a,i4,1x
      &        ,i0.2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')-1,-1
      &        ,trim(adjustl(dum)),0,values(2),'/',values(3),'/'
      &        ,values(1),values(5),':',values(6),':',values(7),'.'
@@ -129,7 +129,7 @@ c     test match
          sysmx=(j-1)/3
          write(*,fmt) 'the largest hailstone integer is ', sysmx
          write(1,fmt) 'the largest hailstone integer is ', sysmx
-         write(*,'(a,t30,a)') ' rec  dly seed',' time date'
+         write(*,'(a,t30,a)') ' rec  dly seed','     time date'
          write(1,'(a)') ' rec  dly seed'
          close(1)
          start=0
@@ -178,7 +178,7 @@ c     increment and save delay record
             open(1,file = 'collatz.out',status="old", position="append",
      &           action="write") ! force write at each iteration
             write(dum,*)sd
-            write(*,'(i4,1x,i4,1x,a,1x,t30,i5,1x,i0.2,a,i0.2,a,i4,1x,i0.
+            write(*,'(i4,1x,i4,1x,a,1x,t30,i9,1x,i0.2,a,i0.2,a,i4,1x,i0.
      &           2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')dlyrec,dly
      &           ,trim(adjustl(dum)),t,values(2),'/',values(3),'/'
      &           ,values(1),values(5),':',values(6),':',values(7),'.'
@@ -199,7 +199,7 @@ c     check exit flags
             write(dum,*)sd
             write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
             close(1)
-            write(*,'(i4,1x,i4,1x,a,1x,i5)')-1,dly
+            write(*,'(i4,1x,i4,1x,a,1x,i9)')-1,dly
      &           ,trim(adjustl(dum)),t
 
             exit
