@@ -1,4 +1,4 @@
-      program huge
+      program biggest
       implicit none
       integer*16 i, j, k
       integer*1 sz,ln
@@ -31,6 +31,13 @@ c     print summary with calculated formats
       if(ln.eq.10**k)k=k+1      ! needed for 4 bit
       write(fmt,*)'(i',ln,',a,i',k,',a)'
       write(*,fmt)j,' is ',ln,' digits long'
+      k=huge(i)
+      if(k.eq.j)then
+         write(*,*)'calculated maximum equals system maximum'
+      else
+         write(*,*)'calculated maximum does not equal system maximum'
+         write(*,*)j,'.ne.',k
+      endif
       end
       
 c      1 byte    8 bits 127
