@@ -212,6 +212,9 @@ c     check exit flags
       enddo
 c     print summary
       write(*,*)'exited loop'
+
+      write(dum,*)real(sd-start)/t
+      write(*,*)'processing rate ',trim(adjustl(dum)),' seeds per sec'
       write(*,'(a,i3,a)')' found ',dlyrec,' delay records'
       write(*,'(a,i4)')' max delay is ',dlymx
       end
@@ -236,7 +239,7 @@ c     16 |
       subroutine format(dum,dummy)
       implicit none
       integer sln,ii,pos,pos2
-      integer, parameter :: div=12 ! divider spacing
+      integer, parameter :: div=3 ! divider spacing
       character(128) dum,dummy
       write(dummy,*)
       sln=len(trim(adjustl(dum)))
