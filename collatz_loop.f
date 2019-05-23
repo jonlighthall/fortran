@@ -1,11 +1,11 @@
       program collatz_loop
       implicit none
-      integer dly,dlymx,dlyrec,t1,t2,t
+      integer dly,dlymx,dlyrec,t1,t2,t,sln,ii,pos,pos2
       integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
-      character(128) dum,fmt
+      character(128) dum,fmt,dummy
       intrinsic signal
       external handler
       integer,dimension(8) :: values
@@ -95,7 +95,22 @@ c     check if input max exceeds sys max w/o invoking overflow
          do i=4,ln-1
             read(2,*) irec,idly,isd
             write(dum,*)isd
-            write(*,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
+            write(dummy,*)
+c            write(*,'(i4,1x,i4,1x,a,2(i4))')irec,idly,trim(adjustl(dum))
+c     &           ,sln,sln/3
+            sln=len(trim(adjustl(dum)))
+            pos=sln+1
+            pos2=sln+sln/3
+            do ii=1,((sln-1)/3)+1
+               dummy(pos2-2:pos2)=dum(pos-2:pos)
+c               write(*,'(i2,4a)')ii,' ',dum(pos-2:pos),' ',trim(dummy)
+               pos=pos-3
+               if (ii.lt.(((sln-1)/3)+1)) dummy(pos2-3:pos2-3)=','
+               pos2=pos2-4
+            enddo
+            write(*,'(i4,1x,i4,1x,a,2(i4))')irec,idly
+     &           ,trim(adjustl(dummy))
+
             write(1,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
          enddo
          close(1)
