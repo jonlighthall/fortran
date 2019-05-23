@@ -1,6 +1,6 @@
       program collatz_loop
       implicit none
-      integer dly,dlymx,dlyrec,t1,t2,t,sln,ii,pos,pos2
+      integer dly,dlymx,dlyrec,t1,t2,t
       integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd
       logical error, interrupt
       common interrupt
@@ -95,22 +95,9 @@ c     check if input max exceeds sys max w/o invoking overflow
          do i=4,ln-1
             read(2,*) irec,idly,isd
             write(dum,*)isd
-            write(dummy,*)
-c            write(*,'(i4,1x,i4,1x,a,2(i4))')irec,idly,trim(adjustl(dum))
-c     &           ,sln,sln/3
-            sln=len(trim(adjustl(dum)))
-            pos=sln+1
-            pos2=sln+sln/3
-            do ii=1,((sln-1)/3)+1
-               dummy(pos2-2:pos2)=dum(pos-2:pos)
-c               write(*,'(i2,4a)')ii,' ',dum(pos-2:pos),' ',trim(dummy)
-               pos=pos-3
-               if (ii.lt.(((sln-1)/3)+1)) dummy(pos2-3:pos2-3)=','
-               pos2=pos2-4
-            enddo
+            call format(dum,dummy)
             write(*,'(i4,1x,i4,1x,a,2(i4))')irec,idly
      &           ,trim(adjustl(dummy))
-
             write(1,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
          enddo
          close(1)
@@ -129,11 +116,12 @@ c     test match
          sysmx=(j-1)/3
          write(*,*)'continuing...'
          write(*,'(a,t30,a)') ' rec  dly seed','     time date'
-         write(dum,*)start         
+         write(dum,*)start        
+         call format(dum,dummy) 
          call date_and_time(VALUES=values)
          write(*,'(i4,1x,i4,1x,a,1x,t30,i9,1x,i0.2,a,i0.2,a,i4,1x
      &        ,i0.2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')-1,-1
-     &        ,trim(adjustl(dum)),0,values(2),'/',values(3),'/'
+     &        ,trim(adjustl(dummy)),0,values(2),'/',values(3),'/'
      &        ,values(1),values(5),':',values(6),':',values(7),'.'
      &        ,values(8),' ',values(4)/60,' UTC'
       else
@@ -171,7 +159,8 @@ c     loop over all possible numbers
                   open(1,file = 'collatz.out',status="old", position 
      &                 ="append",action="write") 
                   write(dum,*)sd
-                  write(*,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dum)
+                  call format(dum,dummy)
+                  write(*,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dummy)
      &                 ),' ERROR Overflow imminent.'
                   write(1,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dum)
      &                 ),' ERROR Overflow imminent.'
@@ -193,9 +182,10 @@ c     increment and save delay record
             open(1,file = 'collatz.out',status="old", position="append",
      &           action="write") ! force write at each iteration
             write(dum,*)sd
+            call format(dum,dummy)
             write(*,'(i4,1x,i4,1x,a,1x,t30,i9,1x,i0.2,a,i0.2,a,i4,1x,i0.
      &           2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')dlyrec,dly
-     &           ,trim(adjustl(dum)),t,values(2),'/',values(3),'/'
+     &           ,trim(adjustl(dummy)),t,values(2),'/',values(3),'/'
      &           ,values(1),values(5),':',values(6),':',values(7),'.'
      &           ,values(8),' ',values(4)/60,' UTC'
             write(1,'(i4,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(dum))
@@ -214,16 +204,16 @@ c     check exit flags
             write(dum,*)sd
             write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
             close(1)
-            write(*,'(i4,1x,i4,1x,a,1x,i9)')-1,dly
-     &           ,trim(adjustl(dum)),t
-
+            call format(dum,dummy)
+            write(*,'(i4,1x,i4,1x,a,1x,t30,i9)')-1,dly
+     &           ,trim(adjustl(dummy)),t
             exit
          endif
       enddo
 c     print summary
       write(*,*)'exited loop'
-      write(*,'(a,i3,a)')'found ',dlyrec,' delay records'
-      write(*,'(a,i4)')'max delay is ',dlymx
+      write(*,'(a,i3,a)')' found ',dlyrec,' delay records'
+      write(*,'(a,i4)')' max delay is ',dlymx
       end
 
 c     largest sequential delay without overflow error
@@ -242,3 +232,21 @@ c     16 |
       interrupt = .true.
       print*,'Ctrl+C pressed',interrupt
       end function handler
+
+      subroutine format(dum,dummy)
+      implicit none
+      integer sln,ii,pos,pos2
+      integer, parameter :: div=12 ! divider spacing
+      character(128) dum,dummy
+      write(dummy,*)
+      sln=len(trim(adjustl(dum)))
+      pos=sln+1
+      pos2=sln+sln/div
+      do ii=1,((sln-1)/div)+1
+         dummy(pos2-div-1:pos2)=dum(pos-div-1:pos)
+         pos=pos-div
+         if (ii.lt.(((sln-1)/div)+1)) dummy(pos2-div:pos2-div)=','
+         pos2=pos2-(div+1)
+      enddo
+      return
+      end subroutine format
