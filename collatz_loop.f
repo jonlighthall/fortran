@@ -212,9 +212,9 @@ c     check exit flags
       enddo
 c     print summary
       write(*,*)'exited loop'
-
       write(dum,*)real(sd-start)/t
       write(*,*)'processing rate ',trim(adjustl(dum)),' seeds per sec'
+      write(*,*)'estimate ',real(sysmx-sd)/(sd-start)*t
       write(*,'(a,i3,a)')' found ',dlyrec,' delay records'
       write(*,'(a,i4)')' max delay is ',dlymx
       end
