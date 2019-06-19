@@ -5,7 +5,7 @@ This repsoitory contains basic programs written in FORTRAN.
 
 | program              | description                           | command tested | file dependencies | files output
 | -------------------- | ------------------------------------  | ---- | ---- | ---- |
-| [`hello.f   `](hello.f   ) | hello world | `print`
+| [`hello.f   `](hello.f   ) | hello world | `write` `sleep`
 | [`fundem.f  `](fundem.f  ) | fundamental | `read` `function`
 | [`ar.f      `](ar.f	   ) | array | `subroutine` | [`f.f`](f.f) [`f2.f`](f2.f)
 | [`global.f  `](global.f  ) | global variable | `include`|[`araydim.inc`](araydim.inc)
@@ -18,11 +18,11 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`timedate.f`](timedate.f) | date and time | `date_and_time`
 | [`pause.f`](pause.f) | pause | `pause`
 | [`test_system_clock.f`](test_system_clock.f) | system clock | `system_clock`
-| [`make_svp.f`](make_svp.f) |  | `system_clock` `srand` `rand`||`svp.in`
-| [`collatz.f`](collatz.f) | 
-| [`huge.f`](huge.f)||`kind` `huge`
-| [`collatz_loop.f`](collatz_loop.f) |  | | | [`collatz.out`](collatz.out)
-| [`interrupt.f`](interrupt.f)| |`common` `signal`||`state`
+| [`make_svp.f`](make_svp.f) | | `system_clock` `srand` `rand`||`svp.in`
+| [`collatz.f`](collatz.f) | Collatz sequence 
+| [`huge.f`](huge.f)| largest integer |`kind` `huge`
+| [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | | [`collatz.out`](collatz.out)
+| [`interrupt.f`](interrupt.f)| catch interrupt signal |`common` `signal`||`state`
 
 ## Installation
 
