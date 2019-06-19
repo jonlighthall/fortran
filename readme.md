@@ -18,7 +18,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`timedate.f`](timedate.f) | date and time | `date_and_time`
 | [`pause.f`](pause.f) | pause | `pause`
 | [`test_system_clock.f`](test_system_clock.f) | system clock | `system_clock`
-| [`make_svp.f`](make_svp.f) |  | `system_clock` `srand` `rand`
+| [`make_svp.f`](make_svp.f) |  | `system_clock` `srand` `rand`||`svp.in`
 | [`collatz.f`](collatz.f) | 
 | [`huge.f`](huge.f)||`kind` `huge`
 | [`collatz_loop.f`](collatz_loop.f) |  | | | [`collatz.out`](collatz.out)
