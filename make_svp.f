@@ -1,7 +1,7 @@
       program make_svp
-      INTEGER :: count
-      CALL SYSTEM_CLOCK(count)
-      call srand(count)
+      integer :: count
+      call system_clock(count)  ! get system time in milliseconds
+      call srand(count)         ! use time for random seed
 
       open(1,file = 'svp.in',status='unknown',action='write')
       write(1,*)'svp'
