@@ -1,7 +1,7 @@
       program collatz_loop
       implicit none
-      integer dly,dlymx,dlyrec,t1,t2,t
-      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd
+      integer dly,dlymx,dlyrec,t0,t1,t2,t
+      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd,dif,last
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
@@ -142,10 +142,12 @@ c     test match
 
 c     initialize controls
       error=.false.
+      call system_clock(t0)
       call system_clock(t1)
       call signal (2,handler)   ! interrupt
       call signal (3,handler)   ! quit
       interrupt = .false.
+      last=start
 
 c     loop over all possible numbers      
       do sd=start,sysmx           ! seed range
@@ -176,6 +178,7 @@ c     loop over all possible numbers
 c     increment and save delay record
          if (dly>dlymx) then
             dlyrec=dlyrec+1
+            last=sd
             call system_clock(t2)
             t=t2-t1
             call date_and_time(VALUES=values)
@@ -212,11 +215,23 @@ c     check exit flags
       enddo
 c     print summary
       write(*,*)'exited loop'
-      write(dum,*)real(sd-start)/t
+      dif=sd-start
+      t=t2-t0
+      write(dum,*)real(dif)/t
+      write(*,*)'time = ',t
       write(*,*)'processing rate ',trim(adjustl(dum)),' seeds per sec'
-      write(*,*)'estimate ',real(sysmx-sd)/(sd-start)*t
+      write(*,*)'estimate ',real(sysmx-sd)/dif*t
       write(*,'(a,i3,a)')' found ',dlyrec,' delay records'
       write(*,'(a,i4)')' max delay is ',dlymx
+      write(*,*)'start = ',start
+      write(*,*)' last = ',last
+      write(*,*)'   sd = ',sd
+      dif=sd-last
+      write(*,*)' diff = ',dif
+      write(dum,*)dif
+      call format(dum,dummy)
+      write(*,*)' it has been ',trim(adjustl(dummy))
+     &     ,' since a record has been found'
       end
 
 c     largest sequential delay without overflow error
