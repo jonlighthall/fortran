@@ -7,16 +7,21 @@
       integer function newunit(unit)
       integer, intent(out), optional :: unit
 !     local
-      integer, parameter :: LUN_MIN=10, LUN_MAX=1000
+      integer, parameter :: LUN_MIN=1, LUN_MAX=30
       logical :: opened
       integer :: lun
 !     begin
       newunit=-1
+      write(*,'(2(a,i2))')'testing units ',LUN_MIN,' to ',LUN_MAX
       do lun=LUN_MIN,LUN_MAX
+         write(*, '(A,i2)', ADVANCE = "NO")'testing ',lun
          inquire(unit=lun,opened=opened)
          if (.not. opened) then
             newunit=lun
+            write(*,*)"available"
             exit
+         else
+            write(*,*)'not available'
          end if
       end do
       if (present(unit)) unit=newunit
