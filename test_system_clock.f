@@ -1,6 +1,7 @@
       PROGRAM test_system_clock
       implicit none
       INTEGER :: count, count_rate, count_max,remain,sec,min,hr,day
+      integer delay,elap
       character(32) fmt
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) count, count_rate, count_max
@@ -16,4 +17,8 @@
       sec=(remain/count_rate-day*60*60*24-hr*60*60-min*60)
       write(*,fmt) '      and ',sec
      &     ,' seconds remaining before system clock rollover'
+      call sleep(1)
+      CALL SYSTEM_CLOCK(delay)
+      elap=(delay-count)/count_rate
+      write(*,*)'Program ran for ',elap,' seconds'
       END PROGRAM
