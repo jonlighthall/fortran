@@ -17,8 +17,13 @@
       sec=(remain/count_rate-day*60*60*24-hr*60*60-min*60)
       write(*,fmt) '      and ',sec
      &     ,' seconds remaining before system clock rollover'
-      call sleep(1)
+      call sleep(10)
       CALL SYSTEM_CLOCK(delay)
-      elap=(delay-count)/count_rate
+      if(delay.le.count) then
+         write(*,*)'rollover suspected'
+         elap=(delay+count_max-count)/count_rate
+      else
+         elap=(delay-count)/count_rate
+      endif
       write(*,*)'Program ran for ',elap,' seconds'
       END PROGRAM
