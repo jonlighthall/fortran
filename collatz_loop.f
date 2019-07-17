@@ -253,17 +253,18 @@ c     16 |
 
       subroutine format(dum,dummy)
       implicit none
-      integer sln,ii,pos,pos2
+      integer sln,ii,pos,pos2,numdiv
       integer, parameter :: div=3 ! divider spacing
       character(128) dum,dummy
       write(dummy,*)
       sln=len(trim(adjustl(dum)))
       pos=sln+1
       pos2=sln+sln/div
-      do ii=1,((sln-1)/div)+1
+      numdiv=((sln-1)/div)+1
+      do ii=1,numdiv
          dummy(pos2-div-1:pos2)=dum(pos-div-1:pos)
          pos=pos-div
-         if (ii.lt.(((sln-1)/div)+1)) dummy(pos2-div:pos2-div)=','
+         if (ii.lt.numdiv) dummy(pos2-div:pos2-div)=','
          pos2=pos2-(div+1)
       enddo
       return
