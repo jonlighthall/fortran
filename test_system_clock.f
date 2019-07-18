@@ -40,7 +40,7 @@ c     print divided time
 
 c     run for one cycle
       delay=count
-      do while (delay.le.count)
+      do while (delay.eq.count)
          call system_clock(delay)
       enddo
 
@@ -52,9 +52,8 @@ c     run for one cycle
          elap=(delay-count)
       endif
       call format(elap/count_rate,str)
-      write(*,*)'Program ran for ',trim(adjustl(str)),' seconds'
-      write(*,*)repeat('-',30)
 
+c     print elapsed time
       day=elap/count_rate/60/60/24
       write(*,fmt) 'There are ',day,' days'
       hr=(elap/count_rate-day*60*60*24)/60/60
@@ -66,5 +65,4 @@ c     run for one cycle
       ms=(elap-(day*60*60*24-hr*60*60-min*60)*count_rate)
       write(*,fmt) '      and ',ms
      &     ,' units elapsed'
-
       END PROGRAM
