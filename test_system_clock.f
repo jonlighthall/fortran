@@ -2,31 +2,25 @@
       implicit none
       INTEGER :: count, count_rate, count_max,remain,sec,min,hr
      &     ,day,delay,elap
-      character(64) fmt,dum,dummy
-      write(dum,*)
+      character(64) fmt,str
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) count, count_rate, count_max
       remain=count_max-count
-      write(dum,*)remain
-      call format(remain,dummy)
-c      write(*,*)dummy
+      call format(remain,str)
       write(*,*) 'There are ',remain,' units'
-      write(*,*) 'There are ',trim(adjustl(dummy)),' units'
+      write(*,*) 'There are ',trim(adjustl(str)),' units'
       sec=remain/count_rate
-      write(dum,*)sec
-      call format(sec,dummy)
+      call format(sec,str)
       write(*,*) '       or ',sec,' seconds'
-      write(*,*) '       or ',trim(adjustl(dummy)),' seconds'
+      write(*,*) '       or ',trim(adjustl(str)),' seconds'
       min=remain/count_rate/60
-      write(dum,*)min
-      call format(min,dummy)
-      write(*,*) '       or ',trim(adjustl(dummy)),' minutes'
+      call format(min,str)
+      write(*,*) '       or ',trim(adjustl(str)),' minutes'
       write(*,*) '       or ',min,' minutes'
       hr=remain/count_rate/60/60
-      write(dum,*)hr
-      call format(hr,dummy)
+      call format(hr,str)
       write(*,*) '       or ',hr,' hours'
-      write(*,*) '       or ',trim(adjustl(dummy)),' hours'
+      write(*,*) '       or ',trim(adjustl(str)),' hours'
       day=remain/count_rate/60/60/24
       write(*,*) '       or ',day,
      &' days remaining before system clock rollover'
@@ -52,6 +46,3 @@ c      delay=15
       endif
       write(*,*)'Program ran for ',elap,' seconds'
       END PROGRAM
-
- 
-
