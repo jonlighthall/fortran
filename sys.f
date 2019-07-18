@@ -4,10 +4,18 @@ c     program to test executing system commands from within fortran
       character(len=1024) :: filename
       character(len=1024) :: fmt
       integer cg_itr
+      logical ext
       print *, "system command test"
 c     base file name
       sfx = 'nspe.in'
       write(*,*) 'input file name is', sfx, len_trim(sfx)
+      inquire(file=trim(sfx),exist=ext)
+      if(ext.eqv. .false.) then
+         write(*,*)'creating dummy file...'
+         write(cmd,'(2a)')'touch ',trim(sfx)
+         call system(cmd)
+      endif
+
       do 10 i=0,2,1 
          cg_itr=i
 c     for each iteration, copy the input file with unique name
