@@ -22,15 +22,11 @@
       integer sln,pos,pos2,numdiv,numcom,i,spc
       write(copy,*)int
       copy=adjustl(copy)
-      sln=len(trim(adjustl(copy))) ! string length
+      sln=len(trim(copy)) ! string length
       numcom=(sln-1)/div        ! number of commas
       numdiv=numcom+1           ! number of divisions
       spc=numdiv*div-sln        ! number of leading spaces
       write(str,*)
-      if (spc.gt.1) then
-         write(spc,*)repeat(' ',spc)
-      endif
-
       str(spc+1:sln+spc)=copy(1:sln)
       copy=str
       write(str,*)
