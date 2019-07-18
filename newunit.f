@@ -1,20 +1,20 @@
-!     This is a simple function to search for an available unit. LUN_MIN
-!     and LUN_MAX define the range of possible LUNs to check. The UNIT
+!     This is a simple function to search for an available unit. lun_min
+!     and lun_max define the range of possible luns to check. The unit
 !     value is returned by the function, and also by the optional
-!     argument. This allows the function to be used directly in an OPEN
+!     argument. This allows the function to be used directly in an open
 !     statement, and optionally save the result in a local variable. 
 !     If no units are available, -1 is returned.
       integer function newunit(unit)
       integer, intent(out), optional :: unit
 !     local
-      integer, parameter :: LUN_MIN=1, LUN_MAX=30
+      integer, parameter :: lun_min=1, lun_max=30
       logical :: opened
       integer :: lun
 !     begin
       newunit=-1
-      write(*,'(2(a,i2))')'testing units ',LUN_MIN,' to ',LUN_MAX
-      do lun=LUN_MIN,LUN_MAX
-         write(*, '(A,i2)', ADVANCE = "NO")'testing ',lun
+      write(*,'(2(a,i2))')'testing units ',lun_min,' to ',lun_max
+      do lun=lun_min,lun_max
+         write(*, '(a,i2)', advance = "no")'testing ',lun
          inquire(unit=lun,opened=opened)
          if (.not. opened) then
             newunit=lun
