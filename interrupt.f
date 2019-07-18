@@ -6,7 +6,8 @@
       end 
 
       program crcount
-      integer i,the_start,the_end,stat
+      integer i,the_start,stat
+      integer, parameter :: the_end=10
       logical interrupted
       common interrupted
       external catch_signal
@@ -17,6 +18,11 @@
       open(1,file='state',status='old',action='read',iostat=stat)
       if (stat.eq.0) then
          read(1,*),the_start
+         if(the_start.gt.the_end) then
+            write(*,*)'loop already complete'
+            write(*,*)'starting over'
+            the_start=1
+         endif
          write(*,*)'coninuing from ',the_start
       else
 !     Otherwise bootstrap at 1 
@@ -25,7 +31,7 @@
       end if
       close(1)
 
-      the_end=10
+      write(*,*)'press Ctrl-c to interrupt'
       interrupted = .false.
       write(*,*) 'before loop, interrupted = ',interrupted
       do i = the_start,the_end
