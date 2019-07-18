@@ -1,11 +1,13 @@
       PROGRAM test_system_clock
       implicit none
       INTEGER :: count, count_rate, count_max,remain,sec,min,hr
-     &     ,day,delay,elap
+     &     ,day,delay,elap,ms
       character(64) fmt,str
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) count, count_rate, count_max
       remain=count_max-count
+
+c     print total time
       call format(remain,str)
       write(*,*) 'There are ',trim(adjustl(str)),' units'
       sec=remain/count_rate
@@ -22,6 +24,8 @@
       write(*,*) '       or ',trim(adjustl(str)),
      &' days remaining before system clock rollover'
       write(*,*)repeat('-',30)
+
+c     print divided time
       write(fmt,*)'(1x,a,t12,i2,a)'    
       day=remain/count_rate/60/60/24
       write(*,fmt) 'There are ',day,' days'
@@ -32,20 +36,35 @@
       sec=(remain/count_rate-day*60*60*24-hr*60*60-min*60)
       write(*,fmt) '      and ',sec
      &     ,' seconds remaining before system clock rollover'
+      write(*,*)repeat('-',30)
+
 c     run for one cycle
       delay=count
       do while (delay.le.count)
          call system_clock(delay)
       enddo
-c     run until rollover
-      call sleep(remain/count_rate+10)
 
       WRITE(*,*) delay, count_rate, count_max
       if(delay.lt.count) then
          write(*,*)'rollover suspected'
-         elap=(delay+count_max-count)/count_rate
+         elap=(delay+count_max-count)
       else
-         elap=(delay-count)/count_rate
+         elap=(delay-count)
       endif
-      write(*,*)'Program ran for ',elap,' seconds'
+      call format(elap/count_rate,str)
+      write(*,*)'Program ran for ',trim(adjustl(str)),' seconds'
+      write(*,*)repeat('-',30)
+
+      day=elap/count_rate/60/60/24
+      write(*,fmt) 'There are ',day,' days'
+      hr=(elap/count_rate-day*60*60*24)/60/60
+      write(*,fmt) '      and ',hr,' hours'
+      min=(elap/count_rate-day*60*60*24-hr*60*60)/60
+      write(*,fmt) '      and ',min,' minutes'
+      sec=(elap/count_rate-day*60*60*24-hr*60*60-min*60)
+      write(*,fmt) '      and ',sec,' seconds'
+      ms=(elap-(day*60*60*24-hr*60*60-min*60)*count_rate)
+      write(*,fmt) '      and ',ms
+     &     ,' units elapsed'
+
       END PROGRAM
