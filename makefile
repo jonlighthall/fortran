@@ -36,6 +36,10 @@ collatz_loop.exe: collatz_loop.o format.o
 	@echo compiling $<...	
 	 $(your_f77) -fno-range-check $^ -o $@
 
+huge.exe: huge.o format.o
+	@echo compiling $<...	
+	 $(your_f77) $^ -o $@
+
 newunit_test.exe: newunit_test.o newunit.o
 	@echo compiling $<...	
 	 $(your_f77) $^ -o $@
@@ -55,3 +59,31 @@ clean:
 
 %.exe: %.o
 	$(your_f77) $(fcflags) $^ -o $@	
+
+test_auto: all
+	./hello.exe 
+	./ar.exe 
+	./global.exe 
+	./sys.exe 
+	./subs.exe
+	./globsubs.exe
+	./test_abs.exe
+	./sign.exe
+	./io.exe
+	./timedate.exe
+	./test_system_clock.exe
+	./make_svp.exe
+	./huge.exe
+	./extrema.exe
+	./newunit_test.exe
+	./fmt.exe
+
+test_man: all
+	./fundem.exe 
+	./pause.exe
+	./collatz.exe	
+
+test_int: all
+	./collatz_loop.exe
+	./interrupt.exe
+
