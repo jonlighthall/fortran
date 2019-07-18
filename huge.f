@@ -1,8 +1,8 @@
       program biggest
       implicit none
-      integer(kind=16) :: i, j, k
+      integer(kind=4) :: i, j, k
       integer(kind=1) :: sz,ln
-      character(64) fmt
+      character(64) fmt,str
       i=1 
       j=0
       do while (i.gt.j)
@@ -38,8 +38,16 @@ c     check result with huge intrinsic
          write(*,*)'calculated maximum equals system maximum'
       else
          write(*,*)'calculated maximum does not equal system maximum'
-         write(*,*)j,'.ne.',k
+         write(fmt,*)'(i',ln,',a,/,i',ln,')'
+         write(*,fmt)j,' .ne. ',k
       endif
+
+c     print formatted output
+      call format(j,str)        ! watch for mismatched types
+      write(*,'(a)')str
+      write(*,'(a,i2)')'formatted length is ',len(trim(adjustl(str)))
+      write(*,'(es9.1)')real(j)
+
       end
       
 
