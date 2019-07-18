@@ -1,19 +1,32 @@
       PROGRAM test_system_clock
       implicit none
       INTEGER :: count, count_rate, count_max,remain,sec,min,hr
-     &     ,day
-      integer delay,elap
-      character(32) fmt
+     &     ,day,delay,elap
+      character(64) fmt,dum,dummy
+      write(dum,*)
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) count, count_rate, count_max
       remain=count_max-count
+      write(dum,*)remain
+      call format(remain,dummy)
+c      write(*,*)dummy
       write(*,*) 'There are ',remain,' units'
+      write(*,*) 'There are ',trim(adjustl(dummy)),' units'
       sec=remain/count_rate
+      write(dum,*)sec
+      call format(sec,dummy)
       write(*,*) '       or ',sec,' seconds'
+      write(*,*) '       or ',trim(adjustl(dummy)),' seconds'
       min=remain/count_rate/60
+      write(dum,*)min
+      call format(min,dummy)
+      write(*,*) '       or ',trim(adjustl(dummy)),' minutes'
       write(*,*) '       or ',min,' minutes'
       hr=remain/count_rate/60/60
+      write(dum,*)hr
+      call format(hr,dummy)
       write(*,*) '       or ',hr,' hours'
+      write(*,*) '       or ',trim(adjustl(dummy)),' hours'
       day=remain/count_rate/60/60/24
       write(*,*) '       or ',day,
      &' days remaining before system clock rollover'
@@ -28,9 +41,9 @@
       sec=(remain/count_rate-day*60*60*24-hr*60*60-min*60)
       write(*,fmt) '      and ',sec
      &     ,' seconds remaining before system clock rollover'
-      call sleep(10)
+c      call sleep(10)
       CALL SYSTEM_CLOCK(delay)
-      delay=15
+c      delay=15
       if(delay.le.count) then
          write(*,*)'rollover suspected'
          elap=(delay+count_max-count)/count_rate
@@ -39,3 +52,6 @@
       endif
       write(*,*)'Program ran for ',elap,' seconds'
       END PROGRAM
+
+ 
+

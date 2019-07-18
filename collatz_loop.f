@@ -5,7 +5,7 @@
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
-      character(128) dum,fmt,dummy
+      character(64) str,fmt,fmt_str
       intrinsic signal
       external handler
       integer,dimension(8) :: values
@@ -32,12 +32,12 @@ c     read in existing file
      &     =iostat)
       open(2,status='scratch')
       if (iostat.le.0) then
-         read(1,'(33x,a)')dum   ! read line 1
-         dum=adjustl(dum)
+         read(1,'(33x,a)')str   ! read line 1
+         str=adjustl(str)
 c     check if input max exceeds sys max w/o invoking overflow
-         ilen=len(trim(dum))
+         ilen=len(trim(str))
          if (ilen.gt.k) then
-            write(*,'(3a,i3)')'  length of file maximim ',trim(dum)
+            write(*,'(3a,i3)')'  length of file maximim ',trim(str)
      &           ,' is ',ilen
             write(*,fmt)'length of system maximum ',k
             write(*,'(a,i3,a,i3)')'ERROR: Overflow imminent. ',ilen
@@ -46,24 +46,24 @@ c     check if input max exceeds sys max w/o invoking overflow
             start=1
             close(1)
          else
-         read(dum,*)isysmx        ! convert to integer
+         read(str,*)isysmx        ! convert to integer
          rewind(1)
          if(isysmx.lt.j)then
             write(*,fmt) '  file maximim ',isysmx
             write(*,fmt) 'system maximum ',j
-            read(1,'(a)') dum
+            read(1,'(a)') str
             write(2,fmt) '          the largest integer is ', j
             sysmx=(j-1)/3
-            read(1,'(a)') dum
+            read(1,'(a)') str
             write(2,fmt) 'the largest hailstone integer is ', sysmx
-            read(1,'(a)') dum
-            write(2,'(a)')trim(dum)
+            read(1,'(a)') str
+            write(2,'(a)')trim(str)
             isysmx=j
          else
             write(*,*)'file and system maxima match'
             do i=1,3
-            read(1,'(a)') dum
-            write(2,'(a)')trim(dum)
+            read(1,'(a)') str
+            write(2,'(a)')trim(str)
          enddo
          endif
          ln=3
@@ -88,17 +88,17 @@ c     check if input max exceeds sys max w/o invoking overflow
          rewind(2)
          open(1,file = 'collatz.out',status='old',action='write')
          do i=1,3
-            read(2,'(a)') dum
-            write(1,'(a)')trim(dum)
-            write(*,'(a)')trim(dum)
+            read(2,'(a)') str
+            write(1,'(a)')trim(str)
+            write(*,'(a)')trim(str)
          enddo
          do i=4,ln-1
             read(2,*) irec,idly,isd
-            write(dum,*)isd
-            call format(dum,dummy)
+            write(str,*)isd
+            call format(isd,fmt_str)
             write(*,'(i4,1x,i4,1x,a,2(i4))')irec,idly
-     &           ,trim(adjustl(dummy))
-            write(1,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(dum))
+     &           ,trim(adjustl(fmt_str))
+            write(1,'(i4,1x,i4,1x,a)')irec,idly,trim(adjustl(str))
          enddo
          close(1)
          endif
@@ -116,12 +116,12 @@ c     test match
          sysmx=(j-1)/3
          write(*,*)'continuing...'
          write(*,'(a,t30,a)') ' rec  dly seed','     time date'
-         write(dum,*)start        
-         call format(dum,dummy) 
+         write(str,*)start        
+         call format(start,fmt_str) 
          call date_and_time(VALUES=values)
          write(*,'(i4,1x,i4,1x,a,1x,t30,i9,1x,i0.2,a,i0.2,a,i4,1x
      &        ,i0.2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')-1,-1
-     &        ,trim(adjustl(dummy)),0,values(2),'/',values(3),'/'
+     &        ,trim(adjustl(fmt_str)),0,values(2),'/',values(3),'/'
      &        ,values(1),values(5),':',values(6),':',values(7),'.'
      &        ,values(8),' ',values(4)/60,' UTC'
       else
@@ -160,11 +160,12 @@ c     loop over all possible numbers
                if(n.gt.sysmx) then
                   open(1,file = 'collatz.out',status="old", position 
      &                 ="append",action="write") 
-                  write(dum,*)sd
-                  call format(dum,dummy)
-                  write(*,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dummy)
-     &                 ),' ERROR Overflow imminent.'
-                  write(1,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(dum)
+                  write(str,*)sd
+                  call format(sd,fmt_str)
+                  write(*,'(i4,1x,i4,1x,2a)')-1,dly
+     &                 ,trim(adjustl(fmt_str))
+     &                 ,' ERROR Overflow imminent.'
+                  write(1,'(i4,1x,i4,1x,2a)')-1,dly,trim(adjustl(str)
      &                 ),' ERROR Overflow imminent.'
                   close(1)
                   n=1           ! exit loop
@@ -184,14 +185,14 @@ c     increment and save delay record
             call date_and_time(VALUES=values)
             open(1,file = 'collatz.out',status="old", position="append",
      &           action="write") ! force write at each iteration
-            write(dum,*)sd
-            call format(dum,dummy)
+            write(str,*)sd
+            call format(sd,fmt_str)
             write(*,'(i4,1x,i4,1x,a,1x,t30,i9,1x,i0.2,a,i0.2,a,i4,1x,i0.
      &           2,a,i0.2,a,i0.2,a,i0.3,a,sp,i0.2,a)')dlyrec,dly
-     &           ,trim(adjustl(dummy)),t,values(2),'/',values(3),'/'
+     &           ,trim(adjustl(fmt_str)),t,values(2),'/',values(3),'/'
      &           ,values(1),values(5),':',values(6),':',values(7),'.'
      &           ,values(8),' ',values(4)/60,' UTC'
-            write(1,'(i4,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(dum))
+            write(1,'(i4,1x,i4,1x,a)')dlyrec,dly,trim(adjustl(str))
             close(1)
             dlymx=dly
             call system_clock(t1)
@@ -204,12 +205,12 @@ c     check exit flags
             t=t2-t1
             open(1,file = 'collatz.out',status='old',action='write'
      &           ,position="append")
-            write(dum,*)sd
-            write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
+            write(str,*)sd
+            write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(str))
             close(1)
-            call format(dum,dummy)
+            call format(sd,fmt_str)
             write(*,'(i4,1x,i4,1x,a,1x,t30,i9)')-1,dly
-     &           ,trim(adjustl(dummy)),t
+     &           ,trim(adjustl(fmt_str)),t
             exit
          endif
       enddo
@@ -217,9 +218,9 @@ c     print summary
       write(*,*)'exited loop'
       dif=sd-start
       t=t2-t0
-      write(dum,*)real(dif)/t
+      write(str,*)real(dif)/t
       write(*,*)'time = ',t
-      write(*,*)'processing rate ',trim(adjustl(dum)),' seeds per sec'
+      write(*,*)'processing rate ',trim(adjustl(str)),' seeds per sec'
       write(*,*)'estimate ',real(sysmx-sd)/dif*t
       write(*,'(a,i3,a)')' found ',dlyrec,' delay records'
       write(*,'(a,i4)')' max delay is ',dlymx
@@ -228,9 +229,9 @@ c     print summary
       write(*,*)'   sd = ',sd
       dif=sd-last
       write(*,*)' diff = ',dif
-      write(dum,*)dif
-      call format(dum,dummy)
-      write(*,*)' it has been ',trim(adjustl(dummy))
+      write(str,*)dif
+      call format(dif,fmt_str)
+      write(*,*)' it has been ',trim(adjustl(fmt_str))
      &     ,' since a record has been found'
       end
 
@@ -250,22 +251,3 @@ c     16 |
       interrupt = .true.
       print*,'Ctrl+C pressed',interrupt
       end function handler
-
-      subroutine format(dum,dummy)
-      implicit none
-      integer sln,ii,pos,pos2,numdiv
-      integer, parameter :: div=3 ! divider spacing
-      character(128) dum,dummy
-      write(dummy,*)
-      sln=len(trim(adjustl(dum)))
-      pos=sln+1
-      pos2=sln+sln/div
-      numdiv=((sln-1)/div)+1
-      do ii=1,numdiv
-         dummy(pos2-div-1:pos2)=dum(pos-div-1:pos)
-         pos=pos-div
-         if (ii.lt.numdiv) dummy(pos2-div:pos2-div)=','
-         pos2=pos2-(div+1)
-      enddo
-      return
-      end subroutine format
