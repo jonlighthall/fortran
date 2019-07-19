@@ -41,11 +41,11 @@ Use the following command to install GFortran on Linux.
 
 Check out the folder from the repository with one of the following commands.
 
-`svn co https://github.com/jonlighthall/fortran.git/trunk/ ./fortran` (SVN)
+>`svn co https://github.com/jonlighthall/fortran.git/trunk/ ./fortran` (SVN)
 
-`git clone https://github.com/jonlighthall/fortran` (Git HTTPS)
+>`git clone https://github.com/jonlighthall/fortran` (Git HTTPS)
 
-`git clone git@github.com:jonlighthall/fortran.git` (Git SSH)
+>`git clone git@github.com:jonlighthall/fortran.git` (Git SSH)
 
 ## Compiling
 Compile the source files and create executables with commands such as the following.
@@ -58,3 +58,11 @@ Alternatively, these commands can be executed by using the `make` command.
 The compiled executables can be run using commands such as the following.
   
 `./hello.exe`
+
+Groups of executeables can be run in sequnece with the following commands.
+
+>`make test_auto` to run programs which do not require user input.
+
+>`make test_man` to run programs which require user input.
+
+>`make test_int` to run programs which require an interrupt signal to terminate.
