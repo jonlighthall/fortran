@@ -1,6 +1,7 @@
       subroutine format(int,str)
       implicit none
       integer,intent(in)::int
+      character(len=*), parameter :: sep=','
       character(64), intent(out)::str
       character(64) copy
       integer, parameter :: div=3 ! divider spacing
@@ -21,8 +22,8 @@
          str(pos2:pos2+div-1)=copy(pos:pos+div-1)
          pos=pos+div
          if(i.le.numcom) then
-            str(pos2+div:)=','
-            pos2=pos2+1
+            str(pos2+div:)=sep
+            pos2=pos2+len(sep)
          endif
          pos2=pos2+div
       enddo
