@@ -17,8 +17,9 @@
       do 
          if(interrupted) exit
       enddo
+      write(*,*)'...stopped'
 
-      CALL SYSTEM_CLOCK(count, count_rate, count_max)
+      CALL SYSTEM_CLOCK(count)
       finish=count
       
 c     calculate elapsed time
