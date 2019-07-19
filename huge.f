@@ -1,6 +1,6 @@
       program biggest
       implicit none
-      integer(kind=4) :: i, j, k
+      integer(kind=16) :: i, j, k
       integer(kind=1) :: sz,ln
       character(64) fmt,str
       i=1 
@@ -44,8 +44,10 @@ c     check result with huge intrinsic
 
 c     print formatted output
       call format(j,str)        ! watch for mismatched types
-      write(*,'(a)')str
-      write(*,'(a,i2)')'formatted length is ',len(trim(adjustl(str)))
+      if (str.ne.' -1') then
+         write(*,'(a)')str
+         write(*,'(a,i2)')'formatted length is ',len(trim(adjustl(str)))
+      endif
       write(*,'(es9.1)')real(j)
 
       end
