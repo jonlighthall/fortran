@@ -12,3 +12,26 @@
 
 # Git 
 *.~*~
+
+#----------------
+# programs output
+#----------------
+
+# sys
+nspe*.in
+
+# io
+svp.out
+
+# make_svp
+svp.in
+
+# interrupt
+state
+
+# newunit_test
+test
+test1
+test2
+test3
+test4
