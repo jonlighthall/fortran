@@ -17,12 +17,16 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`io.f      `](io.f      ) | input/output | `inquire` `open` ||`svp.out`
 | [`timedate.f`](timedate.f) | date and time | `date_and_time`
 | [`pause.f`](pause.f) | pause | `pause`
-| [`test_system_clock.f`](test_system_clock.f) | system clock | `system_clock`
+| [`test_system_clock.f`](test_system_clock.f) | system clock | `system_clock`| [`format.f`](format.f)
 | [`make_svp.f`](make_svp.f) | | `system_clock` `srand` `rand`||`svp.in`
 | [`collatz.f`](collatz.f) | Collatz sequence 
-| [`huge.f`](huge.f)| largest integer |`kind` `huge`
-| [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | | [`collatz.out`](collatz.out)
+| [`huge.f`](huge.f)| largest integer |`kind` `huge` | [`format.f`](format.f)
+| [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | [`format.f`](format.f) | [`collatz.out`](collatz.out)
 | [`interrupt.f`](interrupt.f)| catch interrupt signal |`common` `signal`||`state`
+| [`extrema.f`](extrema.f)||||
+| [`newunit_test.f`](newunit_test.f)| newunit replacement |`inquire`|[`newunit.f`](newunit.f)|
+| [`fmt.f`](fmt.f)| comma format | | [`format.f`](format.f) |
+| [`timer.f`](timer.f)| timer | `system_clock` `common` `signal` |
 
 ## Installation
 
