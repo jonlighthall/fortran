@@ -86,4 +86,4 @@ test_man: all
 test_int: all
 	./collatz_loop.exe
 	./interrupt.exe
-
+	./timer.exe
