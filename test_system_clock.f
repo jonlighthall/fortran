@@ -2,14 +2,19 @@
       implicit none
       INTEGER :: count, count_rate, count_max,remain,sec,min,hr
      &     ,day,delay,elap,ms
-      character(64) fmt,str
+      character(64) fmt,str,unit_name
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) count, count_rate, count_max
-      remain=count_max-count
+      remain=count_max!-count
+      if(count_rate.eq.1000) then
+         write(unit_name,*) 'miliseconds'
+      else
+         write(unit_name,*) 'units'
+      endif
 
 c     print total time
       call format(remain,str)
-      write(*,*) 'There are ',trim(adjustl(str)),' units'
+      write(*,*) 'There are ',trim(adjustl(str)),trim(unit_name)
       sec=remain/count_rate
       call format(sec,str)
       write(*,*) '       or ',trim(adjustl(str)),' seconds'
@@ -64,5 +69,5 @@ c     print elapsed time
       write(*,fmt) '      and ',sec,' seconds'
       ms=(elap-(day*60*60*24-hr*60*60-min*60)*count_rate)
       write(*,fmt) '      and ',ms
-     &     ,' units elapsed'
+     &     ,trim(unit_name),' elapsed'
       END PROGRAM
