@@ -4,8 +4,11 @@
      &     ,day,delay,elap,ms
       character(64) fmt,str,unit_name
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
-      WRITE(*,*) count, count_rate, count_max
-      remain=count_max!-count
+      WRITE(*,*) 'Time: ',count
+      write(*,*) 'Rate: ',count_rate
+      write(*,*) ' Max: ', count_max
+      write(*,*)repeat('-',30)
+      remain=count_max-count
       if(count_rate.eq.1000) then
          write(unit_name,*) 'miliseconds'
       else
@@ -49,7 +52,8 @@ c     run for one cycle
          call system_clock(delay)
       enddo
 
-      WRITE(*,*) delay, count_rate, count_max
+c      WRITE(*,*) delay, count_rate, count_max
+      WRITE(*,*) 'Time: ',count
       if(delay.lt.count) then
          write(*,*)'rollover suspected'
          elap=(delay+count_max-count)
