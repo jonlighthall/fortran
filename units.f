@@ -2,14 +2,14 @@
       implicit none
       integer, parameter :: nmi2m=1852, ift2m=3048
       integer, parameter :: dp = 8
-      real(kind = selected_real_kind(dp)) ft2m,m2ft,m2nmi,m2yd,yd2m
-     &     ,dB_m2yd,dB_yd2m
+      integer, parameter :: srk = selected_real_kind(dp)
+      real(kind = srk) ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m
       character(len = 256) :: fmt
 
 c     formatting
       write(fmt,'(a,i02,a)')'(a,i',ceiling(log10(real(dp))),')'
       write(*,fmt)'decimal palces = ',dp
-      write(*,fmt)'real bytes = ',selected_real_kind(dp)
+      write(*,fmt)'real bytes = ',srk
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',dp+3,'.',dp,')'
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',dp+7,'.',dp,')'
       
