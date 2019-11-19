@@ -1,7 +1,7 @@
       program units
-      integer(kind=2), parameter :: nmi2m=1852, ift2m=3048
-c      double precision, parameter :: ft2m=0.3048
-      real(8) ft2m,m2ft,m2nmi,m2yd,dB_m2yd,dB_yd2m
+      implicit none
+      integer, parameter :: nmi2m=1852, ift2m=3048
+      real(kind = 10) ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m
       write(*,*)'nmi2m = ',nmi2m
       ft2m=ift2m/1e4
       write(*,*)'ft2m = ',ft2m
@@ -17,5 +17,4 @@ c      double precision, parameter :: ft2m=0.3048
       write(*,*)'dB_m2yd = ',dB_m2yd
       dB_yd2m=20*log10(yd2m)
       write(*,*)'dB_yd2m = ',dB_yd2m
-
       end
