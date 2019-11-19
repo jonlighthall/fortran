@@ -3,7 +3,8 @@
       integer, parameter :: nmi2m=1852, ift2m=3048
       integer, parameter :: dp = 8
       integer, parameter :: srk = selected_real_kind(dp)
-      real(kind = srk) ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m
+      real(kind = srk) ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m,kt2ms
+     &     ,ms2kt
       character(len = 256) :: fmt
 
 c     formatting
@@ -21,6 +22,8 @@ c     functional definitions
       yd2m=1/m2yd
       dB_m2yd=20*log10(m2yd)
       dB_yd2m=20*log10(yd2m)
+      kt2ms=nmi2m/(60.*60)
+      ms2kt=m2nmi*60*60
 
 c     printed output
       write(*,'(a,i4)')'  nmi2m = ',nmi2m
@@ -31,4 +34,6 @@ c     printed output
       write(*,fmt)'   yd2m = ',yd2m
       write(*,fmt)'dB_m2yd = ',dB_m2yd
       write(*,fmt)'dB_yd2m = ',dB_yd2m
+      write(*,fmt)'  kt2ms = ',kt2ms
+      write(*,fmt)'  ms2kt = ',ms2kt
       end
