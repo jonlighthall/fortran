@@ -60,7 +60,7 @@ clean:
 %.exe: %.o
 	$(your_f77) $(fcflags) $^ -o $@	
 
-test_auto: all
+test_auto: all # test all functions that run automatically
 	./hello.exe 
 	./ar.exe 
 	./global.exe 
@@ -78,12 +78,12 @@ test_auto: all
 	./newunit_test.exe
 	./fmt.exe
 
-test_man: all
+test_man: all # test all functions that require manual input
 	./fundem.exe 
 	./pause.exe
 	./collatz.exe	
 
-test_int: all
+test_int: all # test all functions that require user interrupt
 	./collatz_loop.exe
 	./interrupt.exe
 	./timer.exe
