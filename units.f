@@ -1,7 +1,7 @@
       program units
       implicit none
       integer, parameter :: nmi2m=1852, ift2m=3048
-      integer, parameter :: dp = 8
+      integer, parameter :: dp = 18
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk) ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m,kt2ms
      &     ,ms2kt
@@ -12,7 +12,7 @@ c     formatting
       write(*,fmt)'decimal palces = ',dp
       write(*,fmt)'real bytes = ',srk
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',dp+3,'.',dp,')'
-      write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',dp+7,'.',dp,')'
+c      write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',dp+7,'.',dp,')'
       
 c     functional definitions
       ft2m=ift2m/1e4
