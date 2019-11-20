@@ -12,7 +12,7 @@
       call signal(SIGINT, catch_signal)
 
       write(*,*)'Timer started...'
-      write(*,*)'press Ctrl-c to stop'
+      write(*,*)'press Ctrl-C to stop'
       interrupted = .false.
       do 
          if(interrupted) exit
