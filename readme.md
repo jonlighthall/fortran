@@ -27,7 +27,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`newunit_test.f`](newunit_test.f)| newunit replacement |`inquire`|[`newunit.f`](newunit.f)|
 | [`fmt.f`](fmt.f)| comma format | | [`format.f`](format.f) |
 | [`timer.f`](timer.f)| timer | `system_clock` `common` `signal` |
-| [`units.f`](units.f)| units |  |
+| [`units.f`](units.f)| unit conversions | `selected_real_kind` |
 
 
 ## Installation
