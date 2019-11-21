@@ -1,7 +1,16 @@
       program units
       implicit none
+c     equivalence definitions
       integer, parameter :: nmi2m=1852, ift2m=3048
-      integer, parameter :: dp = 18
+c     set decimal point precision
+c     byts max
+c     ---- ---
+c      4    6
+c      8   15
+c     10   18
+c     16   33
+c     tested consistent out to 32 decimal places
+      integer, parameter :: dp = 33
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk) ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m,kt2ms
      &     ,ms2kt
@@ -12,10 +21,11 @@ c     formatting
       write(*,fmt)'decimal palces = ',dp
       write(*,fmt)'real bytes = ',srk
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',dp+3,'.',dp,')'
-c      write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',dp+7,'.',dp,')'
-      
+c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',dp+7,'.',dp,')'
+
 c     functional definitions
-      ft2m=ift2m/1e4
+      ft2m=ift2m                ! must copy integer value first for ultimate precision
+      ft2m=ft2m/1e4             ! works
       m2ft=1/ft2m
       m2nmi=1./nmi2m
       m2yd=m2ft/3
