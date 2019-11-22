@@ -5,7 +5,7 @@
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
-      character(64) dum,fmt,fmt_str
+      character(128) dum,fmt,fmt_str
       intrinsic signal
       external handler
       integer,dimension(8) :: values
@@ -247,5 +247,5 @@ c     16 |
       logical interrupt
       common interrupt
       interrupt = .true.
-      print*,'Ctrl+C pressed',interrupt
+      print*,'Ctrl-C pressed',interrupt
       end function handler

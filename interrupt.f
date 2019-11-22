@@ -31,7 +31,7 @@
       end if
       close(1)
 
-      write(*,*)'press Ctrl-c to interrupt'
+      write(*,*)'press Ctrl-C to interrupt'
       interrupted = .false.
       write(*,*) 'before loop, interrupted = ',interrupted
       do i = the_start,the_end
