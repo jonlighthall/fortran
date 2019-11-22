@@ -1,6 +1,7 @@
       program collatz
       implicit none
-      integer*16 n,i,seq,sysmx,mxn,sd
+      include 'intsize.f'
+      integer(kind=intsize) n,i,seq,sysmx,mxn,sd
       common sysmx
       call findmx
       write(*,*)'enter arbitrary positive integer'
@@ -40,7 +41,8 @@
 
       subroutine findmx
       implicit none
-      integer*16 i,j,k,sysmx
+      include 'intsize.f'
+      integer(kind=intsize) i,j,k,sysmx
       common sysmx
 c     find maximum integer
       i=1 
