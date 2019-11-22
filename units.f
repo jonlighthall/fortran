@@ -29,9 +29,10 @@ c     formatting
 c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',dp+7,'.',dp,')'
 
 c     functional definitions
-      m2nmi=1./nmi2m
-      kt2ms=nmi2m/(60.*60)
+      m2nmi=nmi2m               ! must copy integer value first for ultimate precision
+      m2nmi=1/m2nmi
       ms2kt=m2nmi*60*60
+      kt2ms=1/ms2kt
 
 c     printed output
       write(*,'(a,i4)')'  nmi2m = ',nmi2m
