@@ -13,7 +13,7 @@ c      4     6   6
 c      8    15  14
 c     10    18  14
 c     16    33  32
-      integer, parameter :: dp = 15
+      integer, parameter :: dp = 33
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk) nmi2m,ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m
      &     ,kt2ms,ms2kt
@@ -99,7 +99,7 @@ c     printed output
 c     functional definitions
 c      ft2m=ift2m                ! must copy integer value first for ultimate precision
 c      ft2m=ft2m/1d4             ! works
-      ft2m=3.048d-1
+      ft2m=3.048q-1
       m2ft=1/ft2m
       m2yd=m2ft/3
       yd2m=1/m2yd
