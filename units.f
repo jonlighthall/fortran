@@ -3,14 +3,17 @@
 c     equivalence definitions
       integer, parameter :: nmi2m=1852, ift2m=3048
 c     set decimal point precision
-c     byts max
-c     ---- ---
-c      4    6
-c      8   15
-c     10   18
-c     16   33
-c     tested consistent out to 32 decimal places
-      integer, parameter :: dp = 18
+c
+c     for each real kind, the maximum number of decimal places is given
+c     along with the maximum accurate (consistent) decimal place
+c      
+c     bytes max consistent
+c     ----- --- ---------
+c      4     6   6
+c      8    15  14
+c     10    18  14
+c     16    33  32
+      integer, parameter :: dp = 15
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk) ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m,kt2ms
      &     ,ms2kt
