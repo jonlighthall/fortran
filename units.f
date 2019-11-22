@@ -22,17 +22,20 @@ c     16    33  32
       real(kind = 8) dnmi2m,dft2m,dm2ft,dm2yd,dyd2m,ddB_m2yd,ddB_yd2m
       integer pdp
 
+c     ----------------
+c     SINGLE PRECISION
+c     ----------------
       write(*,*)'single precision'
       pdp=6
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
       sft2m=3048e-4
 c     functional definitions
-      sm2ft=1/sft2m
-      sm2yd=sm2ft/3
-      syd2m=1/sm2yd
-      sdB_m2yd=20*log10(sm2yd)
-      sdB_yd2m=20*log10(syd2m)
+      sm2ft=1e0/sft2m
+      sm2yd=sm2ft/3e0
+      syd2m=1e0/sm2yd
+      sdB_m2yd=20e0*log10(sm2yd)
+      sdB_yd2m=20e0*log10(syd2m)
 
 c     printed output
       write(*,fmt)'   ft2m = ',sft2m
@@ -41,7 +44,10 @@ c     printed output
       write(*,fmt)'   yd2m = ',syd2m
       write(*,fmt)'dB_m2yd = ',sdB_m2yd
       write(*,fmt)'dB_yd2m = ',sdB_yd2m
-      
+
+c     ----------------
+c     DOUBLE PRECISION
+c     ----------------      
       write(*,*)
       write(*,*)'double precision'
       pdp=14
@@ -49,11 +55,11 @@ c     printed output
 c     equivalence definitions
       dft2m=3048d-4
 c     functional definitions
-      dm2ft=1/dft2m
-      dm2yd=dm2ft/3
-      dyd2m=1/dm2yd
-      ddB_m2yd=20*log10(dm2yd)
-      ddB_yd2m=20*log10(dyd2m)
+      dm2ft=1d0/dft2m
+      dm2yd=dm2ft/3d0
+      dyd2m=1d0/dm2yd
+      ddB_m2yd=20d0*log10(dm2yd)
+      ddB_yd2m=20d0*log10(dyd2m)
 
 c     printed output
       write(*,fmt)'   ft2m = ',dft2m
@@ -63,6 +69,9 @@ c     printed output
       write(*,fmt)'dB_m2yd = ',ddB_m2yd
       write(*,fmt)'dB_yd2m = ',ddB_yd2m
 
+c     --------------
+c     QUAD PRECISION
+c     --------------      
       write(*,*)
       if(srk.ge.16) then
          write(*,*)'quad precision'
