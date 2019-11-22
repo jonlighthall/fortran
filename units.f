@@ -86,7 +86,7 @@ c     --------------
 
 c     formatting
       write(fmt,'(a,i02,a)')'(a,i',ceiling(log10(real(pdp))),')'
-      write(*,fmt)'decimal palces = ',dp
+      write(*,fmt)'decimal places = ',dp
       write(*,fmt)'real bytes = ',srk
 
 c     equivalence definitions
