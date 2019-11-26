@@ -80,9 +80,8 @@ c     --------------
       else if(srk.eq.10) then
          write(*,*)'extended precision'
          pdp=precision(ft2m)
-         ft2m=3048q-4
-c         ft2m=ift2m             ! must copy integer value first for ultimate precision
-c         ft2m=ft2m/1q4          ! works
+         ft2m=ift2m             ! must copy integer value first for ultimate precision
+         ft2m=ft2m/1q4          ! works
       else
          write(*,*)'specified precision'
          pdp=dp
@@ -113,14 +112,10 @@ c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
 c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
       write(*,fmt)'  m2nmi = ',m2nmi
       write(*,fmt)'  kt2ms = ',kt2ms
-      write(*,fmt)'  kt2ms = ',1q0/ms2kt
       write(*,fmt)'  ms2kt = ',ms2kt
       write(*,*)
       
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
-
-c     equivalence definitions
-      nmi2m=1852q0
 
 c     functional definitions
       m2ft=1q0/ft2m
