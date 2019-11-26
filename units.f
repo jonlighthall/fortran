@@ -75,14 +75,14 @@ c     --------------
       write(*,*)
       if(srk.ge.16) then
          write(*,*)'quad precision'
-         pdp=precision(ft2m)
+         pdp=precision(ft2m)-1
          ft2m=3048q-4           ! works for real*16, not real*10
       else if(srk.eq.10) then
          write(*,*)'extended precision'
          pdp=precision(ft2m)
-c        ft2m=3048q-4
-         ft2m=ift2m             ! must copy integer value first for ultimate precision
-         ft2m=ft2m/1q4          ! works
+         ft2m=3048q-4
+c         ft2m=ift2m             ! must copy integer value first for ultimate precision
+c         ft2m=ft2m/1q4          ! works
       else
          write(*,*)'specified precision'
          pdp=dp
