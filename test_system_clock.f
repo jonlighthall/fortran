@@ -1,6 +1,6 @@
       PROGRAM test_system_clock
       implicit none
-      INTEGER :: count, count_rate, count_max,remain,sec,min,hr
+      INTEGER(kind=4) :: count, count_rate, count_max,remain,sec,min,hr
      &     ,day,delay,elap,ms
       character(64) fmt,str,unit_name
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
@@ -30,7 +30,7 @@ c     print total time
       day=remain/count_rate/60/60/24
       call format(day,str)
       write(*,*) '       or ',trim(adjustl(str)),
-     &' days remaining before system clock rollover'
+     &     ' days remaining before system clock rollover'
       write(*,*)repeat('-',30)
 
 c     print divided time
@@ -52,7 +52,6 @@ c     run for one cycle
          call system_clock(delay)
       enddo
 
-c      WRITE(*,*) delay, count_rate, count_max
       WRITE(*,*) 'Time: ',count
       if(delay.lt.count) then
          write(*,*)'rollover suspected'
@@ -63,6 +62,7 @@ c      WRITE(*,*) delay, count_rate, count_max
       call format(elap/count_rate,str)
 
 c     print elapsed time
+      write(fmt,*)'(1x,a,t12,i2,a)'    
       day=elap/count_rate/60/60/24
       write(*,fmt) 'There are ',day,' days'
       hr=(elap/count_rate-day*60*60*24)/60/60
