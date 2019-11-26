@@ -26,7 +26,7 @@ c     ----------------
 c     SINGLE PRECISION
 c     ----------------
       write(*,*)'single precision'
-      pdp=6
+      pdp=precision(sft2m)
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
       sft2m=3048e-4
@@ -50,7 +50,7 @@ c     DOUBLE PRECISION
 c     ----------------      
       write(*,*)
       write(*,*)'double precision'
-      pdp=14
+      pdp=precision(dft2m)      ! last decimal not consistent
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
       dft2m=3048d-4
@@ -75,18 +75,25 @@ c     --------------
       write(*,*)
       if(srk.ge.16) then
          write(*,*)'quad precision'
-         pdp=32
+         pdp=precision(ft2m)
          ft2m=3048q-4           ! works for real*16, not real*10
+      else if(srk.eq.10) then
+         write(*,*)'extended precision'
+         pdp=precision(ft2m)
+c        ft2m=3048q-4
+         ft2m=ift2m             ! must copy integer value first for ultimate precision
+         ft2m=ft2m/1q4          ! works
       else
          write(*,*)'specified precision'
          pdp=dp
+c        ft2m=3048q-4
          ft2m=ift2m             ! must copy integer value first for ultimate precision
          ft2m=ft2m/1q4          ! works
       endif
 
 c     formatting
       write(fmt,'(a,i02,a)')'(a,i',ceiling(log10(real(pdp))),')'
-      write(*,fmt)'decimal places = ',dp
+      write(*,fmt)'decimal places = ',pdp
       write(*,fmt)'real bytes = ',srk
 
 c     equivalence definitions
@@ -106,6 +113,7 @@ c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
 c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
       write(*,fmt)'  m2nmi = ',m2nmi
       write(*,fmt)'  kt2ms = ',kt2ms
+      write(*,fmt)'  kt2ms = ',1q0/ms2kt
       write(*,fmt)'  ms2kt = ',ms2kt
       write(*,*)
       
