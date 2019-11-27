@@ -1,8 +1,9 @@
       PROGRAM test_system_clock
       implicit none
-      INTEGER(kind=4) :: count, count_rate, count_max,remain,sec,min,hr
-     &     ,day,delay,elap,ms
-      character(64) fmt,str,unit_name
+      INTEGER(kind=4) :: count,count_rate,count_max,delay
+      include 'set_format.f'
+      INTEGER(kind=intsize) :: remain,sec,min,hr,day,elap,ms
+      character(len=fmtsize) fmt,str,unit_name
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) 'Time: ',count
       write(*,*) 'Rate: ',count_rate

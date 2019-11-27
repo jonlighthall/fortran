@@ -11,22 +11,22 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`global.f  `](global.f  ) | global variable | `include`|[`araydim.inc`](araydim.inc)
 | [`sys.f     `](sys.f	   ) | system | `system`
 | [`subs.f    `](subs.f	   ) | subroutines | `call` | [`f.f`](f.f) [`f2.f`](f2.f)
-| [`globsubs.f`](globsubs.f) | global variable | `include` `call`||[`araydim.inc`](araydim.inc)
+| [`globsubs.f`](globsubs.f) | global variable | `include` `call`|[`araydim.inc`](araydim.inc)
 | [`test_abs.f`](test_abs.f) | absolute value | `abs` `real`
 | [`sign.f    `](sign.f    ) | sign control | `ss` `sp`
 | [`io.f      `](io.f      ) | input/output | `inquire` `open` ||`svp.out`
 | [`timedate.f`](timedate.f) | date and time | `date_and_time`
 | [`pause.f`](pause.f) | pause | `pause`
-| [`test_system_clock.f`](test_system_clock.f) | system clock | `system_clock`| [`format.f`](format.f)
+| [`test_system_clock.f`](test_system_clock.f) | system clock | `system_clock`| [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`make_svp.f`](make_svp.f) | | `system_clock` `srand` `rand`||`svp.in`
-| [`collatz.f`](collatz.f) | Collatz sequence 
-| [`huge.f`](huge.f)| largest integer |`kind` `huge` | [`format.f`](format.f)
-| [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | [`format.f`](format.f) | [`collatz.out`](collatz.out)
+| [`collatz.f`](collatz.f) | Collatz sequence | [`format.f`](format.f) [`set_format.f`](set_format.f)
+| [`huge.f`](huge.f)| largest integer |`kind` `huge` | [`format.f`](format.f) [`set_format.f`](set_format.f)
+| [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | [`format.f`](format.f) [`set_format.f`](set_format.f) | [`collatz.out`](collatz.out)
 | [`interrupt.f`](interrupt.f)| catch interrupt signal |`common` `signal`||`state`
 | [`extrema.f`](extrema.f)||||
 | [`newunit_test.f`](newunit_test.f)| newunit replacement |`inquire`|[`newunit.f`](newunit.f)|
-| [`fmt.f`](fmt.f)| comma format | | [`format.f`](format.f) |
-| [`timer.f`](timer.f)| timer | `system_clock` `common` `signal` |
+| [`fmt.f`](fmt.f)| comma format | | [`format.f`](format.f) [`set_format.f`](set_format.f)|
+| [`timer.f`](timer.f)| timer | `system_clock` `common` `signal` | [`set_format.f`](set_format.f)
 | [`units.f`](units.f)| unit conversions | `selected_real_kind` |
 
 

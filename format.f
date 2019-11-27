@@ -1,9 +1,11 @@
       subroutine format(int,str)
       implicit none
-      integer,intent(in)::int
+      include 'set_format.f'
+      integer(kind=intsize),intent(in)::int
+c      integer,intent(in)::int
       character(len=*), parameter :: sep=','
-      character(64), intent(out)::str
-      character(64) copy
+      character(fmtsize), intent(out)::str
+      character(fmtsize) copy
       integer, parameter :: div=3 ! divider spacing
       integer sln,pos,pos2,numdiv,numcom,i,spc
       write(copy,*)int
