@@ -1,7 +1,7 @@
       program collatz
       implicit none
-      include 'intsize.f'
-      integer(kind=intsize) n,i,seq,sysmx,mxn,sd
+      include 'set_format.f'
+      integer(kind=intsize) n,i,sysmx,mxn,sd
       common sysmx
       call findmx
       write(*,*)'enter arbitrary positive integer'
@@ -19,11 +19,11 @@
       write(*,*)'i = ',i,'ai = ',n
       write(*,*)'Mx(N) = ',mxn
       write(*,*)'for N = ',sd
-      end
-
-      integer*16 function seq(n)
+      
+      contains
+      integer(kind=intsize)function seq(n)
       implicit none
-      integer*16 n,sysmx
+      integer(kind=intsize) n,sysmx
       common sysmx
       if (mod(n,2).eq.0) then
          seq=n/2
@@ -37,11 +37,12 @@
          endif
       endif
       return
-      end
+      end function
+      end program
 
       subroutine findmx
       implicit none
-      include 'intsize.f'
+      include 'set_format.f'
       integer(kind=intsize) i,j,k,sysmx
       common sysmx
 c     find maximum integer
@@ -64,3 +65,4 @@ c     find maximum integer
       write(*,*) 'the largest hailstone integer is', sysmx
       return
       end
+

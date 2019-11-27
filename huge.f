@@ -1,8 +1,9 @@
       program biggest
       implicit none
-      integer(kind=16) :: i, j, k
+      include 'set_format.f'
+      integer(kind=intsize) :: i, j, k
       integer(kind=1) :: sz,ln
-      character(64) fmt,str
+      character(len=fmtsize) fmt,str
       i=1 
       j=0
       do while (i.gt.j)
@@ -49,9 +50,7 @@ c     print formatted output
          write(*,'(a,i2)')'formatted length is ',len(trim(adjustl(str)))
       endif
       write(*,'(es9.1)')real(j)
-
       end
-      
 
 c     byte bit ln max
 c     --   --- -- ---------------------------------------

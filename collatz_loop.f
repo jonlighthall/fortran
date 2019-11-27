@@ -1,11 +1,12 @@
       program collatz_loop
       implicit none
       integer dly,dlymx,dlyrec,t0,t1,t2,t
-      integer*16 i,j,k,n,sysmx,sd,isysmx,start,isd,dif,last
+      include 'set_format.f'
+      integer(kind=intsize) i,j,k,n,sysmx,sd,isysmx,start,isd,dif,last
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
-      character(128) dum,fmt,fmt_str
+      character(len=fmtsize) dum,fmt,fmt_str
       intrinsic signal
       external handler
       integer,dimension(8) :: values
