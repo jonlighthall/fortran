@@ -46,7 +46,7 @@ c     print elapsed time
       sec=(elap/count_rate-day*60*60*24-hr*60*60-min*60)
       write(*,fmt) '      and ',sec,' seconds'
       ms=(elap-(day*60*60*24-hr*60*60-min*60)*count_rate)
-      write(*,fmt) '      and ',ms,unit_name,' elapsed'
+      write(*,fmt) '      and ',ms,trim(unit_name),' elapsed'
       end 
 
       subroutine catch_signal
