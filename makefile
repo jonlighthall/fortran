@@ -83,6 +83,7 @@ test_auto: all # test all functions that run automatically
 	./extrema.exe
 	./newunit_test.exe
 	./fmt.exe
+	./units.exe
 
 test_man: all # test all functions that require manual input
 	./fundem.exe 
@@ -90,6 +91,4 @@ test_man: all # test all functions that require manual input
 	./collatz.exe	
 
 test_int: all # test all functions that require user interrupt
-	./collatz_loop.exe
-	./interrupt.exe
-	./timer.exe
+	./int.sh
