@@ -58,6 +58,8 @@ clean:
 	rm -fv svp.in
 	rm -fv state
 	rm -fv test?
+	rm -fv a.out
+	rm -iv *.f~
 
 %.o: %.f	
 	@echo compiling $<...	
