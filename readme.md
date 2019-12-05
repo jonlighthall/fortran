@@ -2,9 +2,9 @@
 This repsoitory contains basic programs written in FORTRAN.
 
 ## Contents
-
-| program              | description                           | command tested | file dependencies | files output
-| -------------------- | ------------------------------------  | ---- | ---- | ---- |
+### Programs
+| name                       | description      | command tested | file dependencies | files output
+| -------------------------- | ---------------  | ---- | ---- | ---- |
 | [`hello.f   `](hello.f   ) | hello world      | `write` `sleep`
 | [`fundem.f  `](fundem.f  ) | fundamental      | `read` `function`
 | [`ar.f      `](ar.f	   ) | array            | `subroutine` | [`f.f`](f.f) [`f2.f`](f2.f)
@@ -28,6 +28,24 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`fmt.f`](fmt.f)| comma format |              | [`format.f`](format.f) [`set_format.f`](set_format.f)|
 | [`timer.f`](timer.f)       | timer            | `system_clock` `common` `signal` | [`set_format.f`](set_format.f)
 | [`units.f`](units.f)       | unit conversions | `selected_real_kind` |
+
+### Subroutines
+| name                       | description      | command tested | file dependencies | 
+| -------------------------- | ---------------  | ---- | ---- | 
+| [`f2.f`](f2.f)             |                  | `dimension` |
+| [`f.f`](f.f) |             |                  | `dimension` |
+| [`format.f`](format.f)     | format numerical input to string 
+
+### Functions
+| name                       | description      |
+| -------------------------- | ---------------- |
+| [`newunit.f`](newunit.f)   | |
+
+### Includes
+| name                       | description      |
+| -------------------------- | ---------------- |
+| [`araydim.inc`](araydim.inc) | array dimension
+| [`set_format.f`](set_format.f) | 
 
 
 ## Installation
