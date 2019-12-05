@@ -91,4 +91,6 @@ run_man: all # test all functions that require manual input
 	./collatz.exe	
 
 run_int: all # test all functions that require user interrupt
-	./int.sh
+	./collatz_loop.exe; \
+	./interrupt.exe; \
+	./timer.exe
