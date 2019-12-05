@@ -49,7 +49,6 @@ fmt.exe: fmt.o format.o set_format.f
 	 $(your_f77) fmt.o format.o  -o $@	
 
 format.o: format.f set_format.f
-	@echo compiling $<...	
 	 $(your_f77) $(flflags) $<
 
 clean:

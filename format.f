@@ -2,7 +2,6 @@
       implicit none
       include 'set_format.f'
       integer(kind=intsize),intent(in)::int
-c      integer,intent(in)::int
       character(len=*), parameter :: sep=','
       character(fmtsize), intent(out)::str
       character(fmtsize) copy
