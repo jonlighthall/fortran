@@ -1,4 +1,4 @@
-      PROGRAM f
+      PROGRAM io
       integer, parameter :: n=100
       REAL, DIMENSION(N) :: A
       parameter (maxN=10)
