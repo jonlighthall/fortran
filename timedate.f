@@ -1,4 +1,4 @@
-      program test_time_and_date
+      program timedate
       integer,dimension(8) :: values
        call date_and_time(VALUES=values)
       print '(8i5)', values
@@ -13,4 +13,4 @@
       finish=values(6)*60.+values(7)+values(8)/1000.
       write(*,'(a,f8.3)') '  end time is ', finish
       write(*,'(a,f8.3)') '  run time is ', finish-start
-      end program test_time_and_date
+      end program timedate

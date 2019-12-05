@@ -1,11 +1,4 @@
-      subroutine catch_signal
-      logical interrupted
-      common interrupted
-      interrupted = .true.
-      write(*,*) 'in catch, interrupted = ',interrupted
-      end 
-
-      program crcount
+      program interrupt
       integer i,the_start,stat
       integer, parameter :: the_end=10
       logical interrupted
@@ -51,3 +44,11 @@
       write(1,'(i2)')i
       close(1)
       end 
+
+      subroutine catch_signal
+      logical interrupted
+      common interrupted
+      interrupted = .true.
+      write(*,*) 'in catch, interrupted = ',interrupted
+      end 
+
