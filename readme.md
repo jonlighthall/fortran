@@ -11,7 +11,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`global.f  `](global.f  ) | global variable  | `include`|[`araydim.inc`](araydim.inc)
 | [`sys.f     `](sys.f	   ) | system           | `system`
 | [`subs.f    `](subs.f	   ) | subroutines      | `call` | [`f.f`](f.f) [`f2.f`](f2.f)
-| [`globsubs.f`](globsubs.f) | global variable  | `include` `call`|[`araydim.inc`](araydim.inc)
+| [`globsubs.f`](globsubs.f) | global variable subroutine | `include` `call`|[`araydim.inc`](araydim.inc)
 | [`test_abs.f`](test_abs.f) | absolute value   | `abs` `real`
 | [`sign.f    `](sign.f    ) | sign control     | `ss` `sp`
 | [`io.f      `](io.f      ) | input/output     | `inquire` `open` ||`svp.out`
@@ -63,8 +63,8 @@ The compiled executables can be run using commands such as the following.
 
 Groups of executeables can be run in sequnece with the following commands.
 
->`make test_auto` to run programs which do not require user input.
+>`make run` to run programs which do not require user input.
 
->`make test_man` to run programs which require user input.
+>`make run_man` to run programs which require user input.
 
->`make test_int` to run programs which require an interrupt signal to terminate.
+>`make run_int` to run programs which require an interrupt signal to terminate.
