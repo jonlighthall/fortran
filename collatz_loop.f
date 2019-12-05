@@ -139,6 +139,7 @@ c     test match
          dlymx=0          
          dlyrec=0         
       endif
+      write(*,*)'press Ctrl-C to safely interrupt'
 
 c     initialize controls
       error=.false.
