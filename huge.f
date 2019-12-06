@@ -3,7 +3,8 @@
       include 'set_format.f'
       integer(kind=intsize) :: i, j, k
       integer(kind=1) :: sz,ln
-      character(len=fmtsize) fmt,str
+      character(len=fmtsize) str
+      character(len=256) fmt
       i=1 
       j=0
       do while (i.gt.j)
@@ -54,8 +55,8 @@ c     print formatted output
 
 c     byte bit ln fl max
 c     --   --- -- -- ---------------------------------------
-c      1     8  3    127
-c      2    16  5    32767
+c      1     8  3  3 127
+c      2    16  5  6 32767
 c      4    32 10 13 2147483647
 c      8    64 19 25 9223372036854775807
 c     16   128 39 51 170141183460469231731687303715884105727
