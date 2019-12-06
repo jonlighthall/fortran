@@ -1,21 +1,23 @@
-      program fmt
+      program formatted_integer
       implicit none
       include 'set_format.f'
-      integer(kind=intsize) i,j,k
-      character(len=fmtsize) dummy,sfmt
+      integer(kind=intsize) i,j,k,l
+      character(len=fmtsize) str
+      character(len=256) fmt
       i=floor(log10(real(huge(j))))
-      write(sfmt,*)'(a,i',ceiling(log10(real(intsize))),')'
-      write(*,sfmt)'for byte size ',intsize
-      write(sfmt,*)'(a,i',i+1,')'
-      write(*,sfmt)'testing formatting up to ',10**i+1
-      write(sfmt,*)'(1x,i',i+1,')'
+      write(fmt,*)'(a,i',ceiling(log10(real(intsize))),')'
+      write(*,fmt)'for byte size ',intsize
+      write(fmt,*)'(a,i',i+1,')'
+      write(*,fmt)'testing formatting up to ',10**i+1
+      write(fmt,*)'(1x,i',i+1,')'
+      l=(i+1+ceiling((i+1)/3.))/2
       do j=0,i
          k=10**j
-         write(*,*)repeat('-',10),k,repeat('-',10)
+         write(*,*)repeat('-',l),k,repeat('-',l-1)
          do i =k-1,k+1
-            write(*,sfmt, advance = "no")i
-            call format(i,dummy)
-            write(*,*)adjustr(dummy)
+            write(*,fmt, advance = "no")i
+            call format(i,str)
+            write(*,*)adjustr(str)
          enddo
       enddo
       end
