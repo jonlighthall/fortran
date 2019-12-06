@@ -4,6 +4,7 @@
       include 'set_format.f'
       INTEGER(kind=intsize) :: remain,sec,min,hr,day,elap,ms
       character(len=fmtsize) fmt,str,unit_name
+      write(*,*)'in ',intsize,' bytes'
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) 'Time: ',count
       write(*,*) 'Rate: ',count_rate
@@ -16,6 +17,7 @@
          write(unit_name,*) 'units'
       endif
 
+      if(intsize.ge.4) then
 c     print total time
       call format(remain,str)
       write(*,*) 'There are ',trim(adjustl(str)),trim(unit_name)
@@ -33,6 +35,9 @@ c     print total time
       write(*,*) '       or ',trim(adjustl(str)),
      &     ' days remaining before system clock rollover'
       write(*,*)repeat('-',30)
+      else
+         write(*,*)'no format'
+      endif
 
 c     print divided time
       write(fmt,*)'(1x,a,t12,i2,a)'    
@@ -60,7 +65,6 @@ c     run for one cycle
       else
          elap=(delay-count)
       endif
-      call format(elap/count_rate,str)
 
 c     print elapsed time
       write(fmt,*)'(1x,a,t12,i2,a)'    
