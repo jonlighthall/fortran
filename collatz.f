@@ -3,7 +3,10 @@
       include 'set_format.f'
       integer(kind=intsize) n,i,sysmx,mxn,sd
       common sysmx
-      call findmx
+      sysmx=huge(i)
+      write(*,*) '          the largest integer is', sysmx
+      sysmx=(sysmx-1)/3
+      write(*,*) 'the largest hailstone integer is', sysmx
       write(*,*)'enter arbitrary positive integer'
       read *,n
       write(*,*)'received input ',n
@@ -39,30 +42,3 @@
       return
       end function
       end program
-
-      subroutine findmx
-      implicit none
-      include 'set_format.f'
-      integer(kind=intsize) i,j,k,sysmx
-      common sysmx
-c     find maximum integer
-      i=1 
-      j=0
-      do while (i.gt.j)
-         j=i
-         i=i*2
-      enddo
-      do k=floor(log10(real(j))),0,-1
-         i=j
-         j=i-1
-         do while (i.gt.j)
-            j=i
-            i=i+10**k
-         enddo
-      enddo
-      write(*,*) '          the largest integer is', j
-      sysmx=(j-1)/3
-      write(*,*) 'the largest hailstone integer is', sysmx
-      return
-      end
-
