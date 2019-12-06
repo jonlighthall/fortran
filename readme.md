@@ -18,8 +18,8 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`timedate.f`](timedate.f) | date and time    | `date_and_time`
 | [`pause.f`](pause.f)       | pause            | `pause`
 | [`test_system_clock.f`](test_system_clock.f)  | system clock | `system_clock`| [`format.f`](format.f) [`set_format.f`](set_format.f)
-| [`make_svp.f`](make_svp.f) |                  | `system_clock` `srand` `rand`||`svp.in`
-| [`collatz.f`](collatz.f)   | Collatz sequence | [`format.f`](format.f) [`set_format.f`](set_format.f)
+| [`make_svp.f`](make_svp.f) | make svp           | `system_clock` `srand` `rand`||`svp.in`
+| [`collatz.f`](collatz.f)   | Collatz sequence || [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`huge.f`](huge.f)         | largest integer  |`kind` `huge` | [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | [`format.f`](format.f) [`set_format.f`](set_format.f) | [`collatz.out`](collatz.out)
 | [`interrupt.f`](interrupt.f)| catch interrupt signal |`common` `signal`||`state`
@@ -33,19 +33,19 @@ This repsoitory contains basic programs written in FORTRAN.
 | name                       | description      | command tested | file dependencies | 
 | -------------------------- | ---------------  | ---- | ---- | 
 | [`f2.f`](f2.f)             |                  | `dimension` |
-| [`f.f`](f.f) |             |                  | `dimension` |
+| [`f.f`](f.f)              |                  | `dimension` |
 | [`format.f`](format.f)     | format numerical input to string 
 
 ### Functions
 | name                       | description      |
 | -------------------------- | ---------------- |
-| [`newunit.f`](newunit.f)   | |
+| [`newunit.f`](newunit.f)   | new unit replacement |
 
 ### Includes
 | name                       | description      |
 | -------------------------- | ---------------- |
 | [`araydim.inc`](araydim.inc) | array dimension
-| [`set_format.f`](set_format.f) | 
+| [`set_format.f`](set_format.f) | set format
 
 
 ## Installation
