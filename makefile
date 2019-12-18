@@ -12,12 +12,15 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe \
 	fmt.exe timer.exe units.exe
 
 global.exe: global.f araydim.inc
+	@echo compiling $<...	
 	$(your_f77) $(fcflags) global.f -o $@
 
 subs.exe: subs.f f.f f2.f
+	@echo compiling $<...	
 	$(your_f77) $^ -o $@
 
 globsubs.exe: globsubs.f f.f araydim.inc
+	@echo compiling $<...	
 	$(your_f77) globsubs.f f.f -o $@
 
 pause.exe: pause.f
@@ -25,21 +28,27 @@ pause.exe: pause.f
 	$(your_f77) -std=legacy  $^ -o $@
 
 test_system_clock.exe: test_system_clock.f format.f set_format.f
+	@echo compiling $<...
 	$(your_f77) test_system_clock.f format.f -o $@	
 
 collatz.exe: collatz.f format.f set_format.f
+	@echo compiling $<...	
 	$(your_f77) -fno-range-check collatz.f -o $@
 
 collatz_loop.exe: collatz_loop.f format.f set_format.f
+	@echo compiling $<...	
 	$(your_f77) -fno-range-check collatz_loop.f format.f -o $@
 
 huge.exe: huge.f format.f set_format.f
+	@echo compiling $<...	
 	$(your_f77) huge.f format.f -o $@
 
 newunit_test.exe: newunit_test.f newunit.f
+	@echo compiling $<...
 	$(your_f77) $^ -o $@
 
 fmt.exe: fmt.f format.f set_format.f
+	@echo compiling $<...	
 	$(your_f77) fmt.f format.f -o $@
 
 clean:
