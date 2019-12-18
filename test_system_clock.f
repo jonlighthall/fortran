@@ -3,7 +3,8 @@
       INTEGER(kind=4) :: count,count_rate,count_max,delay
       include 'set_format.f'
       INTEGER(kind=intsize) :: remain,sec,min,hr,day,elap,ms
-      character(len=fmtsize) fmt,str,unit_name
+      character(len=fmtsize) str
+      character(len=128) fmt,unit_name
       write(*,*)'in ',intsize,' bytes'
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       WRITE(*,*) 'Time: ',count
