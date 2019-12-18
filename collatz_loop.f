@@ -3,10 +3,11 @@
       integer dly,dlymx,dlyrec,t0,t1,t2,t
       include 'set_format.f'
       integer(kind=intsize) i,j,k,n,sysmx,sd,isysmx,start,isd,dif,last
+      character(len=fmtsize) fmt_str
       logical error, interrupt
       common interrupt
       integer irec,idly,iostat,ln,ilen
-      character(len=fmtsize) dum,fmt,fmt_str
+      character(len=128) dum,fmt
       intrinsic signal
       external handler
       integer,dimension(8) :: values
@@ -145,8 +146,15 @@ c     initialize controls
       error=.false.
       call system_clock(t0)
       call system_clock(t1)
+      call signal (1,handler)   ! hang up
       call signal (2,handler)   ! interrupt
       call signal (3,handler)   ! quit
+      call signal (4,handler)   ! illegal
+      call signal (5,handler)   ! trap
+      call signal (6,handler)   ! abort
+      call signal (7,handler)   ! busy
+      call signal (8,handler)   ! floating point error
+      call signal (15,handler)  ! terminate
       interrupt = .false.
       last=start
 
