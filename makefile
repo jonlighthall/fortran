@@ -26,26 +26,21 @@ pause.exe: pause.f
 
 test_system_clock.exe: test_system_clock.f format.f set_format.f
 	$(your_f77) test_system_clock.f format.f -o $@	
-	rm -f test_system_clock.o format.o
 
 collatz.exe: collatz.f format.f set_format.f
 	$(your_f77) -fno-range-check collatz.f -o $@
-	rm -f collatz.o format.o
 
 collatz_loop.exe: collatz_loop.f format.f set_format.f
 	$(your_f77) -fno-range-check collatz_loop.f format.f -o $@
-	rm -f collatz_loop.o format.o
 
 huge.exe: huge.f format.f set_format.f
 	$(your_f77) huge.f format.f -o $@
-	rm -f huge.o format.o
 
 newunit_test.exe: newunit_test.f newunit.f
 	$(your_f77) $^ -o $@
 
 fmt.exe: fmt.f format.f set_format.f
 	$(your_f77) fmt.f format.f -o $@
-	rm -f fmt.o format.o
 
 clean:
 	@echo removing files...
@@ -94,3 +89,10 @@ run_int: all # test all functions that require user interrupt
 	./collatz_loop.exe; \
 	./interrupt.exe; \
 	./timer.exe
+
+run_fmt: all # test all functions that require set_fmt.f
+	./test_system_clock.exe
+	./huge.exe
+	./fmt.exe
+	./collatz.exe
+	./collatz_loop.exe
