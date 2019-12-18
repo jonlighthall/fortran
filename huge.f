@@ -24,7 +24,7 @@ c     print summary with calculated formats
       sz=sizeof(i)
       ln=ceiling(log10(real(sz)))
       write(fmt,*)'(a,i',ln,',a)'
-      write(*,fmt)'in ',sz,' bytes'
+      write(*,fmt)'in ',sz,' bytes...'
       ln=ceiling(log10(real(j)))
       write(fmt,*)'(a,sp,i',ln+1,')'
       write(*,fmt) 'the highest signed integer is ', j
