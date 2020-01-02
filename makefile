@@ -9,7 +9,7 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe \
 	test_abs.exe sign.exe io.exe timedate.exe pause.exe \
 	test_system_clock.exe make_svp.exe collatz.exe huge.exe \
 	collatz_loop.exe interrupt.exe extrema.exe newunit_test.exe \
-	fmt.exe timer.exe units.exe basel.exe
+	fmt.exe timer.exe units.exe basel.exe test_pi.exe
 
 global.exe: global.f araydim.inc
 	@echo compiling $<...	
@@ -51,6 +51,10 @@ fmt.exe: fmt.f format.f set_format.f
 	@echo compiling $<...	
 	$(your_f77) fmt.f format.f -o $@
 
+basel.exe: basel.f 
+	@echo compiling $<...	
+	$(your_f77) -fdefault-real-8 -fdefault-integer-8 $^ -o $@
+
 clean:
 	@echo removing files...
 	rm -fv *.exe
@@ -88,6 +92,8 @@ run: all # test all functions that run automatically
 	./newunit_test.exe
 	./fmt.exe
 	./units.exe
+	./basel.exe
+	./test_pi.exe
 
 run_man: all # test all functions that require manual input
 	./fundem.exe 

@@ -29,6 +29,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`timer.f`](timer.f)       | timer            | `system_clock` `common` `signal` | [`set_format.f`](set_format.f)
 | [`units.f`](units.f)       | unit conversions | `selected_real_kind` |
 | [`basel.f`](basel.f)	     | basel problem	|
+| [`test_pi.f`](test_pi.f)   | pi		| `atan`
 
 ### Subroutines
 | name                       | description      | command tested | file dependencies | 
