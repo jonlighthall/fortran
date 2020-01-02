@@ -13,7 +13,7 @@ c      4     6   6
 c      8    15  14
 c     10    18  14
 c     16    33  32
-      integer, parameter :: dp = 10
+      integer, parameter :: dp = 18
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk), parameter :: pi = 4q0*atan(1q0)
       real(kind = srk) sum,pival,seq,pireal
@@ -49,4 +49,14 @@ c      pdp=dp-1
       enddo
       write(*,fmt)pival,'  Basel'
       write(*,*)i,sum,pival
+
+      do i=0,dp
+         write(*,*)i,floor(pireal*10**i),floor(pi*10**i),floor(pival*10
+     &        **i),floor(pireal*10**i).eq.floor(pi*10**i),floor(pireal
+     &        *10**i).eq.floor(pival*10**i)
+         if (floor(pireal*10**i).ne.floor(pi*10**i)) exit
+      enddo
+
+      write(*,*)i-1
+
       end
