@@ -17,6 +17,7 @@
       write(*,fmt)pi,'  atan'
 
       do i=0,dp
+         write(*,*)i,floor(pireal*10**i),floor(pi*10**i)
          if (floor(pireal*10**i).ne.floor(pi*10**i)) exit
       enddo
       write(*,'(1x,i2,a)')i,' decimal places of precision achieved'
