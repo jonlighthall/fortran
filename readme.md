@@ -30,6 +30,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`units.f`](units.f)       | unit conversions | `selected_real_kind` |
 | [`basel.f`](basel.f)	     | basel problem	|
 | [`test_pi.f`](test_pi.f)   | pi		| `atan`
+| [`ask.f`](ask.f)	     | read to logical	| `index`
 
 ### Subroutines
 | name                       | description      | command tested | file dependencies | 
