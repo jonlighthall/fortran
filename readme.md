@@ -67,6 +67,7 @@ pacman -S --noconfirm git
 pacman -S --noconfirm make
 pacman -S --noconfirm mingw32/mingw-w64-i686-gcc-fortran
 pacman -S --noconfirm mingw64/mingw-w64-x86_64-gcc-fortran
+pacman -S --noconfirm msys/gcc-fortran
 ```
 
 ### Cloning
