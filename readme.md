@@ -59,6 +59,15 @@ Use the following command to install GFortran, etc, on Linux.
 
 `sudo apt -y install git make gfortran`
 
+Use the following commands to install GFortran, etc, on MSYS2.
+
+```bash
+pacman -Syu --noconfirm
+pacman -S --noconfirm git
+pacman -S --noconfirm make
+pacman -S --noconfirm mingw64/mingw-w64-x86_64-gcc-fortran mingw64/mingw-w64-x86_64-gcc
+```
+
 ### Cloning
 
 Check out the folder from the repository with one of the following commands.
