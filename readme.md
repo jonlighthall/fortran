@@ -54,10 +54,10 @@ This repsoitory contains basic programs written in FORTRAN.
 
 ### Prerequisites
 
-Requies the a compiler for Fortran, such as GNU Fortran.
-Use the following command to install GFortran on Linux.
+Requies a compiler for Fortran, such as GNU Fortran.
+Use the following command to install GFortran, etc, on Linux.
 
-`sudo apt install gfortran`
+`sudo apt -y install git make gfortran`
 
 ### Cloning
 
