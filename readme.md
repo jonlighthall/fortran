@@ -56,11 +56,14 @@ This repsoitory contains basic programs written in FORTRAN.
 
 Requies a compiler for Fortran, such as GNU Fortran.
 Use the following command to install GFortran, etc, on Linux.
-
-`sudo apt -y install git make gfortran`
+```bash
+sudo apt update && sudo apt -y upgrade
+sudo apt -y install git
+sudo apt -y install make
+sudo apt -y install gfortran
+```
 
 Use the following commands to install GFortran, etc, on MSYS2.
-
 ```bash
 pacman -Syu --noconfirm
 pacman -S --noconfirm git
