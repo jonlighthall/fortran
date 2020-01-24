@@ -10,7 +10,7 @@
 !     Try to recover current state
       open(1,file='state',status='old',action='read',iostat=stat)
       if (stat.eq.0) then
-         read(1,*),the_start
+         read(1,*)the_start
          if(the_start.gt.the_end) then
             write(*,*)'loop already complete'
             write(*,*)'starting over'
