@@ -28,12 +28,13 @@ c     16    33  32
       write(*,'(1x,i2,a,i2,a)')dp,' decimals in ',srk,' bytes'
       pdp=dp-1
       write(fmt,'(a,i0.2,a,i0.2,a)')'(3x,f',pdp+2,'.',pdp,',a)'
-
       pistr = '3.1415926535897932384626433832795028841971693993751058'
       write(*,'(3x,2a)')trim(pistr(1:dp+2)),' string'
       read(pistr,*)pireal
       write(*,fmt)pireal,'  real'
       write(*,fmt)pi,'  atan'
+
+c     calculate series
       sum=0
       i=1
       pival=0
@@ -54,6 +55,7 @@ c     if(mod(i,1000000).eq.0) write(*,'(a)',advance='no'),'.'
       write(*,fmt)pival,'  Basel'
       write(*,*)i,sum,pival
 
+c     compare digits
       do i=0,dp
          sum=pireal*10**i
          j=floor(sum)
@@ -64,8 +66,9 @@ c     if(mod(i,1000000).eq.0) write(*,'(a)',advance='no'),'.'
          write(*,*)i+1,j,k,l,j.eq.k,j.eq.l
          if (j.ne.k) exit
       enddo
+      write(*,'(1x,i2,a)')i,' decimal places of precision achieved'
 
-      write(*,*)i,' decimal places of precision'
+c     calcualte elapsed time
       call system_clock(delay)
       if(delay.lt.count) then
          write(*,*)'rollover suspected'
@@ -76,6 +79,7 @@ c     if(mod(i,1000000).eq.0) write(*,'(a)',advance='no'),'.'
       call hostnm(host)
       write(*,*)'Elapsed time is ',elap,' ',trim(unit_name),' on ',host
 
+c     write to file
       inquire(file = '/Acoustics/forjon/fortran/basel_time.txt',exist
      $     =ext)
       if(ext) then
