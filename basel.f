@@ -74,10 +74,14 @@ c     if(mod(i,1000000).eq.0) write(*,'(a)',advance='no'),'.'
          elap=(delay-count)
       endif
       call hostnm(host)
-      write(*,*)'Elapsed time is ',elap,' on ',host
+      write(*,*)'Elapsed time is ',elap,' ',trim(unit_name),' on ',host
 
-      open(1,file = '/Acoustics/forjon/fortran/basel_time.txt',status
-     &     ='old',position='append',action='write')
-      write(1,*)'Elapsed time is ',elap,' on ',host
-      close(1)
+      inquire(file = '/Acoustics/forjon/fortran/basel_time.txt',exist
+     $     =ext)
+      if(ext) then
+         open(1,file = '/Acoustics/forjon/fortran/basel_time.txt',status
+     &        ='old',position='append',action='write')
+         write(1,*)'Elapsed time is ',elap,' on ',host
+         close(1)
+      endif
       end
