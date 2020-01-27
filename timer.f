@@ -14,8 +14,8 @@
       else
          write(unit_name,*) 'units'
       endif
-      call signal(SIGINT, catch_signal)
 
+      call signal(SIGINT, catch_signal)
       write(*,*)'Timer started...'
       write(*,*)'press Ctrl-C to stop'
       interrupted = .false.
@@ -24,8 +24,7 @@
       enddo
       write(*,*)'...stopped'
 
-      CALL SYSTEM_CLOCK(count)
-      finish=count
+      CALL SYSTEM_CLOCK(finish)
       
 c     calculate elapsed time
       if(finish.lt.start) then
@@ -45,7 +44,7 @@ c     print elapsed time
       write(*,fmt) '      and ',min,' minutes'
       sec=(elap/count_rate-day*60*60*24-hr*60*60-min*60)
       write(*,fmt) '      and ',sec,' seconds'
-      ms=(elap-(day*60*60*24-hr*60*60-min*60)*count_rate)
+      ms=(elap-(day*60*60*24+hr*60*60+min*60+sec)*count_rate)
       write(*,fmt) '      and ',ms,trim(unit_name),' elapsed'
       end 
 
