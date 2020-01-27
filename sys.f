@@ -8,7 +8,7 @@ c     program to test executing system commands from within fortran
       print *, "system command test"
 c     base file name
       sfx = 'fname.in'
-      write(*,*) 'input file name is', sfx, len_trim(sfx)
+      write(*,*) 'input file name is ', sfx, len_trim(sfx)
       inquire(file=trim(sfx),exist=ext)
       if(ext.eqv. .false.) then
          write(*,*)'creating dummy file...'
