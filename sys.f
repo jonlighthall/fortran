@@ -26,11 +26,6 @@ c     for each iteration, copy the input file with unique name
  10   continue
 c     test variable format
       do i=1, 10
-         if (i < 10) then
-            fmt = "(A,I1)"
-         else
-            fmt = "(A,I2)"
-         endif
       fmt = '(a,i0.2)' ! add leading zero
          write (filename,fmt) "sys", i
          print *, trim(filename)
