@@ -33,6 +33,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`ask.f`](ask.f)	     | read to logical	| `index`
 | [`borwein.f`](borwein.f)   | pi iteration	|
 | [`leibniz.f`](leibniz.f)   | pi iteration	|
+| [`wallis.f`](wallis.f)   | pi iteration	|
 
 ### Subroutines
 | name                       | description      | command tested | file dependencies | 
