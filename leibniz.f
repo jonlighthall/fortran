@@ -1,7 +1,7 @@
-      program leibniz.f
+      program leibniz
       implicit none
       integer (kind=16) i,d,c,mx
-      real (kind=16) r
+      real (kind=16) r,p
 c     calculate series
       i=0
       r=0
@@ -16,5 +16,6 @@ c     calculate series
          endif
          i=i+1
       enddo
-      write(*,*)i,d,c,r,4*r
+      p=4d0*r
+      write(*,*)i,d,c,r,p
       end
