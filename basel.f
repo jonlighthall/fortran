@@ -1,6 +1,6 @@
       program basel
       implicit none
-      integer (kind=16) i,pdp,j,k,l
+      integer (kind=16) i,pdp,j,k,l,step
       INTEGER(kind=4) :: count,count_rate,count_max,delay,elap
       logical ext
 c     set decimal point precision
@@ -39,17 +39,17 @@ c     calculate series
       i=1
       pival=0
       seq=2
-c     write(*,*)tiny(seq)
-      do while (seq.gt.1q0/(i*i))
+      step=10000000
+      do while (seq.gt.1q0/(i*i)) ! ensure that squence in monotonically decreasing
          seq=1q0/(i*i)
          sum=sum + seq
          pival=sqrt(6q0*sum)
-c     if(mod(i,100000000).eq.0) then
-c     write(*,*)
-c     write(*,fmt,advance='no'),pival
-c     write(*,'(3x,g16.10)',advance='no'),seq
-c     endif
-c     if(mod(i,1000000).eq.0) write(*,'(a)',advance='no'),'.'
+      if(mod(i,step).eq.0) then
+c      write(*,*)
+c      write(*,fmt,advance='no')pival
+c      write(*,'(3x,g16.10)',advance='no')seq
+      endif
+c      if(mod(i,step/10).eq.0) write(*,'(a)',advance='no')'.'
          i=i+1
       enddo
       write(*,fmt)pival,'  Basel'
