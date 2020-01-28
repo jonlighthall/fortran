@@ -31,6 +31,7 @@ This repsoitory contains basic programs written in FORTRAN.
 | [`basel.f`](basel.f)	     | basel problem	|
 | [`test_pi.f`](test_pi.f)   | pi		| `atan`
 | [`ask.f`](ask.f)	     | read to logical	| `index`
+| [`borwein.f`](borwein.f)   | pi iteration	|
 
 ### Subroutines
 | name                       | description      | command tested | file dependencies | 
