@@ -9,7 +9,8 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe \
 	test_abs.exe sign.exe io.exe timedate.exe pause.exe \
 	test_system_clock.exe make_svp.exe collatz.exe huge.exe \
 	collatz_loop.exe interrupt.exe extrema.exe newunit_test.exe \
-	fmt.exe timer.exe units.exe basel.exe test_pi.exe ask.exe borwein.exe leibniz.exe
+	fmt.exe timer.exe units.exe basel.exe test_pi.exe ask.exe borwein.exe \
+	leibniz.exe wallis.exe
 
 global.exe: global.f araydim.inc
 	@echo compiling $<...	
@@ -95,7 +96,8 @@ run: all # test all functions that run automatically
 	./basel.exe
 	./test_pi.exe
 	./borwein.exe
-	./leibniz.exe
+#	./leibniz.exe
+	./wallix.exe
 
 run_man: all # test all functions that require manual input
 	./fundem.exe 
