@@ -9,7 +9,7 @@ c     calculate series
       i=0
       r=1
       d1=1
-      step=1000
+      step=1
       ii=0
       do j=1,8
          do while (ii.lt.j)
@@ -21,7 +21,7 @@ c     calculate series
                p=2d0*r
 c     write(*,*)i,d1,n1,d2,r,p
 c     compare digits
-               ii=0
+               ii=j-1
                val_ok=.true.
                do while (val_ok)
                   ipi=floor(p*10**ii,16)
@@ -32,6 +32,7 @@ c     write(*,*)ii+1,ipi,test_val,ipi.eq.test_val
                      exit
                   endif
                   ii=ii+1
+                  step=i
                enddo
             endif
             i=i+1
