@@ -1,7 +1,7 @@
       program borwein
       implicit none
-      real(16)a,b,p
-      integer(16) ii,i,ipi,test_val
+      real(kind=8)a,b,p
+      integer(kind=16) ii,i,ipi,test_val
       character (len=40) ipistr
       logical  val_ok
       a=sqrt(2d0)

@@ -1,7 +1,7 @@
       program leibniz
       implicit none
       integer (kind=16) i,d,c,mx,ii,ipi,test_val
-      real (kind=16) r,p,last
+      real (kind=8) r,p,last
       character (len=40) ipistr
       logical  val_ok
       ipistr = '31415926535897932384626433832795028841971693993751058'
