@@ -1,4 +1,4 @@
-      program leibniz
+      program wallis
       implicit none
       integer (kind=16) i,d1,d2,n1,step,ii,ipi,test_val,j
       real (kind=8) r,p
