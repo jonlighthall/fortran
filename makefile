@@ -1,5 +1,5 @@
 # (fortran) compiler
-your_f77 = gfortran
+your_f77 = pgfortran
 # (fortran) compile flags
 fcflags =
 # (fortran) link flags
@@ -26,7 +26,7 @@ globsubs.exe: globsubs.f f.f araydim.inc
 
 pause.exe: pause.f
 	@echo compiling $<...	
-	$(your_f77) -std=legacy  $^ -o $@
+	$(your_f77) $^ -o $@
 
 test_system_clock.exe: test_system_clock.f format.f set_format.f
 	@echo compiling $<...
