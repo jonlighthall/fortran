@@ -19,14 +19,12 @@ c     calculate series
             r=r*real(n1)/d1*real(n1)/d2
             if((mod(i,step).eq.0).or.(j.eq.1)) then
                p=2d0*r
-c     write(*,*)i,d1,n1,d2,r,p
 c     compare digits
                ii=j-1
                val_ok=.true.
                do while (val_ok)
                   ipi=floor(p*10**ii,16)
                   read(ipistr(1:ii+1),*)test_val
-c     write(*,*)ii+1,ipi,test_val,ipi.eq.test_val
                   if ((ipi.ne.test_val)) then
                      val_ok=.false.
                      exit
@@ -39,4 +37,5 @@ c     write(*,*)ii+1,ipi,test_val,ipi.eq.test_val
          enddo
          write(*,*)i,d1,n1,d2,r,p,ii
       enddo
+      write(*,'(1x,i2,a)')ii,' decimal places of precision achieved'
       end
