@@ -96,8 +96,8 @@ run: all # test all functions that run automatically
 	./basel.exe
 	./test_pi.exe
 	./borwein.exe
-#	./leibniz.exe
-	./wallix.exe
+	./leibniz.exe
+	./wallis.exe
 
 run_man: all # test all functions that require manual input
 	./fundem.exe 
