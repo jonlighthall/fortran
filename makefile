@@ -34,11 +34,11 @@ test_system_clock.exe: test_system_clock.f format.f set_format.f
 
 collatz.exe: collatz.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) -fno-range-check collatz.f -o $@
+	$(your_f77) collatz.f -o $@
 
 collatz_loop.exe: collatz_loop.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) -fno-range-check collatz_loop.f format.f -o $@
+	$(your_f77) collatz_loop.f format.f -o $@
 
 huge.exe: huge.f format.f set_format.f
 	@echo compiling $<...	
