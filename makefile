@@ -1,7 +1,8 @@
 # (fortran) compiler
 your_f77 = pgfortran
+export PGI_OBJSUFFIX=o
 # (fortran) compile flags
-fcflags =
+fcflags = -silent
 # (fortran) link flags
 flflags = -c $(fcflags)
 

@@ -1,7 +1,7 @@
       subroutine format(int,str)
       implicit none
       include 'set_format.f'
-      integer(kind=intsize),intent(in)::int
+      integer(intsize),intent(in)::int
       character(len=*), parameter :: sep=','
       character(fmtsize), intent(out)::str
       character(fmtsize) copy

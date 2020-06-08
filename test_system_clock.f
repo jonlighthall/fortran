@@ -1,9 +1,9 @@
       PROGRAM test_system_clock
       implicit none
-      INTEGER(kind=4) :: count,count_rate,count_max
+      INTEGER(4) :: count,count_rate,count_max
       integer :: start, finish
       include 'set_format.f'
-      INTEGER(kind=intsize) :: remain,sec,min,hr,day,elap,ms
+      INTEGER(intsize) :: remain,sec,min,hr,day,elap,ms
       character(len=fmtsize) str
       character(len=128) fmt,unit_name
       write(*,*)'in ',intsize,' bytes'
