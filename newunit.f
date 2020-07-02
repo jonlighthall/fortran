@@ -19,7 +19,7 @@ c
       newunit=-1
       write(*,'(2(a,i2))')'testing units ',lun_min,' to ',lun_max
       do lun=lun_min,lun_max
-         write(*, '(a,i2,a)', advance = "no")'testing ',lun,'...'
+         write(*, '(a,i2,a)', advance = "no")' testing ',lun,'...'
          inquire(unit=lun,opened=opened)
          if (.not. opened) then
             newunit=lun
@@ -29,5 +29,6 @@ c
             write(*,*)'not available'
          end if
       end do
+      write(*,*)'done'
       if (present(unit)) unit=newunit
       end function newunit
