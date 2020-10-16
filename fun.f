@@ -1,9 +1,9 @@
       program test_program
       implicit none
       integer number,get_a_number
-      write(*,'(a)') "hello world"
+      write(*,'(a)') "hello, world"
       number=get_a_number()
-      write(*,*) 'the number is',number
+      write(*,'(a,i2)') 'the number is ',number
       end program test_program
 
 
