@@ -10,7 +10,7 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe \
 	test_system_clock.exe make_svp.exe collatz.exe huge.exe \
 	collatz_loop.exe interrupt.exe extrema.exe newunit_test.exe \
 	fmt.exe timer.exe units.exe basel.exe test_pi.exe ask.exe borwein.exe \
-	leibniz.exe wallis.exe fun.exe
+	leibniz.exe wallis.exe fun.exe dice.exe
 
 global.exe: global.f araydim.inc
 	@echo compiling $<...	
