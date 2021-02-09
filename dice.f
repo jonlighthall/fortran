@@ -4,12 +4,8 @@ c     old
       logical jail
       integer rand2dice
       call system_clock(count)  ! get system time in milliseconds
-      call srand(count)         ! use time for random seed
-      print *, irand(), irand(), irand(), irand()
-      print *, irand(count), irand(), irand(), irand()
 c     
 c     new
- 
       jail=.false.
       rolls=0;
       do while (.not. jail)
@@ -41,7 +37,7 @@ c     do i=1,100
       enddo
       write(*,*)"it took ",rolls,"to go to jail"
       end
-
+c
       integer function rand2dice(u)
       real u
       integer n,m
