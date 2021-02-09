@@ -1,8 +1,8 @@
       program dice
       implicit none
 c     old
-      integer j,k,count,r2d,rolls
-      real u,v
+      integer i,j,k,count,r2d,rolls
+      real u(2)
       logical jail
       call system_clock(count)  ! get system time in milliseconds
       call random_seed(count)
@@ -10,24 +10,21 @@ c
 c     new
       jail=.false.
       rolls=0;
-      do while (.not. jail)
-c     do i=1,100
+c      do while (.not. jail)
+      do i=1,10
          call random_number(u)
-         j = r2d(u)
-         call random_number(v)
-         k = r2d(v)
+         j = r2d(u(1))
+         k = r2d(u(2))
          write(*,*)j,k
-         if (j.eq.k) then ! first double
+         if (j.eq.k) then       ! first double
             call random_number(u)
-            j = r2d(u)
-            call random_number(v)
-            k = r2d(v)
+            j = r2d(u(1))
+            k = r2d(u(2))
             write(*,*)j,k,"second roll"
-            if (j.eq.k) then ! second double
+            if (j.eq.k) then    ! second double
                call random_number(u)
-               j = r2d(u)
-               call random_number(v)
-               k = r2d(v)
+               j = r2d(u(1))
+               k = r2d(u(2))
                write(*,*)j,k, "third roll"
                if (j.eq.k) then
                   write(*,*)"JAIL"
