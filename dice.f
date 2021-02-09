@@ -5,6 +5,7 @@ c     old
       real u,v
       logical jail
       call system_clock(count)  ! get system time in milliseconds
+      call random_seed(count)
 c     
 c     new
       jail=.false.
