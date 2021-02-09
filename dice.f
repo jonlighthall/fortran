@@ -1,8 +1,9 @@
       program dice
+      implicit none
 c     old
-      integer :: count
+      integer j,k,count,r2d,rolls
+      real u,v
       logical jail
-      integer rand2dice
       call system_clock(count)  ! get system time in milliseconds
 c     
 c     new
@@ -11,21 +12,21 @@ c     new
       do while (.not. jail)
 c     do i=1,100
          call random_number(u)
-         j = rand2dice(u)
+         j = r2d(u)
          call random_number(v)
-         k = rand2dice(v)
+         k = r2d(v)
          write(*,*)j,k
          if (j.eq.k) then ! first double
             call random_number(u)
-            j = rand2dice(u)
+            j = r2d(u)
             call random_number(v)
-            k = rand2dice(v)
+            k = r2d(v)
             write(*,*)j,k,"second roll"
             if (j.eq.k) then ! second double
                call random_number(u)
-               j = rand2dice(u)
+               j = r2d(u)
                call random_number(v)
-               k = rand2dice(v)
+               k = r2d(v)
                write(*,*)j,k, "third roll"
                if (j.eq.k) then
                   write(*,*)"JAIL"
@@ -38,11 +39,12 @@ c     do i=1,100
       write(*,*)"it took ",rolls,"to go to jail"
       end
 c
-      integer function rand2dice(u)
+      integer function r2d(u)
+c     random to dice
       real u
       integer n,m
       n=1
       m=6
-      rand2dice = n + FLOOR((m+1-n)*u) ! We want to choose one from m-n+1 integers
+      r2d = n + FLOOR((m+1-n)*u) ! We want to choose one from m-n+1 integers
       return
       end
