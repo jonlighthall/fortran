@@ -5,7 +5,7 @@
       logical jail
       integer :: seed_mode=2
       integer, allocatable :: seed(:)
-      integer :: n
+      integer :: n,lim
       integer :: count(6)
       real :: prob(6)
 
@@ -45,14 +45,17 @@
       jail=.false.
       count=0
       rolls=0
-c      do while (.not. jail)
+      lim=10                    ! write limit
+c     do while (.not. jail)
       do i=1,500000
          call random_number(u)
          rolls=rolls+1
          j = r2d(u(1))
          k = r2d(u(2))
-         write(*,'(a,i3,a,i1,a,i1,a,i2)')'Roll ',rolls,':',j,'+',k,'=',j
-     &        +k
+         if (rolls.le.lim) then
+            write(*,'(a,i3,a,i1,a,i1,a,i2)')'Roll ',rolls,':',j,'+',k
+     &           ,'=',j+k
+         endif
          count(j)=count(j)+1
          count(k)=count(k)+1
          if (j.eq.k) then       ! first double
@@ -61,19 +64,24 @@ c      do while (.not. jail)
             k = r2d(u(2))
             count(j)=count(j)+1
             count(k)=count(k)+1
-            write(*,'(a,i1,a,i1,a,i2,a)')'        :',j,'+',k,'=',j
-     &           +k,' second roll'
+            if (rolls.le.lim) then
+               write(*,'(a,i1,a,i1,a,i2,a)')'        :',j,'+',k,'=',j
+     &              +k,' second roll'
+            end if
             if (j.eq.k) then    ! second double
                call random_number(u)
                j = r2d(u(1))
                k = r2d(u(2))
                count(j)=count(j)+1
                count(k)=count(k)+1
-               write(*,'(a,i1,a,i1,a,i2,a)')'        :',j,'+',k,'=',j+k
-     &              ,' third roll'
-
+               if (rolls.le.lim) then
+                  write(*,'(a,i1,a,i1,a,i2,a)')'        :',j,'+',k,'=',j
+     &                 +k,' third roll'
+               endif
                if (j.eq.k) then
-                  write(*,*)'JAIL'
+                  if (rolls.le.lim) then
+                     write(*,*)'JAIL'
+                  endif
                   jail=.true.
                endif
             endif
