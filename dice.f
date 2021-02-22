@@ -3,7 +3,7 @@
       integer i,j,k,time,r2d,rolls
       real u(2)
       logical jail
-      integer :: seed_mode=1
+      integer :: seed_mode=-1
       integer, allocatable :: seed(:)
       integer :: n
       integer :: count(6)
@@ -34,14 +34,14 @@ c     write (*, *) seed
       jail=.false.
       count=0
       rolls=0
-      i=1
       do while (.not. jail)
          
 c      do i=1,5
          call random_number(u)
          j = r2d(u(1))
          k = r2d(u(2))
-         write(*,'(a,i3,a,i1,a,i1,a,i2)')'Roll ',i,':',j,'+',k,'=',j+k
+         write(*,'(a,i3,a,i1,a,i1,a,i2)')'Roll ',rolls,':',j,'+',k,'=',j
+     &        +k
          count(j)=count(j)+1
          count(k)=count(k)+1
          if (j.eq.k) then       ! first double
@@ -68,8 +68,6 @@ c      do i=1,5
             endif
          endif
          rolls=rolls+1
-         i=i+1
-
       enddo
       if(jail)then
          write(*,*)'it took ',rolls,'to go to jail'
