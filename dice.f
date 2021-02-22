@@ -3,10 +3,11 @@
       integer i,j,k,time,r2d,rolls
       real u(2)
       logical jail
-      integer :: seed_mode=-1
+      integer :: seed_mode=2
       integer, allocatable :: seed(:)
       integer :: n
       integer :: count(6)
+      real :: prob(6)
 
       call random_seed(size = n)
       allocate(seed(n))
@@ -45,7 +46,7 @@
       count=0
       rolls=0
 c      do while (.not. jail)
-      do i=1,50
+      do i=1,500000
          call random_number(u)
          rolls=rolls+1
          j = r2d(u(1))
@@ -82,6 +83,8 @@ c      do while (.not. jail)
          write(*,*)'it took ',rolls,'to go to jail'
       endif
       write(*,*)count
+      prob=real(count)/real(sum(count))
+      write(*,*)prob
       end
 c     
       integer function r2d(u)
