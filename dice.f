@@ -12,32 +12,42 @@
       allocate(seed(n))
       select case (seed_mode)
       case (1)
+         write(*,*)'Seeding with fixed integer'
+         write(*,*)'old seed is'
+         write(*,*) seed
          seed(:)=1
          call random_seed(put=seed)
+         call random_seed(get=seed)
+         write(*,*)'new seed is'
+         write (*,*) seed
       case (2)
+         write(*,*)'Seeding with system time'
          call system_clock(count=time) ! get system time in milliseconds
          call random_seed(get=seed)
-         write(*,*)'seed is'
+         write(*,*)'old seed is'
          write(*,*) seed
-         write(*,*)'The time is ',time
-         seed(:)=time
+         write(*,*)'The time is '
+         write(*,*)time
+         seed(:)=seed(:)+time
          call random_seed(put=seed)
          call random_seed(get=seed)
-         write(*,*)'seed is'
+         write(*,*)'new seed is'
          write (*,*) seed
       case default
+         write(*,*)'Seeding with default'
          call random_seed()
-c     call random_seed(get=seed)
-c     write (*, *) seed
+         call random_seed(get=seed)
+         write(*,*)'see is'
+         write (*, *) seed
       end select
       
       jail=.false.
       count=0
       rolls=0
-      do while (.not. jail)
-         
-c      do i=1,5
+c      do while (.not. jail)
+      do i=1,50
          call random_number(u)
+         rolls=rolls+1
          j = r2d(u(1))
          k = r2d(u(2))
          write(*,'(a,i3,a,i1,a,i1,a,i2)')'Roll ',rolls,':',j,'+',k,'=',j
@@ -67,7 +77,6 @@ c      do i=1,5
                endif
             endif
          endif
-         rolls=rolls+1
       enddo
       if(jail)then
          write(*,*)'it took ',rolls,'to go to jail'
