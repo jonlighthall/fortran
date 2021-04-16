@@ -1,20 +1,20 @@
       program borwein
       implicit none
       integer(kind=16) i,ii,ipi,test_val
-      real(kind=8)a,b,p
+      real(kind=16)a,b,p
       character (len=40) ipistr
       logical  val_ok
       ipistr = '31415926535897932384626433832795028841971693993751058'
 c     calculate series
       i=0
-      a=sqrt(2d0)
-      b=0d0
-      p=2d0+sqrt(2d0)
+      a=sqrt(2q0)
+      b=0q0
+      p=2q0+sqrt(2q0)
       ii=0
-      do while (a.ne.1d0)
-         b=((1d0+b)*sqrt(a))/(a+b)
-         a=(sqrt(a)+1d0/sqrt(a))/2d0
-         p=((1d0+a)*p*b)/(1d0+b)
+      do while (a.ne.1q0)
+         b=((1q0+b)*sqrt(a))/(a+b)
+         a=(sqrt(a)+1q0/sqrt(a))/2q0
+         p=((1q0+a)*p*b)/(1q0+b)
          write(*,*)i,a,b,p
 c     compare digits
 
