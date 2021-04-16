@@ -1,7 +1,7 @@
       program borwein
       implicit none
       integer(kind=8) i,ii,ipi,test_val
-      real(kind=16)a,b,p
+      real(kind=8)a,b,p
       character (len=40) ipistr
       logical  val_ok
       ipistr = '31415926535897932384626433832795028841971693993751058'
