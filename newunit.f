@@ -1,8 +1,12 @@
 c     This is a replacement for the Fortran 2008 function NEWUNIT for
 c     systems running gfortran versions < 4.5
 c
-c     replace open(newunit=unit) with open(newunit(unit))
+c     To use:
+c       1) Replace open(newunit=unit) with open(newunit(unit))
+c       2) Add getunit as an interger variable in the calling program
+c       3) Add getunit.f to the compile line of the calling program
 c
+!     http://fortranwiki.org/fortran/show/newunit
 !     This is a simple function to search for an available unit. lun_min
 !     and lun_max define the range of possible luns to check. The unit
 !     value is returned by the function, and also by the optional
@@ -12,18 +16,20 @@ c
       integer function newunit(unit)
       integer, intent(out), optional :: unit
 !     local
-      integer, parameter :: lun_min=1, lun_max=30
-      logical :: opened
+c     Note: Fortran 77 allows up to 64 logical units. In some situations
+c     using logical unit 1 may cause problems.
+      integer, parameter :: lun_min=2, lun_max=64
+      logical :: i_open
       integer :: lun
 !     begin
       newunit=-1
       write(*,'(2(a,i2))')'testing units ',lun_min,' to ',lun_max
       do lun=lun_min,lun_max
          write(*, '(a,i2,a)', advance = "no")' testing ',lun,'...'
-         inquire(unit=lun,opened=opened)
-         if (.not. opened) then
+         inquire(unit=lun,opened=i_open)
+         if (.not. i_open) then
             newunit=lun
-            write(*,*)"available"
+            write(*,*)'available'
             exit
          else
             write(*,*)'not available'
