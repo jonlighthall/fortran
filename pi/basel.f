@@ -1,6 +1,6 @@
       program basel
       implicit none
-      integer (kind=16) i,pdp,j,k,l,step
+      integer (kind=8) i,pdp,j,k,l,step
       INTEGER(kind=4) :: count,count_rate,count_max,delay,elap
       logical ext
 c     set decimal point precision

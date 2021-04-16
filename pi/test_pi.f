@@ -1,6 +1,6 @@
       program test_pi
       implicit none
-      integer (kind=16) i,ii,ipi,test_val,pdp
+      integer (kind=8) i,ii,ipi,test_val,pdp
       integer, parameter :: dp = 15
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk), parameter :: p = 4.d0*atan(1.d0)
@@ -18,7 +18,7 @@ c     compare digits
       ii=0
       val_ok=.true.
       do while (val_ok)
-         ipi=floor(p*10**ii,16)
+         ipi=floor(p*10**ii,8)
          read(ipistr(1:ii+1),*)test_val
          write(*,*)ii+1,ipi,test_val,ipi.eq.test_val
          if ((ipi.ne.test_val)) then

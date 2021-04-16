@@ -1,6 +1,6 @@
       program borwein
       implicit none
-      integer(kind=16) i,ii,ipi,test_val
+      integer(kind=8) i,ii,ipi,test_val
       real(kind=16)a,b,p
       character (len=40) ipistr
       logical  val_ok
@@ -20,7 +20,7 @@ c     compare digits
 
          val_ok=.true.
          do while (val_ok)
-            ipi=floor(p*10**ii,16)
+            ipi=floor(p*10**ii,8)
             read(ipistr(1:ii+1),*)test_val
             write(*,*)ii+1,ipi,test_val,ipi.eq.test_val
             if ((ipi.ne.test_val)) then
