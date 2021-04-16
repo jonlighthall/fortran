@@ -16,11 +16,6 @@ clean:
 	rm -fv *.exe
 	rm -fv *.o
 	rm -fv *.f.~*~
-	rm -fv fname*.in
-	rm -fv svp.out
-	rm -fv svp.in
-	rm -fv state
-	rm -fv test?
 	rm -fv a.out
 
 %.o: %.f	
