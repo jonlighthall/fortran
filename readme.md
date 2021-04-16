@@ -1,5 +1,5 @@
 # Fortran 
-This repsoitory contains basic programs written in FORTRAN.
+This repsoitory contains simple programs written as I learn FORTRAN.
 
 ## Contents
 ### Programs
