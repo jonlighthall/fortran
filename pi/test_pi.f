@@ -1,9 +1,9 @@
       program test_pi
       implicit none
       integer (kind=16) i,ii,ipi,test_val,pdp
-      integer, parameter :: dp = 15
+      integer, parameter :: dp = 33
       integer, parameter :: srk = selected_real_kind(dp)
-      real(kind = srk), parameter :: p = 4.d0*atan(1.d0)
+      real(kind = srk), parameter :: p = 4.q0*atan(1.q0)
       character (len=40) ipistr,fmt
       logical  val_ok
       write(*,'(1x,i2,a,i2,a)')dp,' decimals reqested (using ',srk
