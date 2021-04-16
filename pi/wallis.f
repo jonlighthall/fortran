@@ -1,6 +1,6 @@
       program wallis
       implicit none
-      integer (kind=16) i,d1,d2,n1,step,ii,ipi,test_val,j
+      integer (kind=8) i,d1,d2,n1,step,ii,ipi,test_val,j
       real (kind=8) r,p
       character (len=40) ipistr
       logical  val_ok
@@ -23,7 +23,7 @@ c     compare digits
                ii=j-1
                val_ok=.true.
                do while (val_ok)
-                  ipi=floor(p*10**ii,16)
+                  ipi=floor(p*10**ii,8)
                   read(ipistr(1:ii+1),*)test_val
                   if ((ipi.ne.test_val)) then
                      val_ok=.false.
