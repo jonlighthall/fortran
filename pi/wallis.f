@@ -11,7 +11,7 @@ c     calculate series
       d1=1
       step=1
       ii=0
-      do j=1,8
+      do j=1,8                  ! over 8 takes too long
          do while (ii.lt.j)
             d1=2*i+1
             n1=2*(i+1)
