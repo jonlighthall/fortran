@@ -9,12 +9,14 @@
       write(*,'(1x,i2,a,i2,a)')dp,' decimals reqested (using ',srk
      &     ,' bytes)'
       ipistr = '31415926535897932384626433832795028841971693993751058'
-      write(*,'(3x,4a)')ipistr(1:1),'.',ipistr(2:dp+1),' string'
+      write(*,'(3x,4a)')ipistr(1:1),'.',ipistr(2:dp+1)
+     &     ,' string (reference)'
       pdp=dp-1                  ! printed decimal places
       write(fmt,'(a,i0.2,a,i0.2,a)')'(3x,f',pdp+2,'.',pdp,',a)'
-      write(*,fmt)p,'  atan'
+      write(*,fmt)p,'  atan (calculated)'
 
 c     compare digits
+      write(*,*)'comparing digits...'
       ii=0
       val_ok=.true.
       do while (val_ok)
