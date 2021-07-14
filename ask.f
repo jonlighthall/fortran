@@ -4,18 +4,18 @@
       ans=.false.
       write(*,*)'give me an answer (y/n)'
       read(5,*)words
-      write(*,*)words
+      write(*,*)'Your answer was "',words,'"'
       
       if(index('yY',words).gt.0) then
          ans=.true.
       else
          ans=.false.
       endif
-      write(*,*)ans
+      write(*,*)'Conditional assignment = ',ans
 
 c     check response with function
       ans=yea(words)
-      write(*,*)ans
+      write(*,*)' Functional assignment = ',ans
       end
 
 c     check if response is positive
