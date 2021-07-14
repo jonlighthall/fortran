@@ -35,7 +35,7 @@ c     compare digits
             endif
             i=i+1
          enddo
-         write(*,*)i,d1,n1,d2,r,p,ii
+         write(*,'(4i10,2f13.10,i2)')i,d1,n1,d2,r,p,ii
       enddo
       write(*,'(1x,i2,a)')ii,' decimal places of precision achieved'
       end
