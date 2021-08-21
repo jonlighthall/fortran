@@ -13,7 +13,7 @@ c      4     6   6
 c      8    15  14
 c     10    18  14
 c     16    33  32
-      integer, parameter :: dp = 18
+      integer, parameter :: dp = 33
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk) nmi2m,ft2m,m2ft,m2nmi,m2yd,yd2m,dB_m2yd,dB_yd2m
      &     ,kt2ms,ms2kt
