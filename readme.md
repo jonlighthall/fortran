@@ -20,8 +20,9 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 | [`test_system_clock.f`](test_system_clock.f)  | system clock | `system_clock`| [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`make_svp.f`](make_svp.f) | make svp           | `system_clock` `srand` `rand`||`svp.in`
 | [`collatz.f`](collatz.f)   | Collatz sequence || [`format.f`](format.f) [`set_format.f`](set_format.f)
-| [`huge.f`](huge.f)         | largest integer  |`kind` `huge` | [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | [`format.f`](format.f) [`set_format.f`](set_format.f) | [`collatz.out`](collatz.out)
+| [`collatz_glide.f`](collatz_glide.f)   | Collatz glide calculation || [`format.f`](format.f) [`set_format.f`](set_format.f)
+| [`huge.f`](huge.f)         | largest integer  |`kind` `huge` | [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`interrupt.f`](interrupt.f)| catch interrupt signal |`common` `signal`||`state`
 | [`extrema.f`](extrema.f)   | extrema          | `huge` `tiny` ||
 | [`newunit_test.f`](newunit_test.f)| newunit replacement |`inquire`|[`newunit.f`](newunit.f)|
@@ -51,7 +52,7 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 | name                       | description      |
 | -------------------------- | ---------------- |
 | [`araydim.inc`](araydim.inc) | array dimension
-| [`set_format.f`](set_format.f) | set format
+| [`set_format.f`](set_format.f) | set integer size and display precision
 
 
 ## Installation
