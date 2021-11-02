@@ -71,7 +71,7 @@ c         if(i.lt.n) write(*,*) 'end: i = ',i
       write(*,*)i,sum,pival
 
 c     compare digits
-      do i=0,dp
+      do i=0,dp+1
          sum=pireal*10**i
          j=floor(sum)
          sum=pi*10**i
