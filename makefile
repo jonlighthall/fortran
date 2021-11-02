@@ -62,6 +62,7 @@ clean:
 	rm -fv state
 	rm -fv test?
 	rm -fv a.out
+	$(MAKE)	clean -C pi
 
 %.o: %.f	
 	@echo compiling $<...	
