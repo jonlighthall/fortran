@@ -1,6 +1,6 @@
       program basel
       implicit none
-      integer (kind=16) i,pdp,j,k,l,step
+      integer (kind=16) i,pdp,j,k,l,step,n
       INTEGER(kind=4) :: count,count_rate,count_max,delay,elap
       logical ext
 c     set decimal point precision
@@ -26,7 +26,7 @@ c     16    33  32
          write(unit_name,*) 'units'
       endif
       write(*,'(1x,i2,a,i2,a)')dp,' decimals in ',srk,' bytes'
-      pdp=dp-1
+      pdp=dp+1
       write(fmt,'(a,i0.2,a,i0.2,a)')'(3x,f',pdp+2,'.',pdp,',a)'
       pistr = '3.1415926535897932384626433832795028841971693993751058'
       write(*,'(3x,2a)')trim(pistr(1:dp+2)),' string'
@@ -34,24 +34,39 @@ c     16    33  32
       write(*,fmt)pireal,'  real'
       write(*,fmt)pi,'  atan'
 
+c     estimate number of steps
+      n=sqrt(1/epsilon(seq))
+      write(*,*) 'n = ',sqrt(1/epsilon(seq))
+      write(*,*) 'n = ',n
+      
 c     calculate series
       sum=0
       i=1
       pival=0
       seq=2
-      step=10000000
-      do while (seq.gt.1q0/(i*i)) ! ensure that squence in monotonically decreasing
-         seq=1q0/(i*i)
+      step=n/10
+      write(*,*) 'step = ',step
+      write(*,*)
+      write(*,fmt,advance='no')pival
+      write(*,'(3x,g16.10)',advance='no')seq
+      
+      do while ((seq.gt.1q0/(i*i)).and.(i.lt.n)) ! ensure that squence in monotonically decreasing
+         seq=1q0/(i*i)       
          sum=sum + seq
          pival=sqrt(6q0*sum)
-      if(mod(i,step).eq.0) then
-c      write(*,*)
-c      write(*,fmt,advance='no')pival
-c      write(*,'(3x,g16.10)',advance='no')seq
-      endif
-c      if(mod(i,step/10).eq.0) write(*,'(a)',advance='no')'.'
+c     print progress
+         if(mod(i,step).eq.0) then
+            write(*,*)
+            write(*,fmt,advance='no')pival
+            write(*,'(3x,g16.10)',advance='no')seq
+         endif
+         if(mod(i,step/10).eq.0) write(*,'(a)',advance='no')'.'
+
+c         if(i.lt.n) write(*,*) 'end: i = ',i
+         
          i=i+1
       enddo
+      write(*,*)
       write(*,fmt)pival,'  Basel'
       write(*,*)i,sum,pival
 
@@ -64,7 +79,7 @@ c     compare digits
          sum=pival*10**i
          l=floor(sum)
          write(*,*)i+1,j,k,l,j.eq.k,j.eq.l
-         if (j.ne.k) exit
+         if (j.ne.l) exit
       enddo
       write(*,'(1x,i2,a)')i,' decimal places of precision achieved'
 
