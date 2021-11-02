@@ -30,7 +30,7 @@ c     find maximum integer
       write(fmt,*)'(a,i',k,')'
 
 c     read in existing file
-      open(1,file = 'collatz.out',status='old',action='read',iostat
+      open(1,file = 'collatz.txt',status='old',action='read',iostat
      &     =iostat)
       open(2,status='scratch')
       if (iostat.le.0) then
@@ -88,7 +88,7 @@ c     check if input max exceeds sys max w/o invoking overflow
          enddo
          close(1)
          rewind(2)
-         open(1,file = 'collatz.out',status='old',action='write')
+         open(1,file = 'collatz.txt',status='old',action='write')
          do i=1,3
             read(2,'(a)') dum
             write(1,'(a)')trim(dum)
@@ -127,7 +127,7 @@ c     test match
      &        ,values(8),' ',values(4)/60,' UTC'
       else
          write(*,*)'starting over...'
-         open(1,file = 'collatz.out',status='unknown',action='write')
+         open(1,file = 'collatz.txt',status='unknown',action='write')
          write(*,fmt) '          the largest integer is ', j
          write(1,fmt) '          the largest integer is ', j
          sysmx=(j-1)/3
@@ -167,7 +167,7 @@ c     loop over all possible numbers
                n=n/2
             else
                if(n.gt.sysmx) then
-                  open(1,file = 'collatz.out',status="old", position 
+                  open(1,file = 'collatz.txt',status="old", position 
      &                 ="append",action="write") 
                   write(dum,*)sd
                   call format(sd,fmt_str)
@@ -192,7 +192,7 @@ c     increment and save delay record
             call system_clock(t2)
             t=t2-t1
             call date_and_time(VALUES=values)
-            open(1,file = 'collatz.out',status="old", position="append",
+            open(1,file = 'collatz.txt',status="old", position="append",
      &           action="write") ! force write at each iteration
             write(dum,*)sd
             call format(sd,fmt_str)
@@ -212,7 +212,7 @@ c     check exit flags
             print*,'Saving current position...'
             call system_clock(t2)
             t=t2-t1
-            open(1,file = 'collatz.out',status='old',action='write'
+            open(1,file = 'collatz.txt',status='old',action='write'
      &           ,position="append")
             write(dum,*)sd
             write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
