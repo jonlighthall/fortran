@@ -88,14 +88,14 @@ Check out the folder from the repository with one of the following commands.
 
 >`git clone git@github.com:jonlighthall/fortran.git` (Git SSH)
 
-## Compiling
+### Compiling
 Compile the source files and create executables with commands such as the following.
 
 `gfortran -o hello.exe hello.f` 
 
 Alternatively, these commands can be executed by using the `make` command.
 
-## Executing
+## Execution
 The compiled executables can be run using commands such as the following.
   
 `./hello.exe`
