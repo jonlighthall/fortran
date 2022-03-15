@@ -11,7 +11,7 @@
       write(*,fmt)'testing formatting up to ',10**i+1
       write(fmt,*)'(1x,i',i+1,')'
       l=(i+1+ceiling((i+1)/3.))/2
-      do j=0,i
+      do j=0,i,3
          k=10**j
          write(*,*)repeat('-',l),k,repeat('-',l-1)
          do i =k-1,k+1
