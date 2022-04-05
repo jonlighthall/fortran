@@ -12,6 +12,10 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe \
 	fmt.exe timer.exe units.exe ask.exe fun.exe dice.exe collatz_glide.exe
 	$(MAKE)	-C pi
 
+units.exe: units.f metrics_revised2.inc
+	@echo compiling $<...	
+	$(your_f77) $(fcflags) $< -o $@
+
 global.exe: global.f araydim.inc
 	@echo compiling $<...	
 	$(your_f77) $(fcflags) global.f -o $@
