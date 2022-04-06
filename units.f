@@ -7,8 +7,11 @@ c      integer, parameter :: set_kind = selected_real_kind(set_precision)
 
       real(kind = set_kind), parameter :: dB_yd2m=20d0*log10(m2ft/3q0)
       character(len = 256) :: fmt3,fmt2
-      integer(kind=16) ii,i1,i2
+      integer(kind=16) ii,i1,i2,ipi,i_test,i_ref,i,i_dum
+      real(kind=16)real_value,real_val
       logical  val_ok
+      character (len=40) str_m2ft,str_mi2ft,str_dBm2yd,str_ms2kt
+     &     ,str_kt2ms,test_str,str_ref
 
 c     equivalence definitions
       integer, parameter :: ift2m=3048
@@ -38,6 +41,7 @@ c     ----------------
 c     REAL
 c     ----------------      
       
+      write(*,*)'unformatted'
       write(*,*) '   ft2m = ',ft2m    
       write(*,*) '   mi2m = ',mi2m    
       write(*,*) '   m2ft = ',m2ft   
@@ -324,5 +328,48 @@ c     compare digits
          ii=ii+1
       enddo
 
+c     test functional definitions against strings
 
+c                 1234567890123456789012345678901234567890
+      str_m2ft  ='3.28083989501312335958005249343832020997'
+      str_mi2ft ='0.00053995680345572354211663066954643628'
+      str_dBm2yd='0.77727565225549351043480174978008085437' 
+      str_ms2kt ='1.94384449244060475161987041036717062634'
+      str_kt2ms ='0.51444444444444444444444444444444444444'
+
+
+c     compare digits
+      real_val=m2ft
+      str_ref=str_m2ft
+      
+      write(*,*)'comparing digits...'
+      ii=0
+      val_ok=.true.
+      write(*,'(a,f40.38)')'     test value is ',real_val
+      write(*,'(a,a)')'reference value is ',str_ref
+      i = index(str_ref,'.')
+      write(*,*)'decimal point found at ',i
+      
+      do while (val_ok)
+         i_test=floor(real_val*10**ii,16)
+         if (ii+1.lt.i) then
+            read(str_ref(1:ii+1),*)i_ref
+         else
+            read(str_ref(1:i-1),*)i_dum
+            i_ref=i_dum*10**ii
+            read(str_ref(i+1:ii+2),*)i_dum
+            i_ref=i_ref+i_dum
+         endif
+         write(*,*)ii+1,i_ref,i_test,i_ref.eq.i_test
+         if ((i_ref.ne.i_test)) then
+            val_ok=.false.
+            write(*,'(1x,i2,a)')ii
+     $           ,' decimal places of precision achieved'
+            exit
+         endif
+         ii=ii+1
+      enddo
+
+
+      
       end
