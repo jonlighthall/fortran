@@ -4,13 +4,13 @@
       include "metrics_revised2.inc"
 c      integer, parameter :: set_precision = 19
 c      integer, parameter :: set_kind = selected_real_kind(set_precision)
-
+      integer dummy,comp_real_str
       real(kind = set_kind), parameter :: dB_yd2m=20d0*log10(m2ft/3q0)
       character(len = 256) :: fmt3,fmt2
       integer(kind=16) ii,i1,i2,ipi,i_test,i_ref,i,i_dum
       real(kind=16)real_value,real_val
       logical  val_ok
-      character (len=40) str_m2ft,str_mi2ft,str_dBm2yd,str_ms2kt
+      character (len=40) str_m2ft,str_m2mi,str_dB_m2yd,str_ms2kt
      &     ,str_kt2ms,test_str,str_ref
 
 c     equivalence definitions
@@ -288,8 +288,6 @@ c     compare digits
          ii=ii+1
       enddo
 
-
-
       write(*,'(a,i2)')'   set precision is ',set_precision      
       pdp=precision(ft2m)
       write(*,'(a,i2)')'actual precision is ',pdp
@@ -331,18 +329,30 @@ c     compare digits
 c     test functional definitions against strings
 
 c                 1234567890123456789012345678901234567890
-      str_m2ft  ='3.28083989501312335958005249343832020997'
-      str_mi2ft ='0.00053995680345572354211663066954643628'
-      str_dBm2yd='0.77727565225549351043480174978008085437' 
-      str_ms2kt ='1.94384449244060475161987041036717062634'
-      str_kt2ms ='0.51444444444444444444444444444444444444'
+      str_m2ft   ='3.28083989501312335958005249343832020997'
+      str_m2mi  ='0.00053995680345572354211663066954643628'
+      str_dB_m2yd='0.77727565225549351043480174978008085437' 
+      str_ms2kt  ='1.94384449244060475161987041036717062634'
+      str_kt2ms  ='0.51444444444444444444444444444444444444'
 
+      dummy=comp_real_str(m2ft,str_m2ft)
+      dummy=comp_real_str(m2mi,str_m2mi)
+      dummy=comp_real_str(abs(dB_m2yd),str_dB_m2yd)
+      dummy=comp_real_str(ms2kt,str_ms2kt)
+      dummy=comp_real_str(kt2ms,str_kt2ms)
+      
+      end
+
+      integer function comp_real_str(real_val,str_ref)
+      implicit none
+      integer(kind=16) i,i_dum,i_ref,i_test,ii
+      real(kind=16) real_val
+      character (len=40) str_ref
+      
+      logical  val_ok
 
 c     compare digits
-      real_val=m2ft
-      str_ref=str_m2ft
-      
-      write(*,*)'comparing digits...'
+      write(*,*)'comparing digits... (function)'
       ii=0
       val_ok=.true.
       write(*,'(a,f40.38)')'     test value is ',real_val
@@ -365,11 +375,10 @@ c     compare digits
             val_ok=.false.
             write(*,'(1x,i2,a)')ii
      $           ,' decimal places of precision achieved'
-            exit
+            comp_real_str=ii
+            return
+c            exit
          endif
          ii=ii+1
       enddo
-
-
-      
       end
