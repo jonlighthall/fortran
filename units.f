@@ -2,16 +2,16 @@
       implicit none
 
       include "metrics_revised2.inc"
+      logical,parameter :: do_check=.false.
       integer dummy,comp_real_str,comp_real
-      real(kind = set_kind), parameter :: dB_yd2m=20d0*log10(m2ft/3q0)
+      real(kind = set_kind), parameter :: dB_yd2m=-20q0*log10(3q0*3048q
+     &     -4)
       character(len = 256) :: fmt3,fmt2
       character (len=40) str_m2ft,str_m2mi,str_dB_m2yd,str_ms2kt
      &     ,str_kt2ms
 
 c     equivalence definitions
       integer, parameter :: ift2m=3048
-c     set decimal point precision
-c     
 c     for each real kind, the maximum number of decimal places is given
 c     along with the maximum accurate (consistent) decimal place
 c     
@@ -24,7 +24,7 @@ c     16    33  32
       integer, parameter :: dp = 33
       integer, parameter :: func_kind = 16
       integer, parameter :: srk = selected_real_kind(dp)
-      real(kind = srk) qnmi2m,qft2m,qm2ft,m2nmi,m2yd,yd2m,qdB_m2yd
+      real(kind = srk) qnmi2m,qft2m,qm2ft,m2nmi,qm2yd,qyd2m,qdB_m2yd
      &     ,qdB_yd2m,qkt2ms,qms2kt,qans
       character(len = 256) :: fmt
       real(kind = 4) snmi2m,sm2nmi,sft2m,sm2ft,sm2yd,syd2m,sdB_m2yd
@@ -32,17 +32,18 @@ c     16    33  32
       real(kind = 8) dnmi2m,dm2nmi,dft2m,dm2ft,dm2yd,dyd2m,ddB_m2yd
      &     ,ddB_yd2m,dkt2ms,dms2kt,dans
       integer pdp,spa,dpa,qpa,strpa
-      
+ 100  format (x12(a,i2))
+      if(do_check) then
 c     ----------------
 c     REAL
 c     ----------------      
-      write(*,'(a,i2)')'set precision is ',set_precision
-      write(*,'(a,i2)')'selected real kind is ',set_kind
+      write(*,100)'set precision is ',set_precision
+      write(*,100)'selected real kind is ',set_kind
 
       write(*,*)
       write(*,*)'unformatted'
       pdp=precision(ft2m)
-      write(*,'(x1a,i2)') ' precision  = ',pdp
+      write(*,100) ' precision  = ',pdp
       write(*,*) '   ft2m = ',ft2m    
       write(*,*) '   mi2m = ',mi2m    
       write(*,*) '   m2ft = ',m2ft   
@@ -53,10 +54,14 @@ c     ----------------
       write(*,*) ' ms2kt  = ',ms2kt      
       dummy=comp_real(real(abs(dB_m2yd),func_kind),real(abs(dB_yd2m)
      &     ,func_kind))
+      write(*,'(i2,a)'
+     &     ) dummy
+     &     ,' decimal places of accuracy (self-consistency) achieved'
+      call report(dummy,pdp)
 
       write(*,*)
       write(*,*)'formatted'
-      write(*,'(a,i2)')'precision is ',pdp
+      write(*,100)'precision is ',pdp
       write(fmt3,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
       write(fmt2,'(a,i0.2,a,i0.2,a)')'(a,es',pdp+3+4,'.',pdp,')'
 c     write(*,*)'fmt3 = ',trim(fmt3)
@@ -69,7 +74,8 @@ c     write(*,*)'fmt2 = ',trim(fmt2)
       write(*,fmt3)'dB_m2yd = ',dB_m2yd
       write(*,fmt3)'dB_yd2m = ',dB_yd2m
       write(*,fmt3)'  kt2ms = ',kt2ms
-      write(*,fmt3)'  ms2kt = ',ms2kt  
+      write(*,fmt3)'  ms2kt = ',ms2kt
+      endif
       
 c     ----------------
 c     SINGLE PRECISION
@@ -77,7 +83,7 @@ c     ----------------
       write(*,*)
       write(*,*)'single precision'
       pdp=precision(sft2m)
-      write(*,'(x1a,i2)')'precision = ',pdp
+      write(*,100)'precision = ',pdp
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
       sft2m=3048e-4
@@ -107,7 +113,11 @@ c     printed output
 
       dummy=comp_real(real(abs(sdB_m2yd),func_kind),real(abs(sdB_yd2m)
      &     ,func_kind))     
+      write(*,'(i2,a)')dummy,
+     &     ' decimal places of accuracy (self-consistency) achieved'
+      call report(dummy,pdp)
       
+      if(do_check) then
 c     check differnece
       write(*,*)
       write(*,*) 'single error (write)'
@@ -151,7 +161,8 @@ c     check differnece
       if(dummy.lt.spa)spa=dummy
       dummy=comp_real(real(kt2ms,func_kind),real(skt2ms,func_kind))
       if(dummy.lt.spa)spa=dummy
-      write(*,'(a,i2)')'single precision acheived = ',spa
+      write(*,100)'single precision accuracy acheived = ',spa
+      endif
       
 c     ----------------
 c     DOUBLE PRECISION
@@ -159,7 +170,7 @@ c     ----------------
       write(*,*)
       write(*,*)'double precision'
       pdp=precision(dft2m)      ! last decimal not consistent
-      write(*,'(x1a,i2)')'precision = ',pdp
+      write(*,100)'precision = ',pdp
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
       dft2m=3048d-4
@@ -189,7 +200,12 @@ c     printed output
 
       dummy=comp_real(real(abs(ddB_m2yd),func_kind),real(abs(ddB_yd2m)
      &     ,func_kind))
+      write(*,'(i2,a)'
+     &     ) dummy
+     &     ,' decimal places of accuracy (self-consistency) achieved'
+      call report(dummy,pdp)
       
+      if (do_check) then
       write(*,*)
       write(*,*) 'double error'
       dans = dft2m - ft2m
@@ -222,7 +238,8 @@ c     printed output
       if(dummy.lt.dpa)dpa=dummy
       dummy=comp_real(real(kt2ms,func_kind),real(dkt2ms,func_kind))
       if(dummy.lt.dpa)dpa=dummy
-      write(*,'(a,i2)')'double precision acheived = ',dpa
+      write(*,100)'double precision accuracy acheived = ',dpa
+      endif
 
 c     --------------
 c     QUAD PRECISION
@@ -231,18 +248,18 @@ c     --------------
       if(srk.ge.16) then
          write(*,*)'quad precision'
          pdp=precision(qft2m)
-         write(*,'(x1a,i2)')'precision = ',pdp
+         write(*,100)'precision = ',pdp
          qft2m=3048q-4          ! works for real*16, not real*10
       else if(srk.eq.10) then
          write(*,*)'extended precision'
          pdp=precision(qft2m)
-         write(*,'(x1a,i2)')'precision = ',pdp
+         write(*,100)'precision = ',pdp
          qft2m=ift2m            ! must copy integer value first for ultimate precision
          qft2m=qft2m/1q4        ! works
       else
          write(*,*)'specified precision'
          pdp=dp
-         write(*,'(x1a,i2)')'precision = ',pdp
+         write(*,100)'precision = ',pdp
 c     qft2m=3048q-4
          qft2m=ift2m            ! must copy integer value first for ultimate precision
          qft2m=qft2m/1q4        ! works
@@ -277,21 +294,26 @@ c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
 
 c     functional definitions
       qm2ft=1q0/qft2m
-      m2yd=qm2ft/3q0
-      yd2m=1q0/m2yd
-      qdB_m2yd=20q0*log10(m2yd)
-      qdB_yd2m=20q0*log10(yd2m)
+      qm2yd=qm2ft/3q0
+      qyd2m=1q0/qm2yd
+      qdB_m2yd=20q0*log10(qm2yd)
+      qdB_yd2m=20q0*log10(qyd2m)
       
 c     printed output
       write(*,fmt)'   ft2m = ',qft2m
       write(*,fmt)'   m2ft = ',qm2ft
-      write(*,fmt)'   m2yd = ',m2yd
-      write(*,fmt)'   yd2m = ',yd2m
+      write(*,fmt)'   m2yd = ',qm2yd
+      write(*,fmt)'   yd2m = ',qyd2m
       write(*,fmt)'dB_m2yd = ',qdB_m2yd
       write(*,fmt)'dB_yd2m = ',qdB_yd2m
 
-      dummy=comp_real(real(abs(qdB_m2yd),16),real(abs(qdB_yd2m),16))     
+      dummy=comp_real(real(abs(qdB_m2yd),16),real(abs(qdB_yd2m),16))
+      write(*,'(i2,a)'
+     &     ) dummy
+     &     ,' decimal places of accuracy (self-consistency) achieved'
+      call report(dummy,pdp)
 
+      if (do_check) then
       qpa=0
       dummy=comp_real(real(m2ft,16),real(qm2ft,16))
       if(dummy.gt.qpa)qpa=dummy
@@ -305,7 +327,7 @@ c     printed output
       if(dummy.lt.qpa)qpa=dummy
       dummy=comp_real(real(kt2ms,16),real(qkt2ms,16))
       if(dummy.lt.qpa)qpa=dummy
-      write(*,'(a,i2)')'quad precision acheived = ',qpa
+      write(*,100)'quad precision accuracy acheived = ',qpa
 
 c     test functional definitions against strings
       write(*,*)
@@ -328,16 +350,19 @@ c     1234567890123456789012345678901234567890
       if(dummy.lt.strpa)strpa=dummy
       dummy=comp_real_str(real(kt2ms,16),str_kt2ms)
       if(dummy.lt.strpa)strpa=dummy
-      write(*,'(a,i2)')'precision acheived = ',strpa
+      write(*,100)'accuracy acheived = ',strpa
 
       write(*,*)
-      write(*,100)'precision: ',precision(ft2m)
+      write(*,100)'precision: ',set_precision
+      write(*,100)'accuracy: ',strpa
       if(strpa.ge.set_precision) then
          write(*,100)'worked: ',strpa,' >= ',set_precision
       else
          write(*,100)'failed: ',strpa,' < ',set_precision
       endif
- 100  format (x12(a,i2))
+      call report(strpa,set_precision)
+      endif
+
       end
       
       integer function comp_real_str(real_val,str_ref)
@@ -346,9 +371,9 @@ c     1234567890123456789012345678901234567890
       real(kind=16) real_val
       character (len=40) str_ref      
       logical  val_ok
-      integer,parameter :: db = 2
+      integer,parameter :: db = 0
 c     compare digits
-      if(db>0) write(*,*)'comparing digits... (function)'
+      if(db>0) write(*,*)'comparing digits...'
       ii=0
       leading_zero=0
       val_ok=.true.
@@ -375,7 +400,7 @@ c     compare digits
             val_ok=.false.
             comp_real_str=ii-leading_zero
             if(db>0) write(*,'(1x,i2,a)')comp_real_str
-     $           ,' decimal places of precision achieved'
+     $           ,' decimal places of accuracy achieved'
             return
          endif
          ii=ii+1
@@ -427,4 +452,15 @@ c     compare digits
       endif
       if(db>0) write(*,'(1x,i2,a)')ii
      &     ,' decimal places of precision confirmed'
+      end
+
+      subroutine report(acc,prec)
+      implicit none
+      integer acc,prec
+      if(acc.ge.prec) then
+         write(*,100)'worked: ',acc,' >= ',prec
+      else
+         write(*,100)'failed: ',acc,' < ',prec
+      endif
+ 100  format (x12(a,i2))
       end
