@@ -257,7 +257,7 @@ c     equivalence definitions
 
 c     functional definitions
       qm2nmi=1q0/qnmi2m
-      qms2kt=m2nmi*6q1*6q1
+      qms2kt=qm2nmi*6q1*6q1
       qkt2ms=1q0/qms2kt
       
 c     printed output
@@ -267,7 +267,7 @@ c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
 
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
-      write(*,fmt)'  m2nmi = ',m2nmi
+      write(*,fmt)'  m2nmi = ',qm2nmi
       write(*,fmt)'  kt2ms = ',qkt2ms
       write(*,fmt)'  ms2kt = ',qms2kt
       write(*,*)
@@ -296,7 +296,7 @@ c     printed output
       qpa=0
       dummy=comp_real(real(m2ft,16),real(qm2ft,16))
       if(dummy.gt.qpa)qpa=dummy
-      dummy=comp_real(real(m2mi,16),real(m2nmi,16))
+      dummy=comp_real(real(m2mi,16),real(qm2nmi,16))
       if(dummy.lt.qpa)qpa=dummy
       dummy=comp_real(real(abs(dB_m2yd),16),real(abs(qdB_m2yd),16))
       if(dummy.lt.qpa)qpa=dummy
