@@ -3,12 +3,11 @@
 
       include "metrics_revised2.inc"
       logical,parameter :: do_check=.false.
-      integer dummy,comp_real_str,comp_real
+      integer dummy,comp_real_str,comp_real,pdp,spa,dpa,qpa,strpa
       real(kind = set_kind), parameter :: dB_yd2m=-20q0*log10(3q0*3048q
      &     -4)
-      character(len = 256) :: fmt3,fmt2
-      character (len=40) str_m2ft,str_m2mi,str_dB_m2yd,str_ms2kt
-     &     ,str_kt2ms
+      character(len=56) :: fmt,fmt2,fmt3,str_m2ft,str_m2mi,str_dB_m2yd
+     &     ,str_ms2kt,str_kt2ms
 
 c     equivalence definitions
       integer, parameter :: ift2m=3048
@@ -24,15 +23,15 @@ c     16    33  32
       integer, parameter :: dp = 33
       integer, parameter :: func_kind = 16
       integer, parameter :: srk = selected_real_kind(dp)
-      real(kind = srk) qnmi2m,qft2m,qm2ft,m2nmi,qm2yd,qyd2m,qdB_m2yd
+      real(kind = srk) qnmi2m,qft2m,qm2ft,qm2nmi,qm2yd,qyd2m,qdB_m2yd
      &     ,qdB_yd2m,qkt2ms,qms2kt,qans
-      character(len = 256) :: fmt
-      real(kind = 4) snmi2m,sm2nmi,sft2m,sm2ft,sm2yd,syd2m,sdB_m2yd
+      real(kind = 4  ) snmi2m,sm2nmi,sft2m,sm2ft,sm2yd,syd2m,sdB_m2yd
      &     ,sdB_yd2m,sms2kt,skt2ms,sans
-      real(kind = 8) dnmi2m,dm2nmi,dft2m,dm2ft,dm2yd,dyd2m,ddB_m2yd
+      real(kind = 8  ) dnmi2m,dm2nmi,dft2m,dm2ft,dm2yd,dyd2m,ddB_m2yd
      &     ,ddB_yd2m,dkt2ms,dms2kt,dans
-      integer pdp,spa,dpa,qpa,strpa
+
  100  format (x12(a,i2))
+
       if(do_check) then
 c     ----------------
 c     REAL
@@ -43,7 +42,6 @@ c     ----------------
       write(*,*)
       write(*,*)'unformatted'
       pdp=precision(ft2m)
-      write(*,100) ' precision  = ',pdp
       write(*,*) '   ft2m = ',ft2m    
       write(*,*) '   mi2m = ',mi2m    
       write(*,*) '   m2ft = ',m2ft   
@@ -54,18 +52,12 @@ c     ----------------
       write(*,*) ' ms2kt  = ',ms2kt      
       dummy=comp_real(real(abs(dB_m2yd),func_kind),real(abs(dB_yd2m)
      &     ,func_kind))
-      write(*,'(i2,a)'
-     &     ) dummy
-     &     ,' decimal places of accuracy (self-consistency) achieved'
       call report(dummy,pdp)
 
       write(*,*)
       write(*,*)'formatted'
-      write(*,100)'precision is ',pdp
       write(fmt3,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
       write(fmt2,'(a,i0.2,a,i0.2,a)')'(a,es',pdp+3+4,'.',pdp,')'
-c     write(*,*)'fmt3 = ',trim(fmt3)
-c     write(*,*)'fmt2 = ',trim(fmt2)
 
       write(*,fmt3)'   ft2m = ',ft2m
       write(*,fmt2)'   mi2m = ',mi2m
@@ -83,7 +75,6 @@ c     ----------------
       write(*,*)
       write(*,*)'single precision'
       pdp=precision(sft2m)
-      write(*,100)'precision = ',pdp
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
       sft2m=3048e-4
@@ -113,8 +104,6 @@ c     printed output
 
       dummy=comp_real(real(abs(sdB_m2yd),func_kind),real(abs(sdB_yd2m)
      &     ,func_kind))     
-      write(*,'(i2,a)')dummy,
-     &     ' decimal places of accuracy (self-consistency) achieved'
       call report(dummy,pdp)
       
       if(do_check) then
@@ -170,7 +159,6 @@ c     ----------------
       write(*,*)
       write(*,*)'double precision'
       pdp=precision(dft2m)      ! last decimal not consistent
-      write(*,100)'precision = ',pdp
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
       dft2m=3048d-4
@@ -200,9 +188,6 @@ c     printed output
 
       dummy=comp_real(real(abs(ddB_m2yd),func_kind),real(abs(ddB_yd2m)
      &     ,func_kind))
-      write(*,'(i2,a)'
-     &     ) dummy
-     &     ,' decimal places of accuracy (self-consistency) achieved'
       call report(dummy,pdp)
       
       if (do_check) then
@@ -248,18 +233,15 @@ c     --------------
       if(srk.ge.16) then
          write(*,*)'quad precision'
          pdp=precision(qft2m)
-         write(*,100)'precision = ',pdp
          qft2m=3048q-4          ! works for real*16, not real*10
       else if(srk.eq.10) then
          write(*,*)'extended precision'
          pdp=precision(qft2m)
-         write(*,100)'precision = ',pdp
          qft2m=ift2m            ! must copy integer value first for ultimate precision
          qft2m=qft2m/1q4        ! works
       else
          write(*,*)'specified precision'
          pdp=dp
-         write(*,100)'precision = ',pdp
 c     qft2m=3048q-4
          qft2m=ift2m            ! must copy integer value first for ultimate precision
          qft2m=qft2m/1q4        ! works
@@ -274,7 +256,7 @@ c     equivalence definitions
       qnmi2m=1852q0
 
 c     functional definitions
-      m2nmi=1q0/qnmi2m
+      qm2nmi=1q0/qnmi2m
       qms2kt=m2nmi*6q1*6q1
       qkt2ms=1q0/qms2kt
       
@@ -308,9 +290,6 @@ c     printed output
       write(*,fmt)'dB_yd2m = ',qdB_yd2m
 
       dummy=comp_real(real(abs(qdB_m2yd),16),real(abs(qdB_yd2m),16))
-      write(*,'(i2,a)'
-     &     ) dummy
-     &     ,' decimal places of accuracy (self-consistency) achieved'
       call report(dummy,pdp)
 
       if (do_check) then
@@ -457,10 +436,14 @@ c     compare digits
       subroutine report(acc,prec)
       implicit none
       integer acc,prec
+      write(*,100) ' precision  = ',acc
+      write(*,200)acc
       if(acc.ge.prec) then
          write(*,100)'worked: ',acc,' >= ',prec
       else
          write(*,100)'failed: ',acc,' < ',prec
       endif
  100  format (x12(a,i2))
+ 200  format (i2
+     &     ,' decimal places of accuracy (self-consistency) achieved')
       end
