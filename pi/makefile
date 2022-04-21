@@ -9,7 +9,7 @@ all: basel.exe test_pi.exe borwein.exe leibniz.exe wallis.exe
 
 basel.exe: basel.f 
 	@echo compiling $<...	
-	$(your_f77) -fdefault-real-8 -fdefault-integer-8 $^ -o $@
+	$(your_f77) $(fcflags) -fdefault-real-8 -fdefault-integer-8 $^ -o $@
 
 clean:
 	@echo removing files...

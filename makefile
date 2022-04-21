@@ -22,39 +22,39 @@ global.exe: global.f araydim.inc
 
 subs.exe: subs.f f.f f2.f
 	@echo compiling $<...	
-	$(your_f77) $^ -o $@
+	$(your_f77) $(fcflags) $^ -o $@
 
 globsubs.exe: globsubs.f f.f araydim.inc
 	@echo compiling $<...	
-	$(your_f77) globsubs.f f.f -o $@
+	$(your_f77) $(fcflags) globsubs.f f.f -o $@
 
 pause.exe: pause.f
 	@echo compiling $<...	
-	$(your_f77) -std=legacy  $^ -o $@
+	$(your_f77) $(fcflags) -std=legacy  $^ -o $@
 
 test_system_clock.exe: test_system_clock.f format.f set_format.f
 	@echo compiling $<...
-	$(your_f77) test_system_clock.f format.f -o $@	
+	$(your_f77) $(fcflags) test_system_clock.f format.f -o $@	
 
 collatz.exe: collatz.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) -fno-range-check collatz.f -o $@
+	$(your_f77) $(fcflags) -fno-range-check collatz.f -o $@
 
 collatz_loop.exe: collatz_loop.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) -fno-range-check collatz_loop.f format.f -o $@
+	$(your_f77) $(fcflags) -fno-range-check collatz_loop.f format.f -o $@
 
 huge.exe: huge.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) huge.f format.f -o $@
+	$(your_f77) $(fcflags) huge.f format.f -o $@
 
 newunit_test.exe: newunit_test.f newunit.f
 	@echo compiling $<...
-	$(your_f77) $^ -o $@
+	$(your_f77) $(fcflags) $^ -o $@
 
 fmt.exe: fmt.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) fmt.f format.f -o $@
+	$(your_f77) $(fcflags) fmt.f format.f -o $@
 
 clean:
 	@echo removing files...
