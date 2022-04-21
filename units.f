@@ -20,8 +20,7 @@ c     4     6   6
 c     8    15  14
 c     10    18  14
 c     16    33  32
-      integer, parameter :: dp = 33
-      integer, parameter :: func_kind = 16
+      integer, parameter :: dp = 33 ! number of decimal places
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk) qnmi2m,qft2m,qm2ft,qm2nmi,qm2yd,qyd2m,qdB_m2yd
      &     ,qdB_yd2m,qkt2ms,qms2kt,qans
@@ -29,6 +28,7 @@ c     16    33  32
      &     ,sdB_yd2m,sms2kt,skt2ms,sans
       real(kind = 8  ) dnmi2m,dm2nmi,dft2m,dm2ft,dm2yd,dyd2m,ddB_m2yd
      &     ,ddB_yd2m,dkt2ms,dms2kt,dans
+      integer, parameter :: func_kind = 16 ! set real kind for function input
 
  100  format (x12(a,i2))
 
@@ -232,27 +232,23 @@ c     --------------
       write(*,*)
       if(srk.ge.16) then
          write(*,*)'quad precision'
-         pdp=precision(qft2m)
-         qft2m=3048q-4          ! works for real*16, not real*10
       else if(srk.eq.10) then
          write(*,*)'extended precision'
-         pdp=precision(qft2m)
-         qft2m=ift2m            ! must copy integer value first for ultimate precision
-         qft2m=qft2m/1q4        ! works
       else
          write(*,*)'specified precision'
-         pdp=dp
-c     qft2m=3048q-4
-         qft2m=ift2m            ! must copy integer value first for ultimate precision
-         qft2m=qft2m/1q4        ! works
       endif
 
 c     formatting
+      pdp=precision(qft2m)
       write(fmt,'(a,i02,a)')'(a,i',ceiling(log10(real(pdp))),')'
       write(*,fmt)'decimal places = ',pdp
       write(*,fmt)'real bytes = ',srk
       
 c     equivalence definitions
+      qft2m=3048q-4             ! works for real*16, not real*10
+c     qft2m=ift2m               ! must copy integer value first for ultimate precision
+c     qft2m=qft2m/1q4           ! works
+
       qnmi2m=1852q0
 
 c     functional definitions
