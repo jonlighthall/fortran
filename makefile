@@ -73,30 +73,31 @@ clean:
 	$(your_f77) $(fcflags) $^ -o $@	
 
 run: all # test all functions that run automatically
-	./hello.exe 
 	./ar.exe 
-	./global.exe 
-	./sys.exe 
-	./subs.exe
-	./globsubs.exe
-	./test_abs.exe
-	./sign.exe
-	./io.exe
-	./timedate.exe
-	./test_system_clock.exe
-	./make_svp.exe
-	./huge.exe
 	./extrema.exe
-	./newunit_test.exe
 	./fmt.exe
-	./units.exe
 	./fun.exe
+	./global.exe 
+	./globsubs.exe
+	./hello.exe 
+	./huge.exe
+	./io.exe
+	./make_svp.exe
+	./newunit_test.exe
+	./sign.exe
+	./subs.exe
+	./sys.exe 
+	./test_abs.exe
+	./test_system_clock.exe
+	./timedate.exe
+	./units.exe
 
 run_man: all # test all functions that require manual input
+	./ask.exe
+	./collatz.exe
+	./collatz_glide.exe	
 	./fundem.exe 
 	./pause.exe
-	./collatz.exe	
-	./ask.exe
 
 run_int: all # test all functions that require user interrupt
 	./collatz_loop.exe; \
@@ -104,8 +105,8 @@ run_int: all # test all functions that require user interrupt
 	./timer.exe
 
 run_fmt: all # test all functions that require set_fmt.f
-	./test_system_clock.exe
-	./huge.exe
-	./fmt.exe
 	./collatz.exe
 	./collatz_loop.exe
+	./fmt.exe
+	./huge.exe
+	./test_system_clock.exe

@@ -27,7 +27,7 @@ clean:
 
 run: all # test all functions that run automatically
 	./basel.exe
-	./test_pi.exe
 	./borwein.exe
 	./leibniz.exe
+	./test_pi.exe
 	./wallis.exe
