@@ -58,18 +58,14 @@ fmt.exe: fmt.f format.f set_format.f
 
 clean:
 	@echo removing files...
-	rm -fv *.exe
-	rm -fv *.o
-	rm -fv *.f.~*~
-	rm -fv fname*.in
-	rm -fv svp.out
-	rm -fv svp.in
-	rm -fv state
-	rm -fv test?
-	rm -fv a.out
-	$(MAKE)	clean -C pi
+	@for fname in *.exe *.o *.f.~*~ fname*.in svp.out svp.in \
+	state test? a.out ; \
+	do \
+		find ./ -type f -name $${fname} -exec rm -v {} \; ; \
+	done
+	$(MAKE) clean -C pi
 
-%.o: %.f	
+%.o: %.f
 	@echo compiling $<...	
 	$(your_f77) $(flflags) $<
 

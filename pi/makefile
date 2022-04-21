@@ -13,10 +13,10 @@ basel.exe: basel.f
 
 clean:
 	@echo removing files...
-	rm -fv *.exe
-	rm -fv *.o
-	rm -fv *.f.~*~
-	rm -fv a.out
+	@for fname in *.exe *.o *.f.~*~ a.out ; \
+	do \
+		find ./ -type f -name $${fname} -exec rm -v {} \; ; \
+	done
 
 %.o: %.f	
 	@echo compiling $<...	
