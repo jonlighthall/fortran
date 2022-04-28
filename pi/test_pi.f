@@ -1,14 +1,14 @@
       program test_pi
       implicit none
-      integer (kind=16) i,ii,ipi,test_val,pdp
+      integer (kind=16) ii,ipi,test_val,pdp
       integer, parameter :: dp = 33
       integer, parameter :: srk = selected_real_kind(dp)
-      real(kind = srk), parameter :: p = 4.q0*atan(1.q0)
-      character (len=40) ipistr,fmt
+      real(kind = srk), parameter :: p = real(4,srk)*atan(real(1,srk))
+      character (len=40) fmt
       logical  val_ok
+      include 'pi_string.f'
       write(*,'(1x,i2,a,i2,a)')dp,' decimals reqested (using ',srk
      &     ,' bytes)'
-      ipistr = '31415926535897932384626433832795028841971693993751058'
       write(*,'(3x,4a)')ipistr(1:1),'.',ipistr(2:dp+1)
      &     ,' string (reference)'
       pdp=dp-1                  ! printed decimal places
