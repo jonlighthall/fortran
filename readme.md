@@ -25,7 +25,7 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 | [`huge.f`](huge.f)         | largest integer  |`kind` `huge` | [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`interrupt.f`](interrupt.f)| catch interrupt signal |`common` `signal`||`state`
 | [`extrema.f`](extrema.f)   | extrema          | `huge` `tiny` ||
-| [`newunit_test.f`](newunit_test.f)| newunit replacement |`inquire`|[`newunit.f`](newunit.f)|
+| [`getunit_test.f`](getunit_test.f)| newunit replacement |`inquire`|[`getunit.f`](getunit.f)|
 | [`fmt.f`](fmt.f)| comma format |              | [`format.f`](format.f) [`set_format.f`](set_format.f)|
 | [`timer.f`](timer.f)       | timer            | `system_clock` `common` `signal` | [`set_format.f`](set_format.f)
 | [`units.f`](units.f)       | unit conversions | `selected_real_kind` |
@@ -46,7 +46,7 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 ### Functions
 | name                       | description      |
 | -------------------------- | ---------------- |
-| [`newunit.f`](newunit.f)   | new unit replacement |
+| [`getunit.f`](getunit.f)   | newunit replacement |
 
 ### Includes
 | name                       | description      |
@@ -67,6 +67,8 @@ sudo apt -y install git
 sudo apt -y install make
 sudo apt -y install gfortran
 ```
+These commands have been collected in the script [`install_packages.sh`](install_packages.sh)
+
 
 Use the following commands to install GFortran, etc, on MSYS2.
 ```bash
@@ -77,6 +79,7 @@ pacman -S --noconfirm mingw32/mingw-w64-i686-gcc-fortran
 pacman -S --noconfirm mingw64/mingw-w64-x86_64-gcc-fortran
 pacman -S --noconfirm msys/gcc-fortran
 ```
+These commands have been collected in the script [`install_packages.sh`](install_packages.sh) on the mingw brach.
 
 ### Cloning
 
