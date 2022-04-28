@@ -2,7 +2,7 @@
 your_f77 = gfortran
 # (fortran) compile flags
 fcflags = -fimplicit-none -pedantic -Wall -Wsurprising -W	\
--fd-lines-as-comments
+-fd-lines-as-comments -Werror
 # (fortran) link flags
 flflags = -c $(fcflags)
 
@@ -11,7 +11,7 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	pause.exe test_system_clock.exe make_svp.exe collatz.exe	\
 	huge.exe collatz_loop.exe interrupt.exe extrema.exe		\
 	newunit_test.exe fmt.exe timer.exe units.exe ask.exe fun.exe	\
-	dice.exe collatz_glide.exe 
+	dice.exe collatz_glide.exe test_getunit.exe
 	$(MAKE)	-C pi
 
 ar.exe: ar.f f.f
@@ -53,9 +53,13 @@ subs.exe: subs.f f.f f2.f
 	@echo compiling $<...	
 	$(your_f77) $(fcflags) $^ -o $@
 
+set_format.exe: set_format.f
+	@echo compiling $<...	
+	$(your_f77) $(fcflags) -Wno-unused-parameter $^ -o $@
+
 test_system_clock.exe: test_system_clock.f format.f set_format.f
 	@echo compiling $<...
-	$(your_f277) $(fcflags) $< format.f -o $@	
+	$(your_f77) $(fcflags) $< format.f -o $@	
 
 units.exe: units.f metrics_revised2.inc
 	@echo compiling $<...	
