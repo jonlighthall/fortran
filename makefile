@@ -2,7 +2,7 @@
 your_f77 = gfortran
 # (fortran) compile flags
 fcflags = -fimplicit-none -pedantic -Wall -Wsurprising -W	\
--fd-lines-as-comments -Werror
+-fd-lines-as-comments
 # (fortran) link flags
 flflags = -c $(fcflags)
 
@@ -19,7 +19,7 @@ ar.exe: ar.f f.f
 
 collatz.exe: collatz.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -fno-range-check $< -o $@
+	$(your_f77) $(fcflags) -fno-range-check -Wno-unused-parameter $< -o $@
 
 collatz_loop.exe: collatz_loop.f format.f set_format.f
 	@echo compiling $<...	
@@ -63,7 +63,7 @@ test_system_clock.exe: test_system_clock.f format.f set_format.f
 
 units.exe: units.f metrics_revised2.inc
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< -o $@
+	$(your_f77) $(fcflags) -Wno-conversion $< -o $@
 
 %.o: %.f makefile
 	@echo compiling $<...	

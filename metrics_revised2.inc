@@ -3,11 +3,13 @@ c     set decimal point precision
       integer, parameter :: set_kind = selected_real_kind(set_precision)
 
 c     equivalence definitions
-      real(kind = set_kind), parameter :: ft2m=3048q-4
-      real(kind = set_kind), parameter :: mi2m=1852q0
+      real(kind = set_kind), parameter :: ft2m=real(3048,set_kind)
+     &     /real(10000,set_kind)
+      real(kind = set_kind), parameter :: mi2m=1852
 c     functional definitions
-      real(kind = set_kind), parameter :: m2ft=1q0/ft2m
-      real(kind = set_kind), parameter :: m2mi=1q0/mi2m
-      real(kind = set_kind), parameter :: dB_m2yd=20q0*log10(3q0*ft2m)  
-      real(kind = set_kind), parameter :: ms2kt=m2mi*6q1*6q1            
-      real(kind = set_kind), parameter :: kt2ms=1q0/ms2kt
+      real(kind = set_kind), parameter :: m2ft=real(1,set_kind)/ft2m
+      real(kind = set_kind), parameter :: m2mi=real(1,set_kind)/mi2m
+      real(kind = set_kind), parameter :: dB_m2yd=real(20,set_kind)
+     &     *log10(real(3,set_kind)*ft2m)
+      real(kind = set_kind), parameter :: ms2kt=m2mi*real(3600,set_kind)
+      real(kind = set_kind), parameter :: kt2ms=real(1,set_kind)/ms2kt
