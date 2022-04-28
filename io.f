@@ -26,7 +26,7 @@
          open(1,file = 'svp.out',status='new',action='write')
       end if
       do i=1,k
-         if(A(i).ne.0)then
+         if(abs(A(i)).gt.0)then
             write(*,*) A(i)
             write(1,*) i, A(i)
          end if
