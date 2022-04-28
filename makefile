@@ -1,7 +1,7 @@
 # (fortran) compiler
 your_f77 = x86_64-w64-mingw32-gfortran
 # (fortran) compile flags
-fcflags = -static-libgfortran -static-libgcc -static
+fcflags = -static
 # (fortran) link flags
 flflags = -c $(fcflags)
 
@@ -13,39 +13,39 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe \
 	$(MAKE)	-C pi
 
 units.exe: units.f metrics_revised2.inc
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) $< -o $@
 
 global.exe: global.f araydim.inc
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) global.f -o $@
 
 subs.exe: subs.f f.f f2.f
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) $^ -o $@
 
 globsubs.exe: globsubs.f f.f araydim.inc
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) globsubs.f f.f -o $@
 
 pause.exe: pause.f
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) -std=legacy  $^ -o $@
 
 test_system_clock.exe: test_system_clock.f format.f set_format.f
 	@echo compiling $<...
-	$(your_f77) $(fcflags) test_system_clock.f format.f -o $@	
+	$(your_f77) $(fcflags) test_system_clock.f format.f -o $@
 
 collatz.exe: collatz.f format.f set_format.f
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) -fno-range-check collatz.f -o $@
 
 collatz_loop.exe: collatz_loop.f format.f set_format.f
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) -fno-range-check collatz_loop.f format.f -o $@
 
 huge.exe: huge.f format.f set_format.f
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) huge.f format.f -o $@
 
 newunit_test.exe: newunit_test.f newunit.f
@@ -53,7 +53,7 @@ newunit_test.exe: newunit_test.f newunit.f
 	$(your_f77) $(fcflags) $^ -o $@
 
 fmt.exe: fmt.f format.f set_format.f
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(fcflags) fmt.f format.f -o $@
 
 clean:
@@ -66,27 +66,27 @@ clean:
 	$(MAKE) clean -C pi
 
 %.o: %.f
-	@echo compiling $<...	
+	@echo compiling $<...
 	$(your_f77) $(flflags) $<
 
 %.exe: %.o
-	$(your_f77) $(fcflags) $^ -o $@	
+	$(your_f77) $(fcflags) $^ -o $@
 
 run: all # test all functions that run automatically
-	./ar.exe 
+	./ar.exe
 	./extrema.exe
 	./fmt.exe
 	./fun.exe
-	./global.exe 
+	./global.exe
 	./globsubs.exe
-	./hello.exe 
+	./hello.exe
 	./huge.exe
 	./io.exe
 	./make_svp.exe
 	./newunit_test.exe
 	./sign.exe
 	./subs.exe
-	./sys.exe 
+	./sys.exe
 	./test_abs.exe
 	./test_system_clock.exe
 	./timedate.exe
@@ -95,8 +95,8 @@ run: all # test all functions that run automatically
 run_man: all # test all functions that require manual input
 	./ask.exe
 	./collatz.exe
-	./collatz_glide.exe	
-	./fundem.exe 
+	./collatz_glide.exe
+	./fundem.exe
 	./pause.exe
 
 run_int: all # test all functions that require user interrupt

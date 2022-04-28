@@ -1,14 +1,14 @@
 # (fortran) compiler
 your_f77 = x86_64-w64-mingw32-gfortran
 # (fortran) compile flags
-fcflags = -static-libgfortran -static-libgcc -static
+fcflags = -static
 # (fortran) link flags
 flflags = -c $(fcflags)
 
 all: basel.exe test_pi.exe borwein.exe leibniz.exe wallis.exe
 
-basel.exe: basel.f 
-	@echo compiling $<...	
+basel.exe: basel.f
+	@echo compiling $<...
 	$(your_f77) $(fcflags) -fdefault-real-8 -fdefault-integer-8 $^ -o $@
 
 clean:
@@ -18,12 +18,12 @@ clean:
 		find ./ -type f -name $${fname} -exec rm -v {} \; ; \
 	done
 
-%.o: %.f	
-	@echo compiling $<...	
+%.o: %.f
+	@echo compiling $<...
 	$(your_f77) $(flflags) $<
 
 %.exe: %.o
-	$(your_f77) $(fcflags) $^ -o $@	
+	$(your_f77) $(fcflags) $^ -o $@
 
 run: all # test all functions that run automatically
 	./basel.exe
