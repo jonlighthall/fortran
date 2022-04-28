@@ -60,26 +60,14 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 ### Prerequisites
 
 Requies a compiler for Fortran, such as GNU Fortran.
-Use the following command to install GFortran, etc, on Linux.
+Use the following commands to install GFortran, etc, on Linux.
 ```bash
 sudo apt update && sudo apt -y upgrade
 sudo apt -y install git
 sudo apt -y install make
 sudo apt -y install gfortran
 ```
-These commands have been collected in the script [`install_packages.sh`](install_packages.sh)
-
-
-Use the following commands to install GFortran, etc, on MSYS2.
-```bash
-pacman -Syu --noconfirm
-pacman -S --noconfirm git
-pacman -S --noconfirm make
-pacman -S --noconfirm mingw32/mingw-w64-i686-gcc-fortran
-pacman -S --noconfirm mingw64/mingw-w64-x86_64-gcc-fortran
-pacman -S --noconfirm msys/gcc-fortran
-```
-These commands have been collected in the script [`install_packages.sh`](install_packages.sh) on the mingw brach.
+These commands have been collected in the script [`install_packages.sh`](install_packages.sh).
 
 ### Cloning
 
