@@ -1,7 +1,8 @@
 # (fortran) compiler
 your_f77 = gfortran
 # (fortran) compile flags
-fcflags =
+fcflags = -fimplicit-none -pedantic -Wall -Wsurprising -W	\
+-fd-lines-as-comments
 # (fortran) link flags
 flflags = -c $(fcflags)
 
@@ -11,14 +12,7 @@ basel.exe: basel.f
 	@echo compiling $<...	
 	$(your_f77) $(fcflags) -fdefault-real-8 -fdefault-integer-8 $^ -o $@
 
-clean:
-	@echo removing files...
-	@for fname in *.exe *.o *.f.~*~ a.out ; \
-	do \
-		find ./ -type f -name $${fname} -exec rm -v {} \; ; \
-	done
-
-%.o: %.f	
+%.o: %.f makefile
 	@echo compiling $<...	
 	$(your_f77) $(flflags) $<
 
@@ -31,3 +25,10 @@ run: all # test all functions that run automatically
 	./leibniz.exe
 	./test_pi.exe
 	./wallis.exe
+
+clean:
+	@echo removing files...
+	@for fname in *.exe *.o *.f.~*~ a.out ; \
+	do \
+		find ./ -type f -name $${fname} -exec rm {} \; ; \
+	done
