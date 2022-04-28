@@ -10,7 +10,7 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	globsubs.exe test_abs.exe sign.exe io.exe timedate.exe		\
 	pause.exe test_system_clock.exe make_svp.exe collatz.exe	\
 	huge.exe collatz_loop.exe interrupt.exe extrema.exe		\
-	newunit_test.exe fmt.exe timer.exe units.exe ask.exe fun.exe	\
+	fmt.exe timer.exe units.exe ask.exe fun.exe	\
 	dice.exe collatz_glide.exe test_getunit.exe
 	$(MAKE)	-C pi
 
@@ -41,7 +41,7 @@ huge.exe: huge.f format.f set_format.f
 	@echo compiling $<...	
 	$(your_f77) $(fcflags) $< format.f -o $@
 
-newunit_test.exe: newunit_test.f newunit.f
+test_getunit.exe: test_getunit.f getunit.f
 	@echo compiling $<...
 	$(your_f77) $(fcflags) $^ -o $@
 
@@ -83,7 +83,7 @@ run: all # test all functions that run automatically
 	./huge.exe
 	./io.exe
 	./make_svp.exe
-	./newunit_test.exe
+	./getunit_test.exe
 	./sign.exe
 	./subs.exe
 	./sys.exe 
