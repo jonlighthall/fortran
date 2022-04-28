@@ -1,5 +1,6 @@
       program timedate
       integer,dimension(8) :: values
+      real start,finish
        call date_and_time(VALUES=values)
       print '(8i5)', values
       write(*,'(a,i0.2,a,i0.2,a,i4)')'the date is ',values(2),'/'

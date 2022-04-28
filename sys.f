@@ -3,7 +3,7 @@ c     program to test executing system commands from within fortran
       character(256) sfx, cmd
       character(len=1024) :: filename
       character(len=1024) :: fmt
-      integer cg_itr
+      integer cg_itr,i
       logical ext
       print *, "system command test"
 c     base file name

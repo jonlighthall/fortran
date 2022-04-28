@@ -1,4 +1,5 @@
       SUBROUTINE f(N)
+      integer N,maxN,i,j,k
       REAL, DIMENSION(N) :: A
       parameter (maxN=10)
       A=0

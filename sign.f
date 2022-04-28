@@ -1,4 +1,6 @@
       PROGRAM sign
+      integer i
+      real x
       WRITE(*,"(1X,A)") "   SS   SP  SS    SP"
       DO i = -5, 5
          x = REAL(i)

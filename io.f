@@ -1,8 +1,9 @@
       PROGRAM io
       integer, parameter :: n=100
       REAL, DIMENSION(N) :: A
-      parameter (maxN=10)
+      integer, parameter :: maxN=10
       logical ext
+      integer i,j,k
       A=0
       WRITE(*,'(A,I6)') 'Creating array of size ',N
       if(N.gt.maxN)then

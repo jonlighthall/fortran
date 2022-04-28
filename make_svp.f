@@ -1,5 +1,5 @@
       program make_svp
-      integer :: count
+      integer :: count,i,j
       call system_clock(count)  ! get system time in milliseconds
       call srand(count)         ! use time for random seed
 

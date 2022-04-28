@@ -2,7 +2,8 @@
       implicit none
       include 'set_format.f'
       integer(kind=intsize) :: i, j, k
-      integer(kind=1) :: sz,ln
+      integer,parameter :: intsize2 = 1
+      integer(kind=intsize2) :: sz,ln
       character(len=fmtsize) str
       character(len=256) fmt
       i=1 
@@ -22,10 +23,10 @@
 
 c     print summary with calculated formats
       sz=sizeof(i)
-      ln=ceiling(log10(real(sz)))
+      ln=ceiling(log10(real(sz)),intsize2)
       write(fmt,*)'(a,i',ln,',a)'
       write(*,fmt)'in ',sz,' bytes...'
-      ln=ceiling(log10(real(j)))
+      ln=ceiling(log10(real(j)),intsize2)
       write(fmt,*)'(a,sp,i',ln+1,')'
       write(*,fmt) 'the highest signed integer is ', j
       write(*,fmt) ' the lowest signed integer is ', i
