@@ -110,7 +110,8 @@ run_fmt: all # test all functions that require set_fmt.f
 	./huge.exe
 	./test_system_clock.exe
 
-win: ask.exe\
+win: clean \
+	ask.exe\
 	collatz.exe \
 	collatz_glide.exe \
 	collatz_loop.exe \
@@ -124,7 +125,7 @@ win: ask.exe\
 clean:
 	@echo removing files...
 	@for fname in *.exe *.o *.f.~*~ fname*.in svp.out svp.in \
-	state test? a.out ; \
+	state test test? a.out ; \
 	do \
 		find ./ -type f -name $${fname} -exec rm {} \; ; \
 	done
