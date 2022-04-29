@@ -1,4 +1,5 @@
       program hello
+      integer i
       write(*,'(a)') "hello world"
       write(*,'(a)') "fortan"
       do 10 i=1,3,1             !print beeps at end of program

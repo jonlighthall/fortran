@@ -1,20 +1,22 @@
       program borwein
       implicit none
       integer(kind=16) i,ii,ipi,test_val
-      real(kind=16)a,b,p
-      character (len=40) ipistr
+      integer,parameter :: srk=16
+      real(kind=srk)a,b,p
       logical  val_ok
-      ipistr = '31415926535897932384626433832795028841971693993751058'
+      include 'pi_string.f'
+      
 c     calculate series
       i=0
-      a=sqrt(2q0)
-      b=0q0
-      p=2q0+sqrt(2q0)
+c     quadratic convergce (1984)
+      a=sqrt(real(2,srk))
+      b=real(0,srk)
+      p=real(2,srk)+sqrt(real(2,srk))
       ii=0
-      do while (a.ne.1q0)
-         b=((1q0+b)*sqrt(a))/(a+b)
-         a=(sqrt(a)+1q0/sqrt(a))/2q0
-         p=((1q0+a)*p*b)/(1q0+b)
+      do while ((a-real(1,srk)).gt.0)
+         b=((real(1,srk)+b)*sqrt(a))/(a+b)
+         a=(sqrt(a)+real(1,srk)/sqrt(a))/real(2,srk)
+         p=((real(1,srk)+a)*p*b)/(real(1,srk)+b)
          write(*,*)i,a,b,p
 c     compare digits
 

@@ -1,4 +1,5 @@
       program pause
+      integer i
       print *, "hello world"
       print *, "fortan"
       do 10 i=1,3

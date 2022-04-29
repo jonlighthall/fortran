@@ -2,9 +2,8 @@
       implicit none
       integer (kind=16) i,d1,d2,n1,step,ii,ipi,test_val,j
       real (kind=8) r,p
-      character (len=40) ipistr
       logical  val_ok
-      ipistr = '31415926535897932384626433832795028841971693993751058'
+      include 'pi_string.f'
 c     calculate series
       i=0
       r=1

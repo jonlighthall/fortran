@@ -16,9 +16,10 @@ c     10    18  14
 c     16    33  32
       integer, parameter :: dp = 6
       integer, parameter :: srk = selected_real_kind(dp)
-      real(kind = srk), parameter :: pi = 4.d0*atan(1.d0)
+      real(kind = srk), parameter :: pi = real(4,srk)*atan(real(1,srk))
       real(kind = srk) sum,pival,seq,pireal
-      character (len=40) pistr,fmt,unit_name,host
+      character (len=40) fmt,unit_name,host
+      include 'pi_string.f'
       CALL SYSTEM_CLOCK(count, count_rate, count_max)
       if(count_rate.eq.1000) then
          write(unit_name,*) 'miliseconds'
@@ -28,14 +29,15 @@ c     16    33  32
       write(*,'(1x,i2,a,i2,a)')dp,' decimals in ',srk,' bytes'
       pdp=dp+1
       write(fmt,'(a,i0.2,a,i0.2,a)')'(3x,f',pdp+2,'.',pdp,',a)'
-      pistr = '3.1415926535897932384626433832795028841971693993751058'
-      write(*,'(3x,2a)')trim(pistr(1:dp+2)),' string'
-      read(pistr,*)pireal
+      ipistr(3:40)=ipistr(2:39)
+      ipistr(2:2)='.'
+      write(*,'(3x,2a)')trim(ipistr(1:dp+4)),' string'      
+      read(ipistr,*)pireal
       write(*,fmt)pireal,'  real'
       write(*,fmt)pi,'  atan'
 
 c     estimate number of steps
-      n=sqrt(1/epsilon(seq))
+      n=floor(sqrt(1/epsilon(seq)),16)
       write(*,*) 'n = ',sqrt(1/epsilon(seq))
       write(*,*) 'n = ',n
       
@@ -51,9 +53,9 @@ c     calculate series
       write(*,'(3x,g16.10)',advance='no')seq
       
       do while ((seq.gt.1q0/(i*i)).and.(i.lt.n)) ! ensure that squence in monotonically decreasing
-         seq=1q0/(i*i)       
+         seq=real(1,srk)/(i*i)       
          sum=sum + seq
-         pival=sqrt(6q0*sum)
+         pival=sqrt(real(6,srk)*sum)
 c     print progress
          if(mod(i,step).eq.0) then
             write(*,*)
@@ -72,11 +74,11 @@ c         if(i.lt.n) write(*,*) 'end: i = ',i
 
 c     compare digits
       do i=0,dp+1
-         sum=pireal*10**i
+         sum=pireal*real(10,srk)**i
          j=floor(sum)
-         sum=pi*10**i
+         sum=pi*real(10,srk)**i
          k=floor(sum)
-         sum=pival*10**i
+         sum=pival*real(10,srk)**i
          l=floor(sum)
          write(*,*)i+1,j,k,l,j.eq.k,j.eq.l
          if (j.ne.l) exit

@@ -4,13 +4,12 @@
       include "metrics_revised2.inc"
       logical,parameter :: do_check=.false.
       integer dummy,comp_real_str,comp_real,pdp,spa,dpa,qpa,strpa
-      real(kind = set_kind), parameter :: dB_yd2m=-20q0*log10(3q0*3048q
-     &     -4)
+      real(kind = set_kind), parameter :: dB_yd2m=real(-20,set_kind)
+     &     *log10(real(3,set_kind)*real(3048)/real(10000))
       character(len=56) :: fmt,fmt2,fmt3,str_m2ft,str_m2mi,str_dB_m2yd
      &     ,str_ms2kt,str_kt2ms
 
 c     equivalence definitions
-      integer, parameter :: ift2m=3048
 c     for each real kind, the maximum number of decimal places is given
 c     along with the maximum accurate (consistent) decimal place
 c     
@@ -23,14 +22,14 @@ c     16    33  32
       integer, parameter :: dp = 33 ! number of decimal places
       integer, parameter :: srk = selected_real_kind(dp)
       real(kind = srk) qnmi2m,qft2m,qm2ft,qm2nmi,qm2yd,qyd2m,qdB_m2yd
-     &     ,qdB_yd2m,qkt2ms,qms2kt,qans
+     &     ,qdB_yd2m,qkt2ms,qms2kt
       real(kind = 4  ) snmi2m,sm2nmi,sft2m,sm2ft,sm2yd,syd2m,sdB_m2yd
      &     ,sdB_yd2m,sms2kt,skt2ms,sans
       real(kind = 8  ) dnmi2m,dm2nmi,dft2m,dm2ft,dm2yd,dyd2m,ddB_m2yd
      &     ,ddB_yd2m,dkt2ms,dms2kt,dans
       integer, parameter :: func_kind = 16 ! set real kind for function input
 
- 100  format (x12(a,i2))
+ 100  format (12x,a,i2)
 
       if(do_check) then
 c     ----------------
@@ -77,18 +76,18 @@ c     ----------------
       pdp=precision(sft2m)
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
-      sft2m=3048e-4
-      snmi2m=1852e0
+      sft2m=real(3048,4)/real(10000,4)
+      snmi2m=real(1852,4)
 c     functional definitions
-      sm2ft=1e0/sft2m
-      sm2yd=sm2ft/3e0
-      syd2m=1e0/sm2yd
-      sdB_m2yd=20e0*log10(sm2yd)
-      sdB_yd2m=20e0*log10(syd2m)
+      sm2ft=real(1,4)/sft2m
+      sm2yd=sm2ft/real(3,4)
+      syd2m=real(1,4)/sm2yd
+      sdB_m2yd=real(20,4)*log10(sm2yd)
+      sdB_yd2m=real(20,4)*log10(syd2m)
       
-      sm2nmi=1e0/snmi2m
-      sms2kt=sm2nmi*6e1*6e1
-      skt2ms=1e0/sms2kt
+      sm2nmi=real(1,4)/snmi2m
+      sms2kt=sm2nmi*real(3600,4)
+      skt2ms=real(1,4)/sms2kt
       
 c     printed output
       write(*,fmt)'   ft2m = ',sft2m
@@ -120,19 +119,19 @@ c     check differnece
       
       write(*,*)
       write(*,*) 'single error (variable)'
-      sans = sft2m - ft2m
+      sans = sft2m - real(ft2m,4)
       write(*,fmt)'   ft2m  - ft2m    = ',   sans
-      sans = sm2ft - m2ft
+      sans = sm2ft - real(m2ft,4)
       write(*,fmt)'   m2ft  - m2ft    = ',   sans
-      sans = sdB_yd2m - dB_m2yd
+      sans = sdB_yd2m - real(dB_m2yd,4)
       write(*,fmt)'dB_yd2m  - dB_m2yd = ',sans
-      sans = snmi2m - mi2m
+      sans = snmi2m - real(mi2m,4)
       write(*,fmt)'   nmi2m - nmi2m   = ',  sans
-      sans = sm2nmi - m2mi
+      sans = sm2nmi - real(m2mi,4)
       write(*,fmt)'   m2nmi - m2mi    = ',   sans
-      sans = skt2ms - kt2ms   
+      sans = skt2ms - real(kt2ms,4)
       write(*,fmt)'   kt2ms - kt2ms   = ',  sans   
-      sans = sms2kt - ms2kt
+      sans = sms2kt - real(ms2kt,4)
       write(*,fmt)'   ms2kt - ms2kt   = ',  sans
 
       spa=0
@@ -161,18 +160,18 @@ c     ----------------
       pdp=precision(dft2m)      ! last decimal not consistent
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 c     equivalence definitions
-      dft2m=3048d-4
-      dnmi2m=1852d0
+      dft2m=real(3048,8)/real(10000,8)
+      dnmi2m=real(1852,8)
 c     functional definitions
-      dm2ft=1d0/dft2m
-      dm2yd=dm2ft/3d0
-      dyd2m=1d0/dm2yd
-      ddB_m2yd=20d0*log10(dm2yd)
-      ddB_yd2m=20d0*log10(dyd2m)
+      dm2ft=real(1,8)/dft2m
+      dm2yd=dm2ft/real(3,8)
+      dyd2m=real(1,8)/dm2yd
+      ddB_m2yd=real(20,8)*log10(dm2yd)
+      ddB_yd2m=real(20,8)*log10(dyd2m)
       
-      dm2nmi=1d0/dnmi2m
-      dms2kt=dm2nmi*6d1*6d1
-      dkt2ms=1d0/dms2kt
+      dm2nmi=real(1,8)/dnmi2m
+      dms2kt=dm2nmi*real(3600,8)
+      dkt2ms=real(1,8)/dms2kt
       
 c     printed output
       write(*,fmt)'   ft2m = ',dft2m
@@ -193,19 +192,19 @@ c     printed output
       if (do_check) then
       write(*,*)
       write(*,*) 'double error'
-      dans = dft2m - ft2m
+      dans = dft2m - real(ft2m,8)
       write(*,fmt)'   ft2m  - ft2m    = ',   dans
-      dans = dm2ft - m2ft
+      dans = dm2ft - real(m2ft,8)
       write(*,fmt)'   m2ft  - m2ft    = ',   dans
-      dans = ddB_yd2m - dB_m2yd
+      dans = ddB_yd2m - real(dB_m2yd,8)
       write(*,fmt)'dB_yd2m  - dB_m2yd = ',dans
-      dans = dnmi2m - mi2m
+      dans = dnmi2m - real(mi2m,8)
       write(*,fmt)'   nmi2m - nmi2m   = ',  dans
-      dans = dm2nmi - m2mi
+      dans = dm2nmi - real(m2mi,8)
       write(*,fmt)'   m2nmi - m2mi    = ',   dans
-      dans = dkt2ms - kt2ms   
+      dans = dkt2ms - real(kt2ms,8)
       write(*,fmt)'   kt2ms - kt2ms   = ',  dans   
-      dans = dms2kt - ms2kt
+      dans = dms2kt - real(ms2kt,8)
       write(*,fmt)'   ms2kt - ms2kt   = ',  dans
 
       dpa=0
@@ -241,20 +240,18 @@ c     --------------
 c     formatting
       pdp=precision(qft2m)
       write(fmt,'(a,i02,a)')'(a,i',ceiling(log10(real(pdp))),')'
-      write(*,fmt)'decimal places = ',pdp
       write(*,fmt)'real bytes = ',srk
       
 c     equivalence definitions
-      qft2m=3048q-4             ! works for real*16, not real*10
-c     qft2m=ift2m               ! must copy integer value first for ultimate precision
+      qft2m=real(3048,16)/real(10000,16)             ! works for real*16, not real*10
 c     qft2m=qft2m/1q4           ! works
 
-      qnmi2m=1852q0
+      qnmi2m=real(1852,16)
 
 c     functional definitions
-      qm2nmi=1q0/qnmi2m
-      qms2kt=qm2nmi*6q1*6q1
-      qkt2ms=1q0/qms2kt
+      qm2nmi=real(1,16)/qnmi2m
+      qms2kt=qm2nmi*real(3600,16)
+      qkt2ms=real(1,16)/qms2kt
       
 c     printed output
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp-3,')'
@@ -271,11 +268,11 @@ c     write(fmt,'(a,i0.2,a,i0.2,a)')'(a,e',pdp+7,'.',pdp,')'
       write(fmt,'(a,i0.2,a,i0.2,a)')'(a,f',pdp+3,'.',pdp,')'
 
 c     functional definitions
-      qm2ft=1q0/qft2m
-      qm2yd=qm2ft/3q0
-      qyd2m=1q0/qm2yd
-      qdB_m2yd=20q0*log10(qm2yd)
-      qdB_yd2m=20q0*log10(qyd2m)
+      qm2ft=real(1,16)/qft2m
+      qm2yd=qm2ft/real(3,16)
+      qyd2m=real(1,16)/qm2yd
+      qdB_m2yd=real(20,16)*log10(qm2yd)
+      qdB_yd2m=real(20,16)*log10(qyd2m)
       
 c     printed output
       write(*,fmt)'   ft2m = ',qft2m
@@ -386,14 +383,14 @@ c     compare digits
       implicit none
       integer(kind=16) i_ref,i_test,ii,a,pdp
       real(kind=16) real_val,real_ref,b,sci_val,sci_ref
-      logical  val_ok,found_sig
+      logical  val_ok
       character(len=40) fmt
       integer,parameter :: db=0
       if(db>0) write(*,*)'comparing digits...'
       pdp=precision(real_val)
 c     convert to scientific notation
       a=floor(log10(real_val))
-      b=10**(-1q0*a)
+      b=10**(real(-1,16)*a)
       sci_val=real_val*b
       sci_ref=real_ref*b
 
@@ -439,7 +436,7 @@ c     compare digits
       else
          write(*,100)'failed: ',acc,' < ',prec
       endif
- 100  format (x12(a,i2))
+ 100  format (12x,a,i2)
  200  format (i2
      &     ,' decimal places of accuracy (self-consistency) achieved')
       end

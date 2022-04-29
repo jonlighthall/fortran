@@ -15,7 +15,7 @@
       mxn=0
       do while (n.gt.1)
          write(*,*)'i = ',i,'ai = ',n
-         if (mod(n,2).eq.0) then
+         if (mod(n,int(2,intsize)).eq.0) then
             seq=n/2
          else
             if(n.gt.sysmx) then

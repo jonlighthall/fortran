@@ -163,7 +163,7 @@ c     loop over all possible numbers
          n=sd
          dly=0
          do while (n.gt.1)
-            if (mod(n,2).eq.0) then
+            if (mod(n,int(2,intsize)).eq.0) then
                n=n/2
             else
                if(n.gt.sysmx) then
@@ -230,7 +230,7 @@ c     print summary
       write(dum,*)real(dif)/t
       write(*,*)'time = ',t
       write(*,*)'processing rate ',trim(adjustl(dum)),' seeds per sec'
-      write(*,*)'estimate ',real(sysmx-sd)/dif*t
+      write(*,*)'estimate ',real(sysmx-sd)/real(dif*t)
       write(*,'(a,i3,a)')' found ',dlyrec,' delay records'
       write(*,'(a,i4)')' max delay is ',dlymx
       write(*,*)'start = ',start
@@ -253,9 +253,9 @@ c      4 |  35  353     106239
 c      8 |  71 1131 8528817511
 c     16 |  
 
-      function handler()
+      subroutine handler()
       logical interrupt
       common interrupt
       interrupt = .true.
       print*,'Ctrl-C pressed',interrupt
-      end function handler
+      end subroutine handler
