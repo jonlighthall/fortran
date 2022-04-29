@@ -110,6 +110,17 @@ run_fmt: all # test all functions that require set_fmt.f
 	./huge.exe
 	./test_system_clock.exe
 
+win: ask.exe\
+	collatz.exe \
+	collatz_glide.exe \
+	collatz_loop.exe \
+	fundem.exe \
+	hello.exe \
+	interrupt.exe \
+	pause.exe \
+	sys.exe \
+	timer.exe
+
 clean:
 	@echo removing files...
 	@for fname in *.exe *.o *.f.~*~ fname*.in svp.out svp.in \
