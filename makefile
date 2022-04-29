@@ -1,8 +1,7 @@
 # (fortran) compiler
-your_f77 = gfortran
+your_f77 = nvfortran
 # (fortran) compile flags
-fcflags = -fimplicit-none -pedantic -Wall -Wsurprising -W	\
--fd-lines-as-comments
+fcflags = -Wall -W
 # (fortran) link flags
 flflags = -c $(fcflags)
 
