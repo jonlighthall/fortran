@@ -114,7 +114,7 @@ run_fmt: all # test all functions that require set_fmt.f
 clean:
 	@echo removing files...
 	@for fname in *.exe *.o *.f.~*~ fname*.in svp.out svp.in \
-	state test? a.out ; \
+	state test test? a.out ; \
 	do \
 		find ./ -type f -name $${fname} -exec rm {} \; ; \
 	done
