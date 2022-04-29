@@ -82,7 +82,7 @@ run: all # test all functions that run automatically
 	./huge.exe
 	./io.exe
 	./make_svp.exe
-	./getunit_test.exe
+	./test_getunit.exe
 	./sign.exe
 	./subs.exe
 	./sys.exe 
