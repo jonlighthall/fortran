@@ -1,7 +1,7 @@
 # (fortran) compiler
 your_f77 = x86_64-w64-mingw32-gfortran
 # (fortran) compile flags
-fcflags = -static
+fcflags = -static -fd-lines-as-comments
 # (fortran) link flags
 flflags = -c $(fcflags)
 
@@ -10,7 +10,7 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	pause.exe test_system_clock.exe make_svp.exe collatz.exe	\
 	huge.exe collatz_loop.exe interrupt.exe extrema.exe		\
 	fmt.exe timer.exe units.exe ask.exe fun.exe	\
-	dice.exe collatz_glide.exe test_getunit.exe
+	dice.exe collatz_glide.exe test_getunit.exe gethost.exe
 	$(MAKE)	-C pi
 
 ar.exe: ar.f f.f
@@ -90,6 +90,7 @@ run: all # test all functions that run automatically
 	./test_system_clock.exe
 	./timedate.exe
 	./units.exe
+	./gethost.exe
 
 run_man: all # test all functions that require manual input
 	./ask.exe
