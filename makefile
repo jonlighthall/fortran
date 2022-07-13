@@ -1,76 +1,81 @@
-# (fortran) compiler
+# fortran compiler
 your_f77 = gfortran
-# (fortran) compile flags
-fcflags = -fimplicit-none -pedantic -Wall -Wsurprising -W	\
--fd-lines-as-comments
-# (fortran) link flags
+# flags
+output = -o $@
+compile = -c $<
+options = -fimplicit-none -fd-lines-as-comments
+warnings = -pedantic -Wall -Wsurprising -W
+
+# fortran compile flags
+fcflags = $(warnings) $(options)
+# fortran link flags
 flflags = -c $(fcflags)
 
 all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	globsubs.exe test_abs.exe sign.exe io.exe timedate.exe		\
 	pause.exe test_system_clock.exe make_svp.exe collatz.exe	\
-	huge.exe collatz_loop.exe interrupt.exe extrema.exe		\
-	fmt.exe timer.exe units.exe ask.exe fun.exe	\
-	dice.exe collatz_glide.exe test_getunit.exe gethost.exe
+	huge.exe collatz_loop.exe interrupt.exe extrema.exe fmt.exe	\
+	timer.exe units.exe ask.exe fun.exe dice.exe			\
+	collatz_glide.exe test_getunit.exe gethost.exe
 	$(MAKE)	-C pi
 
 ar.exe: ar.f f.f
-	$(your_f77) $(fcflags) $< -o $@	
+	$(your_f77) $(fcflags) $< $(output)	
 
 collatz.exe: collatz.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -fno-range-check -Wno-unused-parameter $< -o $@
+	$(your_f77) $(fcflags) -fno-range-check -Wno-unused-parameter $< $(output)
 
 collatz_loop.exe: collatz_loop.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -fno-range-check $< format.f -o $@
+	$(your_f77) $(fcflags) -fno-range-check $< format.f $(output)
 
 fmt.exe: fmt.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< format.f -o $@
+	$(your_f77) $(fcflags) $< format.f $(output)
 
 global.exe: global.f araydim.inc
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< -o $@
+	$(your_f77) $(fcflags) $< $(output)
 
 globsubs.exe: globsubs.f f.f araydim.inc
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< f.f -o $@
+	$(your_f77) $(fcflags) $< f.f $(output)
 
 huge.exe: huge.f format.f set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< format.f -o $@
+	$(your_f77) $(fcflags) $< format.f $(output)
 
 test_getunit.exe: test_getunit.f getunit.f
 	@echo compiling $<...
-	$(your_f77) $(fcflags) $^ -o $@
+	$(your_f77) $(fcflags) $^ $(output)
 
 pause.exe: pause.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -w -std=legacy  $^ -o $@
+	$(your_f77) $(fcflags) -w -std=legacy  $^ $(output)
 
 subs.exe: subs.f f.f f2.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $^ -o $@
+	$(your_f77) $(fcflags) $^ $(output)
 
 set_format.exe: set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -Wno-unused-parameter $^ -o $@
+	$(your_f77) $(fcflags) -Wno-unused-parameter $^ $(output)
 
 test_system_clock.exe: test_system_clock.f format.f set_format.f
 	@echo compiling $<...
-	$(your_f77) $(fcflags) $< format.f -o $@	
+	$(your_f77) $(fcflags) $< format.f $(output)	
 
 units.exe: units.f metrics_revised2.inc
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -Wno-conversion $< -o $@
+	$(your_f77) $(fcflags) -Wno-conversion $< $(output)
 
 %.o: %.f makefile
 	@echo compiling $<...	
 	$(your_f77) $(flflags) $<
 
 %.exe: %.o
-	$(your_f77) $(fcflags) $^ -o $@	
+	$(your_f77) $(fcflags) $^ $(output)	
 
 run: all # test all functions that run automatically
 	./ar.exe 
@@ -107,16 +112,29 @@ run_int: all # test all functions that require user interrupt
 
 run_fmt: all # test all functions that require set_fmt.f
 	./collatz.exe
-	./collatz_loop.exe
-	./fmt.exe
-	./huge.exe
+	./collatz_loop.exe; \
+	./fmt.exe; \
+	./huge.exe; \
 	./test_system_clock.exe
 
+CMD = @rm -vfrd
 clean:
-	@echo removing files...
-	@for fname in *.exe *.o *.f.~*~ fname*.in svp.out svp.in \
-	state test test? a.out ; \
-	do \
-		find ./ -type f -name $${fname} -exec rm {} \; ; \
-	done
+	@echo removing files...	
+# remove compiled binaries
+	$(CMD) *.o *.obj
+	$(CMD) *.mod
+	$(CMD) *.exe
+	$(CMD) *.out
+	$(CMD) fort.*
 	$(MAKE) clean -C pi
+distclean: clean
+	$(CMD) fname*.in
+	$(CMD) svp.out
+	$(CMD) svp.in
+	$(CMD) state
+	$(CMD) test
+	$(CMD) test?
+# remove Git versions
+	$(CMD) *.~*~
+# remove Emacs backup files
+	$(CMD) *~ \#*\#
