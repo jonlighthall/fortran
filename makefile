@@ -4,7 +4,13 @@ your_f77 = gfortran
 output = -o $@
 compile = -c $<
 options = -fimplicit-none -fd-lines-as-comments
-warnings = -pedantic -Wall -Wsurprising -W
+warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
+-Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
+-Wimplicit-procedure -Winteger-division -Wintrinsics-std	\
+-Wreal-q-constant -Wuse-without-only -Wrealloc-lhs-all
+debug = -g							\
+-ffpe-trap=invalid,zero,overflow,underflow,inexact,denormal	\
+-fcheck=all -fbacktrace
 
 # fortran compile flags
 fcompile = $(compile) $(warnings) $(options) $(output)
