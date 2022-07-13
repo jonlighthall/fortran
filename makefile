@@ -75,6 +75,7 @@ units.exe: units.f metrics_revised2.inc
 	$(your_f77) $(flflags) $<
 
 %.exe: %.o
+	@echo linking $<...	
 	$(your_f77) $(fcflags) $^	
 
 run: all # test all functions that run automatically
