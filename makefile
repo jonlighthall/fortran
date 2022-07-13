@@ -1,6 +1,9 @@
 # fortran compiler
 your_f77 = gfortran
-# fortran compile flags
+# flags
+output = -o $@
+compile = -c $<
+options = -fimplicit-none -fd-lines-as-comments
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 -Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
 -Wimplicit-procedure -Winteger-division -Wintrinsics-std	\
@@ -8,10 +11,11 @@ warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 debug = -g							\
 -ffpe-trap=invalid,zero,overflow,underflow,inexact,denormal	\
 -fcheck=all -fbacktrace
-output = -o $@
-fcflags = -fimplicit-none -fd-lines-as-comments $(warnings) $(debug) $(output)
+
+# fortran compile flags
+fcompile = $(compile) $(warnings) $(options) $(output)
 # fortran link flags
-flflags = -c $(fcflags)
+flink = $(output) $^
 
 all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	globsubs.exe test_abs.exe sign.exe io.exe timedate.exe		\
@@ -21,63 +25,60 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	collatz_glide.exe test_getunit.exe gethost.exe
 	$(MAKE)	-C pi
 
-ar.exe: ar.f f.f
-	$(your_f77) $(fcflags) $< 
+ar.exe: ar.o
+	$(your_f77) $(flink)
 
-collatz.exe: collatz.f format.f set_format.f
+collatz.exe: collatz.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -fno-range-check -Wno-unused-parameter $<
+	$(your_f77) $(flink) -fno-range-check -Wno-unused-parameter
 
-collatz_loop.exe: collatz_loop.f format.f set_format.f
+collatz_loop.exe: collatz_loop.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -fno-range-check $< format.f
+	$(your_f77) $(flink) -fno-range-check
 
-fmt.exe: fmt.f format.f set_format.f
+fmt.exe: fmt.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< format.f
+	$(your_f77) $(flink)
 
-global.exe: global.f araydim.inc
+global.exe: global.o | araydim.inc
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $<
+	$(your_f77) $(flink)
 
-globsubs.exe: globsubs.f f.f araydim.inc
+globsubs.exe: globsubs.o f.o | araydim.inc
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< f.f
+	$(your_f77) $(flink) 
 
-huge.exe: huge.f format.f set_format.f
+huge.exe: huge.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) $< format.f
+	$(your_f77) $(flink)
 
-test_getunit.exe: test_getunit.f getunit.f
+test_getunit.exe: test_getunit.o getunit.o
+	@echo compiling $@...
+	$(your_f77) $(flink)
+
+pause.exe: pause.o
+	@echo compiling $<...	
+	$(your_f77) $(flink) -w -std=legacy 
+
+subs.exe: subs.o f.o f2.o
+	@echo compiling $<...	
+	$(your_f77) $(flink)
+
+test_system_clock.exe: test_system_clock.o format.o | set_format.f
 	@echo compiling $<...
-	$(your_f77) $(fcflags) $^
+	$(your_f77) $(flink) 
 
-pause.exe: pause.f
+units.exe: units.o | metrics_revised2.inc
 	@echo compiling $<...	
-	$(your_f77) $(fcflags) -w -std=legacy  $^
-
-subs.exe: subs.f f.f f2.f
-	@echo compiling $<...	
-	$(your_f77) $(fcflags) $^
-
-set_format.exe: set_format.f
-	@echo compiling $<...	
-	$(your_f77) $(fcflags) -Wno-unused-parameter $^
-
-test_system_clock.exe: test_system_clock.f format.f set_format.f
-	@echo compiling $<...
-	$(your_f77) $(fcflags) $< format.f	
-
-units.exe: units.f metrics_revised2.inc
-	@echo compiling $<...	
-	$(your_f77) $(fcflags) -Wno-conversion $<
+	$(your_f77) $(flink) -Wno-conversion
 
 %.o: %.f makefile
 	@echo compiling $<...	
-	$(your_f77) $(flflags) $<
+	$(your_f77) $(fcompile)
 
 %.exe: %.o
-	$(your_f77) $(fcflags) $^	
+	@echo linking $<...	
+	$(your_f77) $(flink)	
 
 run: all # test all functions that run automatically
 	./ar.exe 
@@ -114,9 +115,9 @@ run_int: all # test all functions that require user interrupt
 
 run_fmt: all # test all functions that require set_fmt.f
 	./collatz.exe
-	./collatz_loop.exe
-	./fmt.exe
-	./huge.exe
+	./collatz_loop.exe; \
+	./fmt.exe; \
+	./huge.exe; \
 	./test_system_clock.exe
 
 CMD = @rm -vfrd
