@@ -9,7 +9,7 @@ warnings = -pedantic -Wall -Wsurprising -W
 # fortran compile flags
 fcompile = $(compile) $(warnings) $(options) $(output)
 # fortran link flags
-flink = $(output)
+flink = $(output) $^
 
 all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	globsubs.exe test_abs.exe sign.exe io.exe timedate.exe		\
@@ -19,56 +19,52 @@ all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
 	collatz_glide.exe test_getunit.exe gethost.exe
 	$(MAKE)	-C pi
 
-ar.exe: ar.f f.f
-	$(your_f77) $(flink) $< 
+ar.exe: ar.o
+	$(your_f77) $(flink)
 
-collatz.exe: collatz.f format.f set_format.f
+collatz.exe: collatz.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(flink) -fno-range-check -Wno-unused-parameter $<
+	$(your_f77) $(flink) -fno-range-check -Wno-unused-parameter
 
-collatz_loop.exe: collatz_loop.f format.f set_format.f
+collatz_loop.exe: collatz_loop.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(flink) -fno-range-check $< format.f
+	$(your_f77) $(flink) -fno-range-check
 
-fmt.exe: fmt.f format.f set_format.f
+fmt.exe: fmt.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(flink) $< format.f
+	$(your_f77) $(flink)
 
-global.exe: global.f araydim.inc
+global.exe: global.o | araydim.inc
 	@echo compiling $<...	
-	$(your_f77) $(flink) $<
+	$(your_f77) $(flink)
 
-globsubs.exe: globsubs.f f.f araydim.inc
+globsubs.exe: globsubs.o f.o | araydim.inc
 	@echo compiling $<...	
-	$(your_f77) $(flink) $< f.f
+	$(your_f77) $(flink) 
 
-huge.exe: huge.f format.f set_format.f
+huge.exe: huge.o format.o | set_format.f
 	@echo compiling $<...	
-	$(your_f77) $(flink) $< format.f
+	$(your_f77) $(flink)
 
 test_getunit.exe: test_getunit.o getunit.o
 	@echo compiling $@...
-	$(your_f77) $(flink) $^
+	$(your_f77) $(flink)
 
-pause.exe: pause.f
+pause.exe: pause.o
 	@echo compiling $<...	
-	$(your_f77) $(flink) -w -std=legacy  $^
+	$(your_f77) $(flink) -w -std=legacy 
 
-subs.exe: subs.f f.f f2.f
+subs.exe: subs.o f.o f2.o
 	@echo compiling $<...	
-	$(your_f77) $(flink) $^
+	$(your_f77) $(flink)
 
-set_format.exe: set_format.f
-	@echo compiling $<...	
-	$(your_f77) $(flink) -Wno-unused-parameter $^
-
-test_system_clock.exe: test_system_clock.f format.f set_format.f
+test_system_clock.exe: test_system_clock.o format.o | set_format.f
 	@echo compiling $<...
-	$(your_f77) $(flink) $< format.f	
+	$(your_f77) $(flink) 
 
-units.exe: units.f metrics_revised2.inc
+units.exe: units.o | metrics_revised2.inc
 	@echo compiling $<...	
-	$(your_f77) $(flink) -Wno-conversion $<
+	$(your_f77) $(flink) -Wno-conversion
 
 %.o: %.f makefile
 	@echo compiling $<...	
@@ -76,7 +72,7 @@ units.exe: units.f metrics_revised2.inc
 
 %.exe: %.o
 	@echo linking $<...	
-	$(your_f77) $(flink) $^	
+	$(your_f77) $(flink)	
 
 run: all # test all functions that run automatically
 	./ar.exe 
