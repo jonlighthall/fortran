@@ -4,7 +4,7 @@
       WRITE(*,'(A,I2,A,I2)') 'Creating array of size',N,' x ',M
       DO i = 1, M
          DO j = 1, N
-            A(i,j) = i
+            A(i,j) = real(i)
          END DO
       END DO
       DO i = 1, M

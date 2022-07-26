@@ -13,7 +13,7 @@
          j=N
       end if
       DO i = 1, j
-         A(i) = i
+         A(i) = real(i)
       END DO
 
       k=size(A)

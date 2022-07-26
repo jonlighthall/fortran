@@ -1,4 +1,9 @@
       program globsubs
+      interface
+         subroutine f(N)
+         integer N
+         end subroutine
+      end interface
 c     I/O units & option switches
       include 'araydim.inc'
       integer,parameter :: mr=100000,mz=mxZ,mp=10

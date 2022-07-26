@@ -16,7 +16,7 @@ c     check size against limit
 c
 c     fill array
       DO i = 1, j
-         A(i) = i
+         A(i) = real(i)
       END DO
 
       k=size(A)
