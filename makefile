@@ -1,8 +1,8 @@
 # fortran compiler
-your_f77 = gfortran
-# flags
-output = -o $@
-compile = -c $<
+FC = gfortran
+# general flags
+compile_flags = -c $<
+output_flags = -o $@
 options = -fimplicit-none -fd-lines-as-comments
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 -Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
@@ -11,74 +11,79 @@ warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 debug = -g							\
 -ffpe-trap=invalid,zero,overflow,underflow,inexact,denormal	\
 -fcheck=all -fbacktrace
-
 # fortran compile flags
-fcompile = $(compile) $(warnings) $(options) $(output)
+FCFLAGS =  $(options) $(warnings)
+FC.COMPILE = $(FCFLAGS) $(output_flags) $(compile_flags)
+FC.COMPILE.o = $(FC) $(FC.COMPILE) 
+#
 # fortran link flags
-flink = $(output) $^
+flink = $(output_flags) $^
+FC.LINK = $(FC) $(flink)
+#
+# dependencies
+SRC = $(wildcard *.f)
+OBJS = $(SRC:.f=.o)
 
-all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe		\
-	globsubs.exe test_abs.exe sign.exe io.exe timedate.exe		\
-	pause.exe test_system_clock.exe make_svp.exe collatz.exe	\
-	huge.exe collatz_loop.exe interrupt.exe extrema.exe fmt.exe	\
-	timer.exe units.exe ask.exe fun.exe dice.exe			\
-	collatz_glide.exe test_getunit.exe gethost.exe
+all: $(addsuffix .exe, hello fundem ar global sys subs globsubs		\
+	test_abs sign io timedate pause test_system_clock make_svp	\
+	collatz huge collatz_loop interrupt extrema fmt timer units	\
+	ask fun dice collatz_glide test_getunit gethost )
 	$(MAKE)	-C pi
 
 ar.exe: ar.o
-	$(your_f77) $(flink)
+	$(FC.LINK)
 
 collatz.exe: collatz.o format.o | set_format.f
-	@echo compiling $<...	
-	$(your_f77) $(flink) -fno-range-check -Wno-unused-parameter
+	@echo "compiling executable $@..."
+	$(FC.LINK) -fno-range-check -Wno-unused-parameter
 
 collatz_loop.exe: collatz_loop.o format.o | set_format.f
-	@echo compiling $<...	
-	$(your_f77) $(flink) -fno-range-check
+	@echo "compiling executable $@..."
+	$(FC.LINK) -fno-range-check
 
 fmt.exe: fmt.o format.o | set_format.f
-	@echo compiling $<...	
-	$(your_f77) $(flink)
+	@echo "compiling executable $@..."
+	$(FC.LINK)
 
 global.exe: global.o | araydim.inc
-	@echo compiling $<...	
-	$(your_f77) $(flink)
+	@echo "compiling executable $@..."
+	$(FC.LINK)
 
 globsubs.exe: globsubs.o f.o | araydim.inc
-	@echo compiling $<...	
-	$(your_f77) $(flink) 
+	@echo "compiling executable $@..."
+	$(FC.LINK) 
 
 huge.exe: huge.o format.o | set_format.f
-	@echo compiling $<...	
-	$(your_f77) $(flink)
+	@echo "compiling executable $@..."
+	$(FC.LINK)
 
 test_getunit.exe: test_getunit.o getunit.o
-	@echo compiling $@...
-	$(your_f77) $(flink)
+	@echo "compiling executable $@..."
+	$(FC.LINK)
 
 pause.exe: pause.o
-	@echo compiling $<...	
-	$(your_f77) $(flink) -w -std=legacy 
+	@echo "compiling executable $@..."
+	$(FC.LINK) -w -std=legacy 
 
 subs.exe: subs.o f.o f2.o
-	@echo compiling $<...	
-	$(your_f77) $(flink)
+	@echo "compiling executable $@..."
+	$(FC.LINK)
 
 test_system_clock.exe: test_system_clock.o format.o | set_format.f
-	@echo compiling $<...
-	$(your_f77) $(flink) 
+	@echo "compiling executable $@..."
+	$(FC.LINK) 
 
 units.exe: units.o | metrics_revised2.inc
-	@echo compiling $<...	
-	$(your_f77) $(flink) -Wno-conversion
+	@echo "compiling executable $@..."
+	$(FC.LINK) -Wno-conversion
 
 %.o: %.f makefile
-	@echo compiling $<...	
-	$(your_f77) $(fcompile)
+	@echo "compiling object $@..."
+	$(FC.COMPILE.o)
 
 %.exe: %.o
-	@echo linking $<...	
-	$(your_f77) $(flink)	
+	@echo "executable $@..."
+	$(FC.LINK)	
 
 run: all # test all functions that run automatically
 	./ar.exe 
