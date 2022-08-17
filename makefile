@@ -3,7 +3,7 @@ FC = gfortran
 # general flags
 compile_flags = -c $<
 output_flags = -o $@
-options = -fimplicit-none -fd-lines-as-comments
+options = -fimplicit-none 
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 -Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
 -Wimplicit-procedure -Winteger-division -Wintrinsics-std	\
@@ -14,15 +14,16 @@ debug = -g							\
 # fortran compile flags
 FCFLAGS =  $(options) $(warnings)
 FC.COMPILE = $(FCFLAGS) $(output_flags) $(compile_flags)
-FC.COMPILE.o = $(FC) $(FC.COMPILE) 
+FC.COMPILE.o = $(FC) $(FC.COMPILE) -fd-lines-as-comments
+FC.COMPILE.o.f90 = $(FC) $(FC.COMPILE) $(debug)
 #
 # fortran link flags
 flink = $(output_flags) $^
 FC.LINK = $(FC) $(flink)
 #
 # dependencies
-SRC = $(wildcard *.f)
-OBJS = $(SRC:.f=.o)
+SRC = $(wildcard *.f) $(wildcard *.f90)
+OBJS = $(SRC:.f=.o) $(SRC:.f90=.o)
 
 all: $(addsuffix .exe, hello fundem ar global sys subs globsubs		\
 	test_abs sign io timedate pause test_system_clock make_svp	\
@@ -80,6 +81,11 @@ units.exe: units.o | metrics_revised2.inc
 %.o: %.f makefile
 	@echo "compiling object $@..."
 	$(FC.COMPILE.o)
+
+%.o: %.f90
+	@echo "compiling object $@..."
+	$(FC.COMPILE.o.f90)
+
 
 %.exe: %.o
 	@echo "executable $@..."
