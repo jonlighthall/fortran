@@ -1,4 +1,5 @@
       program gethost
+      implicit none
       character(len=256) hostname
       integer length, status
       logical trim
