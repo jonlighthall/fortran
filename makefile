@@ -1,8 +1,10 @@
 # fortran compiler
 FC = gfortran
+#
 # general flags
 compile_flags = -c $<
 output_flags = -o $@
+includes = -I $(INCDIR) -J $(MODDIR) 
 options = -fimplicit-none 
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 -Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
@@ -12,84 +14,135 @@ debug = -g							\
 -ffpe-trap=invalid,zero,overflow,underflow,inexact,denormal	\
 -fcheck=all -fbacktrace
 # fortran compile flags
-FCFLAGS =  $(options) $(warnings)
-FC.COMPILE = $(FCFLAGS) $(output_flags) $(compile_flags)
-FC.COMPILE.o = $(FC) $(FC.COMPILE) -fd-lines-as-comments
-FC.COMPILE.o.f90 = $(FC) $(FC.COMPILE) $(debug)
+FC.COMPILE = $(FC) $(compile_flags) $(includes) $(options) $(warnings) $(output_flags) 
+FC.COMPILE.o = $(FC.COMPILE) -fd-lines-as-comments
+#FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o
+FC.COMPILE.o.f90 = $(FC.COMPILE) $(debug)
 #
 # fortran link flags
-flink = $(output_flags) $^
+flink = $(output_flags) $^ $(includes)
 FC.LINK = $(FC) $(flink)
 #
+# define subdirectories
+OBJDIR := obj
+MODDIR := mod
+BINDIR := bin
+INCDIR := inc
+#
+# source files
+SRC77 = $(wildcard *.f) 
+SRC90 = $(wildcard *.f90)
+SRC = $(SRC77) $(SRC90)
+#
+# objects
+OBJS77 = $(SRC77:.f=.o)
+OBJS90 = $(SRC90:.f90=.o)
+OBJS = $(OBJS77) $(OBJS90)
+#
 # dependencies
-SRC = $(wildcard *.f) $(wildcard *.f90)
-OBJS = $(SRC:.f=.o) $(SRC:.f90=.o)
+MODS = version
+SUBS = f2 f format
+FUNS = getunit
+DEPS = $(MODS) $(SUBS) $(FUNS)
+DEPS.o = $(addsuffix .o,$(DEPS))
+OBJS.exe = $(filter-out $(DEPS.o),$(OBJS))
 
-all: $(addsuffix .exe, hello fundem ar global sys subs globsubs		\
-	test_abs sign io timedate pause test_system_clock make_svp	\
-	collatz huge collatz_loop interrupt extrema fmt timer units	\
-	ask fun dice collatz_glide test_getunit gethost )
-	$(MAKE)	-C pi
+OBJS.dir := $(addprefix $(OBJDIR)/,$(OBJS))
+DEPS.dir := $(addprefix $(OBJDIR)/,$(DEPS.o))
+MODS := $(addprefix $(MODDIR)/,$(addsuffix .mod,$(MODS)))
+EXES = $(addprefix $(BINDIR)/,$(OBJS.exe:.o=.exe))
 
-ar.exe: ar.o
+#all: 
+all: distclean
+	@echo $(SRC)
+	@echo
+	@echo $(OBJS)
+	@echo
+	@echo $(DEPS.o)
+	@echo
+	@echo $(OBJS.exe)	
+	@echo
+	@echo $(OBJS.dir)	
+	@echo
+	@echo $(DEPS.dir)	
+	@echo
+	@echo $(MODS)	
+	@echo
+	@echo $(EXES)	
+
+exe: all $(DEPS.dir) $(EXES)
+
+# special recipies
+$(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
+	@echo "executable $@..."
 	$(FC.LINK)
-
-collatz.exe: collatz.o format.o | set_format.f
-	@echo "compiling executable $@..."
-	$(FC.LINK) -fno-range-check -Wno-unused-parameter
-
-collatz_loop.exe: collatz_loop.o format.o | set_format.f
-	@echo "compiling executable $@..."
-	$(FC.LINK) -fno-range-check
-
-fmt.exe: fmt.o format.o | set_format.f
-	@echo "compiling executable $@..."
-	$(FC.LINK)
-
-global.exe: global.o | araydim.inc
-	@echo "compiling executable $@..."
-	$(FC.LINK)
-
-globsubs.exe: globsubs.o f.o | araydim.inc
-	@echo "compiling executable $@..."
-	$(FC.LINK) 
-
-huge.exe: huge.o format.o | set_format.f
-	@echo "compiling executable $@..."
-	$(FC.LINK)
-
-test_getunit.exe: test_getunit.o getunit.o
-	@echo "compiling executable $@..."
-	$(FC.LINK)
-
-pause.exe: pause.o
-	@echo "compiling executable $@..."
-	$(FC.LINK) -w -std=legacy 
-
-subs.exe: subs.o f.o f2.o
-	@echo "compiling executable $@..."
-	$(FC.LINK)
-
-test_system_clock.exe: test_system_clock.o format.o | set_format.f
-	@echo "compiling executable $@..."
-	$(FC.LINK) 
-
-units.exe: units.o | metrics_revised2.inc
-	@echo "compiling executable $@..."
-	$(FC.LINK) -Wno-conversion
-
-%.o: %.f makefile
+# general recipies
+$(OBJDIR)/%.o: %.f | $(OBJDIR)
 	@echo "compiling object $@..."
 	$(FC.COMPILE.o)
 
-%.o: %.f90
+$(OBJDIR)/%.o: %.f90 | $(OBJDIR)
 	@echo "compiling object $@..."
 	$(FC.COMPILE.o.f90)
 
+$(OBJDIR)/%.o: $(INCDIR)/%.f | $(OBJDIR) $(MODDIR)
+	@echo "compiling include object $@..."
+	$(FC.COMPILE.o)
 
-%.exe: %.o
-	@echo "executable $@..."
+$(OBJDIR)/%.o: $(INCDIR)/%.f90 | $(OBJDIR)
+	@echo "compiling include object $@..."
+	$(FC.COMPILE.o.f90)
+
+#$(MODDIR)/%.mod : $(INCDIR)/%.f | $(MODDIR)
+#	@echo "compiling module $@..."
+#	$(FC.COMPILE.mod)
+
+#$(MODDIR)/%.mod : $(INCDIR)/%.f90 | $(MODDIR)
+#	@echo "compiling f90 module $@..."
+#	$(FC.COMPILE.mod)
+
+$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS.dir) | $(BINDIR)
+	@echo "executable generic $@..."
 	$(FC.LINK)	
+#
+# define directory creation
+$(OBJDIR):
+	@mkdir -v $(OBJDIR)
+$(BINDIR):
+	@mkdir -v $(BINDIR)
+$(MODDIR):
+	@mkdir -v $(MODDIR)
+# keep intermediate object files
+.SECONDARY: $(OBJS) $(MODS)
+#
+CMD = @rm -vfrd
+clean:
+	@echo removing files...	
+# remove compiled binaries
+	$(CMD) $(TARGET)
+	$(CMD) $(OBJDIR)/*.o
+	$(CMD) $(OBJDIR)
+	$(CMD) *.o *.obj
+	$(CMD) $(MODDIR)/*.mod
+	$(CMD) $(MODDIR)
+	$(CMD) *.mod
+	$(CMD) $(BINDIR)/*.exe
+	$(CMD) $(BINDIR)
+	$(CMD) *.exe
+	$(CMD) *.out
+	$(CMD) fort.*
+	@echo "$@ done"
+distclean: clean
+	$(CMD) fname*.in
+	$(CMD) svp.out
+	$(CMD) svp.in
+	$(CMD) state
+	$(CMD) test
+	$(CMD) test?
+# remove Git versions
+	$(CMD) *.~*~
+# remove Emacs backup files
+	$(CMD) *~ \#*\#
 
 run: all # test all functions that run automatically
 	./ar.exe 
@@ -130,25 +183,3 @@ run_fmt: all # test all functions that require set_fmt.f
 	./fmt.exe; \
 	./huge.exe; \
 	./test_system_clock.exe
-
-CMD = @rm -vfrd
-clean:
-	@echo removing files...	
-# remove compiled binaries
-	$(CMD) *.o *.obj
-	$(CMD) *.mod
-	$(CMD) *.exe
-	$(CMD) *.out
-	$(CMD) fort.*
-	$(MAKE) clean -C pi
-distclean: clean
-	$(CMD) fname*.in
-	$(CMD) svp.out
-	$(CMD) svp.in
-	$(CMD) state
-	$(CMD) test
-	$(CMD) test?
-# remove Git versions
-	$(CMD) *.~*~
-# remove Emacs backup files
-	$(CMD) *~ \#*\#
