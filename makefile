@@ -13,10 +13,10 @@ warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 debug = -g							\
 -ffpe-trap=invalid,zero,overflow,underflow,inexact,denormal	\
 -fcheck=all -fbacktrace
+#
 # fortran compile flags
 FC.COMPILE = $(FC) $(compile_flags) $(includes) $(options) $(warnings) $(output_flags) 
 FC.COMPILE.o = $(FC.COMPILE) -fd-lines-as-comments
-#FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(debug)
 #
 # fortran link flags
@@ -70,19 +70,21 @@ all: distclean
 	@echo
 	@echo $(EXES)	
 
-exe: all $(DEPS.dir) $(EXES)
+exe: $(EXES) | $(DEPS.dir) 
 
+#
 # special recipies
 $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
-	@echo "executable $@..."
+	@echo "compiling special executable $@..."
 	$(FC.LINK)
+#
 # general recipies
 $(OBJDIR)/%.o: %.f | $(OBJDIR)
 	@echo "compiling object $@..."
 	$(FC.COMPILE.o)
 
 $(OBJDIR)/%.o: %.f90 | $(OBJDIR)
-	@echo "compiling object $@..."
+	@echo "compiling f90 object $@..."
 	$(FC.COMPILE.o.f90)
 
 $(OBJDIR)/%.o: $(INCDIR)/%.f | $(OBJDIR) $(MODDIR)
@@ -90,19 +92,11 @@ $(OBJDIR)/%.o: $(INCDIR)/%.f | $(OBJDIR) $(MODDIR)
 	$(FC.COMPILE.o)
 
 $(OBJDIR)/%.o: $(INCDIR)/%.f90 | $(OBJDIR)
-	@echo "compiling include object $@..."
+	@echo "compiling include f90 object $@..."
 	$(FC.COMPILE.o.f90)
 
-#$(MODDIR)/%.mod : $(INCDIR)/%.f | $(MODDIR)
-#	@echo "compiling module $@..."
-#	$(FC.COMPILE.mod)
-
-#$(MODDIR)/%.mod : $(INCDIR)/%.f90 | $(MODDIR)
-#	@echo "compiling f90 module $@..."
-#	$(FC.COMPILE.mod)
-
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS.dir) | $(BINDIR)
-	@echo "executable generic $@..."
+	@echo "compiling executable $@..."
 	$(FC.LINK)	
 #
 # define directory creation
