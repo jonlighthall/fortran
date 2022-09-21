@@ -130,13 +130,9 @@ $(OBJDIR)/%.o: $(INCDIR)/%.f $(MODS.dir) | $(OBJDIR) $(MODDIR)
 $(OBJDIR)/%.o: $(INCDIR)/%.f90 $(MODS.dir) | $(OBJDIR) $(MODDIR)
 	@echo "\ncompiling generic include f90 object $@..."
 	$(FC.COMPILE.o.f90)
-$(MODDIR)/%.mod: $(INCDIR)/%.f | $(OBJDIR) $(MODDIR)
-	@echo "\ncompiling generic module $@..."
-	$(FC.COMPILE.mod)
 $(MODDIR)/%.mod: $(INCDIR)/%.f90 | $(OBJDIR) $(MODDIR)
 	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
-
 #
 # define directory creation
 $(OBJDIR):
