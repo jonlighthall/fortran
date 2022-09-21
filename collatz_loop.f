@@ -1,13 +1,20 @@
       program collatz_loop
       implicit none
-      integer dly,dlymx,dlyrec,t0,t1,t2,t
+      interface
+         subroutine format(int,str)
+         include 'set_format.f'
+         integer(kind=intsize),intent(in)::int
+         character(fmtsize), intent(out)::str
+         end subroutine
+      end interface
       include 'set_format.f'
+      integer(kind=intsize) dly,dlymx,dlyrec,t0,t1,t2,t
       integer(kind=intsize) i,j,k,n,sysmx,sd,isysmx,start,isd,dif,last
+      integer(kind=intsize) irec,idly,iostat,ln,ilen
       character(len=fmtsize) fmt_str
+      character(len=128) dum,fmt
       logical error, interrupt
       common interrupt
-      integer irec,idly,iostat,ln,ilen
-      character(len=128) dum,fmt
       intrinsic signal
       external handler
       integer,dimension(8) :: values
@@ -18,7 +25,7 @@ c     find maximum integer
          j=i
          i=i*2
       enddo
-      do k=floor(log10(real(j))),0,-1
+      do k=floor(log10(real(j)),intsize),0,-1
          i=j
          j=i-1
          do while (i.gt.j)
@@ -26,7 +33,7 @@ c     find maximum integer
             i=i+10**k
          enddo
       enddo
-      k=ceiling(log10(real(j)))
+      k=ceiling(log10(real(j)),intsize)
       write(fmt,*)'(a,i',k,')'
 
 c     read in existing file
@@ -37,7 +44,7 @@ c     read in existing file
          read(1,'(33x,a)')dum   ! read line 1
          dum=adjustl(dum)
 c     check if input max exceeds sys max w/o invoking overflow
-         ilen=len(trim(dum))
+         ilen=len(trim(dum),intsize)
          if (ilen.gt.k) then
             write(*,'(3a,i3)')'  length of file maximim ',trim(dum)
      &           ,' is ',ilen
@@ -227,7 +234,7 @@ c     print summary
       write(*,*)'exited loop'
       dif=sd-start
       t=t2-t0
-      write(dum,*)real(dif)/t
+      write(dum,*)real(dif)/real(t)
       write(*,*)'time = ',t
       write(*,*)'processing rate ',trim(adjustl(dum)),' seeds per sec'
       write(*,*)'estimate ',real(sysmx-sd)/real(dif*t)
