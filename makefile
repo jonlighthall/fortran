@@ -21,7 +21,7 @@ F90.FLAGS = -std=f2008 $(debug)
 FC.COMPILE = $(FC) $(FCFLAGS)
 FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
-FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o
+FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 #
 # fortran link flags
 FLFLAGS = $(output) $^
@@ -34,35 +34,33 @@ BINDIR := bin
 INCDIR := inc
 #
 # source files
-SRC77 = $(wildcard *.f)
-SRC90 = $(wildcard *.f90)
-SRC = $(SRC77) $(SRC90)
+SRC.F77 = $(wildcard *.f)
+SRC.F90 = $(wildcard *.f90)
+SRC = $(SRC.F77) $(SRC.F90)
 #
 # objects
-OBJS77 = $(SRC77:.f=.o)
-OBJS90 = $(SRC90:.f90=.o)
-OBJS = $(OBJS77) $(OBJS90)
+OBJS.F77 = $(SRC.F77:.f=.o)
+OBJS.F90 = $(SRC.F90:.f90=.o)
+OBJS.all = $(OBJS.F77) $(OBJS.F90)
 #
-# dependencies
-MODS = version
-SUBS = f2 f format
-FUNS = getunit
+# dependencies (non-executables)
+MODS. = version
+SUBS. = f2 f format
+FUNS. = getunit
+DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
-DEPS = $(MODS) $(SUBS) $(FUNS)
-
-
-DEPS.o = $(addsuffix .o,$(DEPS))
-OBJS.o = $(filter-out $(DEPS.o),$(OBJS))
+DEPS.o = $(addsuffix .o,$(DEPS.))
+OBJS.o = $(filter-out $(DEPS.o),$(OBJS.all))
 MODS.mod = $(addsuffix .mod,$(MODS))
 
-OBJS.dir := $(addprefix $(OBJDIR)/,$(OBJS.o))
-DEPS.dir := $(addprefix $(OBJDIR)/,$(DEPS.o))
-MODS.dir := $(addprefix $(MODDIR)/,$(MODS.mod))
+DEPS := $(addprefix $(OBJDIR)/,$(DEPS.o))
+OBJS := $(addprefix $(OBJDIR)/,$(OBJS.o))
+MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 #
 # executables
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 
-all: $(EXES) | $(OBJS.dir) $(DEPS.dir) $(MODS.dir)
+all: $(EXES) | $(OBJS) $(DEPS) $(MODS)
 	$(MAKE)	-C pi
 	@echo "$@ done"
 printvars:
@@ -70,19 +68,19 @@ printvars:
 	@echo
 	@echo "SRC = $(SRC)"
 	@echo
-	@echo "OBJS = $(OBJS)"
+	@echo "OBJS.all = $(OBJS.all)"
 
 	@echo	
 	@echo "----------------------------------------------------"
 	@echo
 
-	@echo "MODS = $(MODS)"
+	@echo "MODS. = $(MODS.)"
 	@echo
-	@echo "SUBS = $(SUBS)"
+	@echo "SUBS. = $(SUBS.)"
 	@echo
-	@echo "FUNS = $(FUNS)"
+	@echo "FUNS. = $(FUNS.)"
 	@echo
-	@echo "DEPS = $(DEPS)"
+	@echo "DEPS. = $(DEPS.)"
 
 	@echo
 	@echo "----------------------------------------------------"
@@ -100,11 +98,11 @@ printvars:
 
 	@echo "EXES = $(EXES)"
 	@echo
-	@echo "OBJS.dir = $(OBJS.dir)"
+	@echo "OBJS = $(OBJS)"
 	@echo
-	@echo "DEPS.dir = $(DEPS.dir)"
+	@echo "DEPS = $(DEPS)"
 	@echo
-	@echo "MODS.dir = $(MODS.dir)"
+	@echo "MODS = $(MODS)"
 	@echo
 
 	@echo "$@ done"
@@ -115,19 +113,19 @@ $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
 	$(FC.LINK)
 #
 # generic recipies
-$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS.dir) | $(BINDIR)
+$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
 	@echo "\nlinking generic executable $@..."
 	$(FC.LINK)	
-$(OBJDIR)/%.o: %.f $(MODS.dir) | $(OBJDIR)
+$(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic object $@..."
 	$(FC.COMPILE.o)
-$(OBJDIR)/%.o: %.f90 $(MODS.dir) | $(OBJDIR)
+$(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
-$(OBJDIR)/%.o: $(INCDIR)/%.f $(MODS.dir) | $(OBJDIR) $(MODDIR)
+$(OBJDIR)/%.o: $(INCDIR)/%.f $(MODS) | $(OBJDIR) $(MODDIR)
 	@echo "\ncompiling generic include object $@..."
 	$(FC.COMPILE.o)
-$(OBJDIR)/%.o: $(INCDIR)/%.f90 $(MODS.dir) | $(OBJDIR) $(MODDIR)
+$(OBJDIR)/%.o: $(INCDIR)/%.f90 $(MODS) | $(OBJDIR) $(MODDIR)
 	@echo "\ncompiling generic include f90 object $@..."
 	$(FC.COMPILE.o.f90)
 $(MODDIR)/%.mod: $(INCDIR)/%.f90 | $(OBJDIR) $(MODDIR)
@@ -142,7 +140,7 @@ $(BINDIR):
 $(MODDIR):
 	@mkdir -v $(MODDIR)
 # keep intermediate object files
-.SECONDARY: $(OBJS.dir) $(MODS.dir)
+.SECONDARY: $(OBJS) $(MODS)
 #
 # recipes without outputs
 .PHONY: clean out distclean
