@@ -32,6 +32,7 @@ OBJDIR := obj
 MODDIR := mod
 BINDIR := bin
 INCDIR := inc
+VPATH = $(INCDIR)
 #
 # source files
 SRC.F77 = $(wildcard *.f)
@@ -51,7 +52,7 @@ DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
 DEPS.o = $(addsuffix .o,$(DEPS.))
 OBJS.o = $(filter-out $(DEPS.o),$(OBJS.all))
-MODS.mod = $(addsuffix .mod,$(MODS))
+MODS.mod = $(addsuffix .mod,$(MODS.))
 
 DEPS := $(addprefix $(OBJDIR)/,$(DEPS.o))
 OBJS := $(addprefix $(OBJDIR)/,$(OBJS.o))
@@ -122,13 +123,7 @@ $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
-$(OBJDIR)/%.o: $(INCDIR)/%.f $(MODS) | $(OBJDIR) $(MODDIR)
-	@echo "\ncompiling generic include object $@..."
-	$(FC.COMPILE.o)
-$(OBJDIR)/%.o: $(INCDIR)/%.f90 $(MODS) | $(OBJDIR) $(MODDIR)
-	@echo "\ncompiling generic include f90 object $@..."
-	$(FC.COMPILE.o.f90)
-$(MODDIR)/%.mod: $(INCDIR)/%.f90 | $(OBJDIR) $(MODDIR)
+$(MODDIR)/%.mod: %.f90 | $(OBJDIR) $(MODDIR)
 	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
