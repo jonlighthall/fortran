@@ -1,11 +1,17 @@
       program ask
-      logical ans,yea
+      implicit none
+      interface
+         logical function yea(text)
+         character text
+         end function
+      end interface
+      logical ans
       character words
       ans=.false.
       write(*,*)'give me an answer (y/n)'
       read(5,*)words
       write(*,*)'Your answer was "',words,'"'
-      
+
       if(index('yY',words).gt.0) then
          ans=.true.
       else
