@@ -2,10 +2,10 @@
 FC = gfortran
 #
 # general flags
-compile_flags = -c $<
-output_flags = -o $@
-includes = -I $(INCDIR) -J $(MODDIR) 
-options = -fimplicit-none 
+compile = -c $<
+output = -o $@
+includes = -I $(INCDIR) -J $(MODDIR)
+options = -fimplicit-none
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 -Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
 -Wimplicit-procedure -Winteger-division -Wintrinsics-std	\
@@ -15,13 +15,17 @@ debug = -g							\
 -fcheck=all -fbacktrace
 #
 # fortran compile flags
-FC.COMPILE = $(FC) $(compile_flags) $(includes) $(options) $(warnings) $(output_flags) 
-FC.COMPILE.o = $(FC.COMPILE) -fd-lines-as-comments
-FC.COMPILE.o.f90 = $(FC.COMPILE) $(debug)
+FCFLAGS = $(compile) $(includes) $(options) $(warnings)
+F77.FLAGS = -fd-lines-as-comments -Wno-tabs
+F90.FLAGS = -std=f2008 $(debug)
+FC.COMPILE = $(FC) $(FCFLAGS)
+FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
+FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
+FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o
 #
 # fortran link flags
-flink = $(output_flags) $^ $(includes)
-FC.LINK = $(FC) $(flink)
+FLFLAGS = $(output) $^
+FC.LINK = $(FC) $(FLFLAGS)
 #
 # define subdirectories
 OBJDIR := obj
@@ -30,7 +34,7 @@ BINDIR := bin
 INCDIR := inc
 #
 # source files
-SRC77 = $(wildcard *.f) 
+SRC77 = $(wildcard *.f)
 SRC90 = $(wildcard *.f90)
 SRC = $(SRC77) $(SRC90)
 #
@@ -43,61 +47,96 @@ OBJS = $(OBJS77) $(OBJS90)
 MODS = version
 SUBS = f2 f format
 FUNS = getunit
+
 DEPS = $(MODS) $(SUBS) $(FUNS)
+
+
 DEPS.o = $(addsuffix .o,$(DEPS))
-OBJS.exe = $(filter-out $(DEPS.o),$(OBJS))
+OBJS.o = $(filter-out $(DEPS.o),$(OBJS))
+MODS.mod = $(addsuffix .mod,$(MODS))
 
-OBJS.dir := $(addprefix $(OBJDIR)/,$(OBJS))
+OBJS.dir := $(addprefix $(OBJDIR)/,$(OBJS.o))
 DEPS.dir := $(addprefix $(OBJDIR)/,$(DEPS.o))
-MODS := $(addprefix $(MODDIR)/,$(addsuffix .mod,$(MODS)))
-EXES = $(addprefix $(BINDIR)/,$(OBJS.exe:.o=.exe))
-
-#all: 
-all: distclean
-	@echo $(SRC)
-	@echo
-	@echo $(OBJS)
-	@echo
-	@echo $(DEPS.o)
-	@echo
-	@echo $(OBJS.exe)	
-	@echo
-	@echo $(OBJS.dir)	
-	@echo
-	@echo $(DEPS.dir)	
-	@echo
-	@echo $(MODS)	
-	@echo
-	@echo $(EXES)	
-
-exe: $(EXES) | $(DEPS.dir) 
-
+MODS.dir := $(addprefix $(MODDIR)/,$(MODS.mod))
 #
-# special recipies
+# executables
+EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
+
+all: $(EXES) | $(OBJS.dir) $(DEPS.dir) $(MODS.dir)
+	$(MAKE)	-C pi
+	@echo "$@ done"
+printvars:
+	@echo $@:
+	@echo
+	@echo "SRC = $(SRC)"
+	@echo
+	@echo "OBJS = $(OBJS)"
+
+	@echo	
+	@echo "----------------------------------------------------"
+	@echo
+
+	@echo "MODS = $(MODS)"
+	@echo
+	@echo "SUBS = $(SUBS)"
+	@echo
+	@echo "FUNS = $(FUNS)"
+	@echo
+	@echo "DEPS = $(DEPS)"
+
+	@echo
+	@echo "----------------------------------------------------"
+	@echo
+
+	@echo "OBJS.o = $(OBJS.o)"
+	@echo
+	@echo "DEPS.o = $(DEPS.o)"
+	@echo
+	@echo "MODS.mod = $(MODS.mod)"
+
+	@echo
+	@echo "----------------------------------------------------"
+	@echo
+
+	@echo "EXES = $(EXES)"
+	@echo
+	@echo "OBJS.dir = $(OBJS.dir)"
+	@echo
+	@echo "DEPS.dir = $(DEPS.dir)"
+	@echo
+	@echo "MODS.dir = $(MODS.dir)"
+	@echo
+
+	@echo "$@ done"
+#
+# specific recipes
 $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
 	@echo "compiling special executable $@..."
 	$(FC.LINK)
 #
-# general recipies
-$(OBJDIR)/%.o: %.f | $(OBJDIR)
-	@echo "compiling object $@..."
-	$(FC.COMPILE.o)
-
-$(OBJDIR)/%.o: %.f90 | $(OBJDIR)
-	@echo "compiling f90 object $@..."
-	$(FC.COMPILE.o.f90)
-
-$(OBJDIR)/%.o: $(INCDIR)/%.f | $(OBJDIR) $(MODDIR)
-	@echo "compiling include object $@..."
-	$(FC.COMPILE.o)
-
-$(OBJDIR)/%.o: $(INCDIR)/%.f90 | $(OBJDIR)
-	@echo "compiling include f90 object $@..."
-	$(FC.COMPILE.o.f90)
-
+# generic recipies
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS.dir) | $(BINDIR)
-	@echo "compiling executable $@..."
+	@echo "\nlinking generic executable $@..."
 	$(FC.LINK)	
+$(OBJDIR)/%.o: %.f $(MODS.dir) | $(OBJDIR)
+	@echo "\ncompiling generic object $@..."
+	$(FC.COMPILE.o)
+$(OBJDIR)/%.o: %.f90 $(MODS.dir) | $(OBJDIR)
+	@echo "\ncompiling generic f90 object $@..."
+	$(FC.COMPILE.o.f90)
+$(OBJDIR)/%.o: $(INCDIR)/%.f $(MODS.dir) | $(OBJDIR) $(MODDIR)
+	@echo "\ncompiling generic include object $@..."
+	$(FC.COMPILE.o)
+$(OBJDIR)/%.o: $(INCDIR)/%.f90 $(MODS.dir) | $(OBJDIR) $(MODDIR)
+	@echo "\ncompiling generic include f90 object $@..."
+	$(FC.COMPILE.o.f90)
+$(MODDIR)/%.mod: $(INCDIR)/%.f | $(OBJDIR) $(MODDIR)
+	@echo "\ncompiling generic module $@..."
+	$(FC.COMPILE.mod)
+$(MODDIR)/%.mod: $(INCDIR)/%.f90 | $(OBJDIR) $(MODDIR)
+	@echo "\ncompiling generic f90 module $@..."
+	$(FC.COMPILE.mod)
+
 #
 # define directory creation
 $(OBJDIR):
@@ -107,13 +146,16 @@ $(BINDIR):
 $(MODDIR):
 	@mkdir -v $(MODDIR)
 # keep intermediate object files
-.SECONDARY: $(OBJS) $(MODS)
+.SECONDARY: $(OBJS.dir) $(MODS.dir)
 #
+# recipes without outputs
+.PHONY: clean out distclean
+#
+# clean up routines
 CMD = @rm -vfrd
 clean:
-	@echo removing files...	
+	@echo removing files...
 # remove compiled binaries
-	$(CMD) $(TARGET)
 	$(CMD) $(OBJDIR)/*.o
 	$(CMD) $(OBJDIR)
 	$(CMD) *.o *.obj
@@ -125,34 +167,43 @@ clean:
 	$(CMD) *.exe
 	$(CMD) *.out
 	$(CMD) fort.*
+	$(MAKE) clean -C pi
 	@echo "$@ done"
-distclean: clean
+out:
 	$(CMD) fname*.in
 	$(CMD) svp.out
 	$(CMD) svp.in
 	$(CMD) state
 	$(CMD) test
 	$(CMD) test?
+	@echo "$@ done"
+distclean: clean out
 # remove Git versions
 	$(CMD) *.~*~
 # remove Emacs backup files
 	$(CMD) *~ \#*\#
-
+	@echo "$@ done"
+#
+# test the makefile
+test: distclean printvars all
+	@echo "$@ done"
+#
+# run executables
 run: all # test all functions that run automatically
-	./ar.exe 
+	./ar.exe
 	./extrema.exe
 	./fmt.exe
 	./fun.exe
-	./global.exe 
+	./global.exe
 	./globsubs.exe
-	./hello.exe 
+	./hello.exe
 	./huge.exe
 	./io.exe
 	./make_svp.exe
 	./test_getunit.exe
 	./sign.exe
 	./subs.exe
-	./sys.exe 
+	./sys.exe
 	./test_abs.exe
 	./test_system_clock.exe
 	./timedate.exe
@@ -162,8 +213,8 @@ run: all # test all functions that run automatically
 run_man: all # test all functions that require manual input
 	./ask.exe
 	./collatz.exe
-	./collatz_glide.exe	
-	./fundem.exe 
+	./collatz_glide.exe
+	./fundem.exe
 	./pause.exe
 
 run_int: all # test all functions that require user interrupt
