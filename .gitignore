@@ -2,6 +2,9 @@
 *.o
 *.obj
 
+# Fortran module files
+*.mod
+
 # Executables
 *.exe
 *.out
