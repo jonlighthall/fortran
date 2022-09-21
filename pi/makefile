@@ -1,37 +1,54 @@
-# (fortran) compiler
-your_f77 = gfortran
-# (fortran) compile flags
+# fortran compiler
+FC = gfortran
+#
+# general flags
+compile = -c $<
+output = -o $@
+includes =
 options = -fimplicit-none
-warnings = -pedantic -Wall -Wsurprising -W
-output =  -o $@
-
-# (fortran) compile flags
-compile = -c $^
-fcflags = $(options) $(warnings) $(output) $(compile)
-F.COMPILE.f = $(your_f77) $(fcflags) -fd-lines-as-comments
-F.COMPILE.f90 = $(your_f77) $(fcflags)
-
-# (fortran) link flags
-flflags =  $(output) $^
-F.LINK = $(your_f77) $(flflags)
+warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
+-Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
+-Wimplicit-procedure -Winteger-division -Wintrinsics-std	\
+-Wreal-q-constant -Wuse-without-only -Wrealloc-lhs-all
+debug = -g -fbacktrace -fcheck=all			\
+-ffpe-trap=invalid,zero,overflow,underflow,denormal
+#
+# fortran compile flags
+FCFLAGS = $(compile) $(includes) $(options) $(warnings)
+F77.FLAGS = -fd-lines-as-comments
+F90.FLAGS = -std=f2008 $(debug)
+FC.COMPILE = $(FC) $(FCFLAGS)
+FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
+FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
+FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
+#
+# fortran link flags
+FLFLAGS = $(output) $^
+FC.LINK = $(FC) $(FLFLAGS)
 
 all: $(addsuffix .exe, basel test_pi borwein leibniz wallis pi_monte_carlo)
-
+#
+# specific recipes
 basel.exe: basel.f 
 	@echo compiling executable $@...	
-	$(F.LINK) -fdefault-real-8 -fdefault-integer-8
+	$(FC.LINK) -fdefault-real-8 -fdefault-integer-8
+
+pi_monte_carlo.o: pi_monte_carlo.f90
+	@echo compiling f90 object file $@...	
+	$(FC.COMPILE.o.f90) -std=legacy
+#
+# generic recipies
+%.exe: %.o
+	@echo compiling executable $@...	
+	$(FC.LINK)
 
 %.o: %.f | makefile
 	@echo compiling object file $@...	
-	$(F.COMPILE.f)
+	$(FC.COMPILE.o)
 
 %.o: %.f90 | makefile
 	@echo compiling f90 object file $@...	
-	$(F.COMPILE.f90)
-
-%.exe: %.o
-	@echo compiling executable $@...	
-	$(F.LINK)
+	$(FC.COMPILE.o.f90)
 
 run: all # test all functions that run automatically
 	./basel.exe
