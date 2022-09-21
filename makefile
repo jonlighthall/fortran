@@ -178,41 +178,42 @@ test: distclean printvars all
 #
 # run executables
 run: all # test all functions that run automatically
-	./ar.exe
-	./extrema.exe
-	./fmt.exe
-	./fun.exe
-	./global.exe
-	./globsubs.exe
-	./hello.exe
-	./huge.exe
-	./io.exe
-	./make_svp.exe
-	./test_getunit.exe
-	./sign.exe
-	./subs.exe
-	./sys.exe
-	./test_abs.exe
-	./test_system_clock.exe
-	./timedate.exe
-	./units.exe
-	./gethost.exe
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	ar \
+	extrema \
+	fmt \
+	fun \
+	global \
+	globsubs \
+	hello \
+	huge \
+	io \
+	make_svp \
+	test_getunit \
+	sign \
+	subs \
+	sys \
+	test_abs \
+	test_system_clock \
+	timedate \
+	units \
+	gethost ))
 
 run_man: all # test all functions that require manual input
-	./ask.exe
-	./collatz.exe
-	./collatz_glide.exe
-	./fundem.exe
-	./pause.exe
+	./$(BINDIR)/ask.exe
+	./$(BINDIR)/collatz.exe
+	./$(BINDIR)/collatz_glide.exe
+	./$(BINDIR)/fundem.exe
+	./$(BINDIR)/pause.exe
 
 run_int: all # test all functions that require user interrupt
-	./collatz_loop.exe; \
-	./interrupt.exe; \
-	./timer.exe
+	./$(BINDIR)/collatz_loop.exe; \
+	./$(BINDIR)/interrupt.exe; \
+	./$(BINDIR)/timer.exe
 
 run_fmt: all # test all functions that require set_fmt.f
-	./collatz.exe
-	./collatz_loop.exe; \
-	./fmt.exe; \
-	./huge.exe; \
-	./test_system_clock.exe
+	./$(BINDIR)/collatz.exe
+	./$(BINDIR)/collatz_loop.exe; \
+	./$(BINDIR)/fmt.exe; \
+	./$(BINDIR)/huge.exe; \
+	./$(BINDIR)/test_system_clock.exe
