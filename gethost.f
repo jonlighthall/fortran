@@ -17,5 +17,5 @@
             endif
          endif
       endif
-      WRITE (*,*) TRIM(hostname)
+      WRITE (*,*) "host name: ",TRIM(hostname)
       end program gethost
