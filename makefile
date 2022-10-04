@@ -60,7 +60,7 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 # executables
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 
-all: $(EXES) | $(OBJS) $(DEPS) $(MODS)
+all: $(EXES) $(OBJS) $(DEPS) $(MODS)
 	$(MAKE)	-C pi
 	@echo "$@ done"
 printvars:
@@ -109,7 +109,7 @@ printvars:
 #
 # specific recipes
 $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
-	@echo "compiling special executable $@..."
+	@echo "compiling specific executable $@..."
 	$(FC.LINK)
 #
 # generic recipies
@@ -122,6 +122,9 @@ $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
+$(MODDIR)/%.mod: %.f | $(OBJDIR) $(MODDIR)
+	@echo "\ncompiling generic module $@..."
+	$(FC.COMPILE.mod)
 $(MODDIR)/%.mod: %.f90 | $(OBJDIR) $(MODDIR)
 	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
