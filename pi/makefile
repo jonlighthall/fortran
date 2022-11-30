@@ -130,8 +130,8 @@ test: clean all
 #
 # run executables
 run: all # test all functions that run automatically
-	./basel.exe
-	./borwein.exe
-	./leibniz.exe
-	./test_pi.exe
-	./wallis.exe
+	./$(BINDIR)/basel.exe
+	./$(BINDIR)/borwein.exe
+	./$(BINDIR)/leibniz.exe
+	./$(BINDIR)/test_pi.exe
+	./$(BINDIR)/wallis.exe
