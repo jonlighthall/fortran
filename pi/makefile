@@ -4,7 +4,7 @@ FC = gfortran
 # general flags
 compile = -c $<
 output = -o $@
-includes = -I $(INCDIR) -J $(MODDIR)
+includes = -I $(INCDIR)
 options = -fimplicit-none
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 -Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
@@ -14,7 +14,7 @@ debug = -g -fbacktrace -fcheck=all			\
 -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
 # fortran compile flags
-FCFLAGS = $(compile) $(options) $(warnings)
+FCFLAGS = $(compile) $(includes) $(options) $(warnings)
 F77.FLAGS = -fd-lines-as-comments
 F90.FLAGS = -std=f2008 $(debug)
 FC.COMPILE = $(FC) $(FCFLAGS)
