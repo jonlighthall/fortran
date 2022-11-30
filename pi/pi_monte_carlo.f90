@@ -1,9 +1,11 @@
 program pi_monte_carlo
   implicit none
-  double precision::x,y,error=1,pi_calculated
+  double precision::x,y,error,pi_calculated,thresh
   integer::n=0,square=0,circle = 0
   double precision, parameter::pi=3.141592653589793d0
-  do while (error>1e-10)
+  thresh=1e-10
+  error=thresh+1
+  do while (error>thresh)
      call random_number(x)
      call random_number(y)
      if (sqrt(x**2.+y**2.)<=1.) then
