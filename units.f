@@ -1,11 +1,30 @@
       program units
       implicit none
+      interface
+         integer function comp_real(real_val,real_ref)
+         implicit none
+         real(kind=16),intent(in) :: real_val,real_ref
+         end function comp_real
+
+
+      integer function comp_real_str(real_val,str_ref)
+      implicit none
+      real(kind=16),intent(in) :: real_val
+      character (len=40),intent(in) :: str_ref      
+      end function comp_real_str
+
+      subroutine report(acc,prec)
+      implicit none
+      integer,intent(in) :: acc,prec
+      end subroutine report
+      end interface
 
       include "metrics_revised2.inc"
       logical,parameter :: do_check=.false.
-      integer dummy,comp_real_str,comp_real,pdp,spa,dpa,qpa,strpa
+      integer dummy,pdp,spa,dpa,qpa,strpa
       real(kind = set_kind), parameter :: dB_yd2m=real(-20,set_kind)
-     &     *log10(real(3,set_kind)*real(3048)/real(10000))
+     &     *log10(real(3,set_kind)
+     &     *real(3048,set_kind)/real(10000,set_kind))
       character(len=56) :: fmt,fmt2,fmt3,str_m2ft,str_m2mi,str_dB_m2yd
      &     ,str_ms2kt,str_kt2ms
 
@@ -109,13 +128,13 @@ c     printed output
 c     check differnece
       write(*,*)
       write(*,*) 'single error (write)'
-      write(*,fmt)'   ft2m  - ft2m    = ',   sft2m - ft2m
-      write(*,fmt)'   m2ft  - m2ft    = ',   sm2ft - m2ft
-      write(*,fmt)'dB_yd2m  - dB_m2yd = ',sdB_yd2m - dB_m2yd
-      write(*,fmt)'   nmi2m - nmi2m   = ',  snmi2m - mi2m
-      write(*,fmt)'   m2nmi - m2mi    = ',   sm2nmi - m2mi
-      write(*,fmt)'   kt2ms - kt2ms   = ',  skt2ms - kt2ms   
-      write(*,fmt)'   ms2kt - ms2kt   = ',  sms2kt - ms2kt
+      write(*,fmt)'   ft2m  - ft2m    = ',real(   sft2m,16) - ft2m
+      write(*,fmt)'   m2ft  - m2ft    = ',real(   sm2ft,16) - m2ft
+      write(*,fmt)'dB_yd2m  - dB_m2yd = ',real(sdB_yd2m,16) - dB_m2yd
+      write(*,fmt)'   nmi2m - nmi2m   = ',real(  snmi2m,16) - mi2m
+      write(*,fmt)'   m2nmi - m2mi    = ',real(  sm2nmi,16) - m2mi
+      write(*,fmt)'   kt2ms - kt2ms   = ',real(  skt2ms,16) - kt2ms   
+      write(*,fmt)'   ms2kt - ms2kt   = ',real(  sms2kt,16) - ms2kt
       
       write(*,*)
       write(*,*) 'single error (variable)'
@@ -340,8 +359,8 @@ c     1234567890123456789012345678901234567890
       integer function comp_real_str(real_val,str_ref)
       implicit none
       integer(kind=16) i,i_dum,i_ref,i_test,ii,leading_zero
-      real(kind=16) real_val
-      character (len=40) str_ref      
+      real(kind=16),intent(in) :: real_val
+      character (len=40),intent(in) :: str_ref      
       logical  val_ok
       integer,parameter :: db = 0
 c     compare digits
@@ -352,11 +371,11 @@ c     compare digits
       if(db>0) write(*,'(a,f40.38)')'     test value is ',real_val
       if(db>0) write(*,'(a,a,a)')'reference value is ',str_ref
      &     ,' (string)'
-      i = index(str_ref,'.')
+      i = int(index(str_ref,'.'),16)
       if(db>1) write(*,*)'decimal point found at ',i
       
       do while (val_ok.and.(ii.lt.len(str_ref)))
-         i_test=floor(real_val*10**ii,16)
+         i_test=floor(real_val*10**real(ii,16),16)
          if (ii+1.lt.i) then
             read(str_ref(1:ii+1),*)i_ref
          else
@@ -381,16 +400,17 @@ c     compare digits
 
       integer function comp_real(real_val,real_ref)
       implicit none
+      real(kind=16),intent(in) :: real_val,real_ref
       integer(kind=16) i_ref,i_test,ii,a,pdp
-      real(kind=16) real_val,real_ref,b,sci_val,sci_ref
+      real(kind=16) b,sci_val,sci_ref
       logical  val_ok
       character(len=40) fmt
       integer,parameter :: db=0
       if(db>0) write(*,*)'comparing digits...'
       pdp=precision(real_val)
 c     convert to scientific notation
-      a=floor(log10(real_val))
-      b=10**(real(-1,16)*a)
+      a=floor(log10(real_val),16)
+      b=10**(real(-1,16)*real(a,16))
       sci_val=real_val*b
       sci_ref=real_ref*b
 
@@ -407,8 +427,8 @@ c     compare digits
       ii=0      
       val_ok=.true.      
       do while (val_ok.and.(ii.lt.precision(real_ref)))
-         i_test=floor(sci_val*10**ii,16)
-         i_ref=floor(sci_ref*10**ii,16)
+         i_test=floor(sci_val*10**real(ii,16),16)
+         i_ref=floor(sci_ref*10**real(ii,16),16)
          if(db>1) write(*,*)ii+1,i_ref,i_test,i_ref.eq.i_test
          if ((i_ref.ne.i_test)) then
             val_ok=.false.
@@ -428,7 +448,7 @@ c     compare digits
 
       subroutine report(acc,prec)
       implicit none
-      integer acc,prec
+      integer,intent(in) :: acc,prec
       write(*,100) ' precision  = ',acc
       write(*,200)acc
       if(acc.ge.prec) then
