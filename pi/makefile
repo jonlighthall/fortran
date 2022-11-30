@@ -135,3 +135,4 @@ run: all # test all functions that run automatically
 	./$(BINDIR)/leibniz.exe
 	./$(BINDIR)/test_pi.exe
 	./$(BINDIR)/wallis.exe
+	./$(BINDIR)/pi_monte_carlo.exe
