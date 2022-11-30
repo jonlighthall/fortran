@@ -13,13 +13,12 @@ program pi_monte_carlo
      call random_number(y)
      if (sqrt(x**real(2,knd)+y**real(2,knd))<=real(1,knd)) then
         circle=circle+1
-        square=square+1
-     else
-        square=square+1
      end if
+     square=square+1
      pi_calculated=real(4,knd)*(real(circle,knd)/real(square,knd))
      error=(pi_calculated-pi)
-     if(mod(n,int(1e5)).eq.0) write(*,*)"steps=",n,"pi=",pi_calculated,"error=",error
+     if(mod(n,int(1e5)).eq.0) &
+          write(*,*)"steps=",n,"pi=",pi_calculated,"error=",error
      n=n+1
   end do
   print *, "finished"
