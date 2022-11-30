@@ -1,6 +1,10 @@
-      program collatz
-      implicit none
+      module set_fmt
       include 'set_format.f'
+      end module
+
+      program collatz_glide
+      use set_fmt,only:intsize
+      implicit none
       integer(kind=intsize) n,i,sysmx,mxn,sd,seq,gld
       logical gldfound
       common sysmx
