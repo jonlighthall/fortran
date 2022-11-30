@@ -114,19 +114,19 @@ $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
 #
 # generic recipies
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
-	@echo "\nlinking generic executable $@..."
+	@echo -e "\nlinking generic executable $@..."
 	$(FC.LINK)	
 $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
-	@echo "\ncompiling generic object $@..."
+	@echo -e "\ncompiling generic object $@..."
 	$(FC.COMPILE.o)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
-	@echo "\ncompiling generic f90 object $@..."
+	@echo -e "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
 $(MODDIR)/%.mod: %.f | $(OBJDIR) $(MODDIR)
-	@echo "\ncompiling generic module $@..."
+	@echo -e "\ncompiling generic module $@..."
 	$(FC.COMPILE.mod)
 $(MODDIR)/%.mod: %.f90 | $(OBJDIR) $(MODDIR)
-	@echo "\ncompiling generic f90 module $@..."
+	@echo -e "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
 # define directory creation
