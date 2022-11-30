@@ -25,10 +25,10 @@ program pi_monte_carlo
      pdp=(-ceiling(log10(error)))
      if(pdp.gt.last) then
         last=pdp
-        write(fmt3,'("(a,i10,2x,a,a",i0,",2x,a,f",i0,".",i0,")")')dp+2,dp+2,dp
+        write(fmt3,'("(i2,a,i10,2x,a,a",i0,",2x,a,f",i0,".",i0,")")')dp+2,dp+2,dp
         write(fmt4,'("(f",i0,".",i0,")")')pdp+2-1,pdp-1
         write(val,fmt4)pi_calculated
-        write(*,fmt3)"steps=",n,"pi=",val,"error= ",error
+        write(*,fmt3)pdp,": steps=",n,"pi=",val,"error= ",error
        endif
      n=n+1
   enddo
