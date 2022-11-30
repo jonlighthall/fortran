@@ -72,9 +72,9 @@ c     run for one cycle
 c     calculate elapsed time
       if(finish.lt.start) then
          write(*,*)'rollover suspected'
-         elap=(finish+count_max-start)
+         elap=int((finish+count_max-start),intsize)
       else
-         elap=(finish-start)
+         elap=int((finish-start),intsize)
       endif
 
 c     print elapsed time

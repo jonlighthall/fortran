@@ -6,13 +6,21 @@
       integer(kind=intsize2) :: sz,ln
       character(len=fmtsize) str
       character(len=256) fmt
+      interface
+         subroutine format(int,str)
+         implicit none
+         include 'set_format.f'
+         integer(kind=intsize),intent(in)::int
+         character(fmtsize), intent(out)::str
+         end subroutine format
+      end interface
       i=1 
       j=0
       do while (i.gt.j)
          j=i
          i=i*2
       enddo
-      do k=floor(log10(real(j))),0,-1
+      do k=floor(log10(real(j)),intsize),0,-1
          i=j
          j=i-1
          do while (i.gt.j)
@@ -27,11 +35,11 @@ c     print summary with calculated formats
       write(fmt,*)'(a,i',ln,',a)'
       write(*,fmt)'in ',sz,' bytes...'
       ln=ceiling(log10(real(j)),intsize2)
-      write(fmt,*)'(a,sp,i',ln+1,')'
+      write(fmt,*)'(a,sp,i',ln+int(1,intsize2),')'
       write(*,fmt) 'the highest signed integer is ', j
       write(*,fmt) ' the lowest signed integer is ', i
-      k=ceiling(log10(real(ln)))
-      if(ln.eq.10**k)k=k+1      ! needed for 4 bit
+      k=ceiling(log10(real(ln)),intsize)
+      if(int(ln,16).eq.10**k)k=k+1      ! needed for 4 bit
       write(fmt,*)'(i',ln,',a,i',k,',a)'
       write(*,fmt)j,' is ',ln,' digits long'
 

@@ -61,9 +61,9 @@ c     a quad read is declared to avoid real-literal-constant warning
       
       i = floor(log10(real(i)),1)
       j = floor(log10(real(j)),2)
-      k = floor(log10(real(k)))
-      l = floor(log10(real(l)))
-      m = floor(log10(real(m)))
+      k = floor(log10(real(k)),4)
+      l = floor(log10(real(l)),8)
+      m = floor(log10(real(m)),16)
 
       write(*,*) 'floor(log), variable'
       write(*,100) i
@@ -73,18 +73,18 @@ c     a quad read is declared to avoid real-literal-constant warning
       write(*,100) m
 
       write(*,*) 'equvialence test'
-      write(*,*) i.eq.(a-1)
-      write(*,*) j.eq.(b-1)
-      write(*,*) k.eq.(c-1)
-      write(*,*) l.eq.(d-1)
-      write(*,*) m.eq.(e-1)      
+      write(*,*) i.eq.(a-int(1,1))
+      write(*,*) j.eq.int((b-int(1,1)),2)
+      write(*,*) k.eq.int((c-int(1,1)),4)
+      write(*,*) l.eq.int((d-int(1,1)),8)
+      write(*,*) m.eq.int((e-int(1,1)),16)   
 
       i = floor(log10(real(huge(int(0,1)))),1)
       j = floor(log10(real(huge(int(0,2)))),2)
       k = floor(log10(real(huge(int(0,4)),8)))
       l = floor(log10(real(huge(int(0,8)),16)))
 c     m = floor(log10(real(huge(int(0,16)),16)))
-      m=e-1
+      m=int(e-int(1,1),16)
 
       write(*,*) 'floor(log(huge)), variable'
       write(*,100) i

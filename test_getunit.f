@@ -1,6 +1,11 @@
       program test_getunit
       implicit none
-      integer lun,getunit
+      interface
+         integer function getunit(unit)
+         integer, intent(out), optional :: unit
+         end function getunit
+      end interface
+      integer lun
       integer unit1,unit2,unit3,unit4
       
       open(getunit(lun),file='test')
