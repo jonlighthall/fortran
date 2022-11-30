@@ -46,7 +46,7 @@ OBJS.all = $(OBJS.F77) $(OBJS.F90)
 # dependencies (non-executables)
 MODS. = version
 SUBS. = f2 f format
-FUNS. = getunit
+FUNS. = getunit opened
 DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
 DEPS.o = $(addsuffix .o,$(DEPS.))
