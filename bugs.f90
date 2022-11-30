@@ -3,10 +3,15 @@ program bugs
   real last
   real c(10)
   integer p
+  interface
+     subroutine divide(d,e)
+       real,intent(in) :: d,e
+     end subroutine divide
+  end interface
 
   !     Initialise c with successive integer values.
   do p=1,10
-     c(p)=p
+     c(p)=real(p)
   enddo
 
   !     Calculate and print ratios of successive integers.
@@ -19,6 +24,6 @@ end program bugs
 
 subroutine divide(d,e)
   implicit none
-  real d,e
+  real,intent(in) :: d,e
   print *,e/d
 end subroutine divide
