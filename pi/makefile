@@ -32,10 +32,6 @@ all: $(addsuffix .exe, basel test_pi borwein leibniz wallis pi_monte_carlo)
 basel.exe: basel.f 
 	@echo compiling executable $@...	
 	$(FC.LINK) -fdefault-real-8 -fdefault-integer-8
-
-pi_monte_carlo.o: pi_monte_carlo.f90
-	@echo compiling f90 object file $@...	
-	$(FC.COMPILE.o.f90) -std=legacy
 #
 # generic recipies
 %.exe: %.o
