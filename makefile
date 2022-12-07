@@ -5,24 +5,30 @@ FC = gfortran
 compile = -c $<
 output = -o $@
 includes = -I $(INCDIR) -J $(MODDIR)
-options = -fimplicit-none
+options = -std=f2008 -fimplicit-none
+options_new = -std=f2018
+options := $(options) $(options_new)
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
--Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
--Wimplicit-procedure -Winteger-division -Wintrinsics-std	\
--Wreal-q-constant -Wuse-without-only -Wrealloc-lhs-all
-debug = -g -fbacktrace -fcheck=all			\
+-Wcharacter-truncation -Wimplicit-interface -Wintrinsics-std
+warnings_new = -Wconversion-extra -Wimplicit-procedure	\
+-Winteger-division -Wreal-q-constant -Wuse-without-only	\
+-Wrealloc-lhs-all
+warnings := $(warnings) $(warnings_new)
+debug = -g -fbacktrace					\
 -ffpe-trap=invalid,zero,overflow,underflow,denormal
+debug_new = -fcheck=all
+debug:= $(debug) $(debug_new)
 #
-# fortran compile flags
-FCFLAGS = $(compile) $(includes) $(options) $(warnings)
+# fortran compiler flags
+FCFLAGS = $(includes) $(options) $(warnings) $(debug)
 F77.FLAGS = -fd-lines-as-comments
-F90.FLAGS = -std=f2008 $(debug)
-FC.COMPILE = $(FC) $(FCFLAGS)
+F90.FLAGS = 
+FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
 FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 #
-# fortran link flags
+# fortran linker flags
 FLFLAGS = $(output) $^
 FC.LINK = $(FC) $(FLFLAGS)
 #
@@ -60,8 +66,7 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 # executables
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 
-all: $(EXES) $(OBJS) $(DEPS) $(MODS)
-	$(MAKE)	-C pi
+all: $(EXES) $(OBJS) $(DEPS) $(MODS) subsystem
 	@echo "$@ done"
 printvars:
 	@echo $@:
@@ -142,6 +147,10 @@ $(MODDIR):
 # recipes without outputs
 .PHONY: clean out distclean
 #
+# sub-programs
+subsystem:
+	$(MAKE) -C pi
+#
 # clean up routines
 CMD = @rm -vfrd
 clean:
@@ -161,6 +170,7 @@ clean:
 	$(MAKE) clean -C pi
 	@echo "$@ done"
 out:
+# remove outputs produced by executables
 	$(CMD) fname*.in
 	$(CMD) svp.out
 	$(CMD) svp.in
@@ -173,6 +183,8 @@ distclean: clean out
 	$(CMD) *.~*~
 # remove Emacs backup files
 	$(CMD) *~ \#*\#
+# clean sub-programs
+	$(MAKE) distclean -C pi	
 	@echo "$@ done"
 #
 # test the makefile
