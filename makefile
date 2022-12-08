@@ -66,7 +66,7 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 # executables
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 
-all: $(EXES) $(OBJS) $(DEPS) $(MODS) subsystem
+all: $(EXES) subsystem
 	@echo "$@ done"
 printvars:
 	@echo $@:
