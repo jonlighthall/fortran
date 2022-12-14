@@ -22,7 +22,7 @@ debug:= $(debug) $(debug_new)
 # fortran compiler flags
 FCFLAGS = $(includes) $(options) $(warnings) $(debug)
 F77.FLAGS = -fd-lines-as-comments -std=legacy
-F90.FLAGS = 
+F90.FLAGS =
 FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
@@ -75,7 +75,7 @@ printvars:
 	@echo
 	@echo "OBJS.all = $(OBJS.all)"
 
-	@echo	
+	@echo
 	@echo "----------------------------------------------------"
 	@echo
 
@@ -119,19 +119,19 @@ $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
 #
 # generic recipies
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
-	@echo -e "\nlinking generic executable $@..."
-	$(FC.LINK)	
+	@echo "\nlinking generic executable $@..."
+	$(FC.LINK)
 $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
-	@echo -e "\ncompiling generic object $@..."
+	@echo "\ncompiling generic object $@..."
 	$(FC.COMPILE.o)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
-	@echo -e "\ncompiling generic f90 object $@..."
+	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
 $(MODDIR)/%.mod: %.f | $(OBJDIR) $(MODDIR)
-	@echo -e "\ncompiling generic module $@..."
+	@echo "\ncompiling generic module $@..."
 	$(FC.COMPILE.mod)
 $(MODDIR)/%.mod: %.f90 | $(OBJDIR) $(MODDIR)
-	@echo -e "\ncompiling generic f90 module $@..."
+	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
 # define directory creation
@@ -188,7 +188,7 @@ distclean: distclean
 # remove Emacs backup files
 	$(CMD) *~ \#*\#
 # clean sub-programs
-	$(MAKE) distclean -C pi	
+	$(MAKE) distclean -C pi
 	@echo "$@ done"
 #
 # test the makefile
