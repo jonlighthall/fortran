@@ -145,7 +145,7 @@ $(MODDIR):
 .SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
 # recipes without outputs
-.PHONY: clean out distclean
+.PHONY: mostlyclean clean out realclean distclean
 #
 # sub-programs
 subsystem:
@@ -163,6 +163,7 @@ mostlyclean:
 	$(CMD) $(MODDIR)
 	$(CMD) *.mod
 	$(CMD) fort.*
+	$(MAKE) $@ -C pi
 	@echo "$@ done"
 clean: mostlyclean
 # remove executables
@@ -170,7 +171,7 @@ clean: mostlyclean
 	$(CMD) $(BINDIR)
 	$(CMD) *.exe
 	$(CMD) *.out
-	$(MAKE) clean -C pi
+	$(MAKE) $@ -C pi
 	@echo "$@ done"
 out:
 # remove outputs produced by executables
@@ -182,13 +183,15 @@ out:
 	$(CMD) test?
 	@echo "$@ done"
 realclean: clean out
-distclean: distclean
+	$(MAKE) $@ -C pi
+	@echo "$@ done"	
+distclean: realclean
 # remove Git versions
 	$(CMD) *.~*~
 # remove Emacs backup files
 	$(CMD) *~ \#*\#
 # clean sub-programs
-	$(MAKE) distclean -C pi
+	$(MAKE) $@ -C pi
 	@echo "$@ done"
 #
 # test the makefile

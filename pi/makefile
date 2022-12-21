@@ -13,16 +13,16 @@ warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 debug = -g -fbacktrace -fcheck=all			\
 -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
-# fortran compile flags
-FCFLAGS = $(compile) $(includes) $(options) $(warnings)
-F77.FLAGS = -fd-lines-as-comments
-F90.FLAGS = -std=f2008 $(debug)
-FC.COMPILE = $(FC) $(FCFLAGS)
+# fortran compiler flags
+FCFLAGS = $(includes) $(options) $(warnings) $(debug)
+F77.FLAGS = -fd-lines-as-comments -std=legacy
+F90.FLAGS =
+FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
 FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 #
-# fortran link flags
+# fortran linker flags
 FLFLAGS = $(output) $^
 FC.LINK = $(FC) $(FLFLAGS)
 #
@@ -60,7 +60,7 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 # executables
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 
-all: $(EXES) $(OBJS) $(DEPS) $(MODS)
+all: $(EXES)
 	@echo "$@ done"
 #
 # specific recipes
@@ -93,14 +93,14 @@ $(BINDIR):
 $(MODDIR):
 	@mkdir -v $(MODDIR)
 # keep intermediate object files
-.SECONDARY: $(OBJS) $(MODS)
+.SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
 # recipes without outputs
-.PHONY: clean 
+.PHONY: mostlyclean clean out realclean distclean
 #
 # clean up routines
 CMD = @rm -vfrd
-clean:
+mostlyclean:
 	@echo removing files...
 # remove compiled binaries
 	$(CMD) $(OBJDIR)/*.o
@@ -109,15 +109,20 @@ clean:
 	$(CMD) $(MODDIR)/*.mod
 	$(CMD) $(MODDIR)
 	$(CMD) *.mod
+	$(CMD) fort.*
+	@echo "$@ done"
+clean: mostlyclean
+# remove executables
 	$(CMD) $(BINDIR)/*.exe
 	$(CMD) $(BINDIR)
 	$(CMD) *.exe
 	$(CMD) *.out
-	$(CMD) fort.*
 	@echo "$@ done"
-out: 
+out:
+# remove outputs produced by executables
 	@echo "$@ done"
-distclean: clean out
+realclean: clean out
+distclean: realclean
 # remove Git versions
 	$(CMD) *.~*~
 # remove Emacs backup files
@@ -125,7 +130,7 @@ distclean: clean out
 	@echo "$@ done"
 #
 # test the makefile
-test: clean all
+test: distclean all
 	@echo "$@ done"
 #
 # run executables
