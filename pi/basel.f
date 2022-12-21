@@ -52,8 +52,8 @@ c     calculate series
       write(*,fmt,advance='no')pival
       write(*,'(3x,g16.10)',advance='no')seq
       
-      do while ((seq.gt.1q0/(i*i)).and.(i.lt.n)) ! ensure that squence in monotonically decreasing
-         seq=real(1,srk)/(i*i)       
+      do while ((seq.gt.1q0/real((i*i),srk)).and.(i.lt.n)) ! ensure that squence in monotonically decreasing
+         seq=real(1,srk)/real((i*i),srk)       
          sum=sum + seq
          pival=sqrt(real(6,srk)*sum)
 c     print progress
@@ -75,11 +75,11 @@ c         if(i.lt.n) write(*,*) 'end: i = ',i
 c     compare digits
       do i=0,dp+1
          sum=pireal*real(10,srk)**i
-         j=floor(sum)
+         j=floor(sum,kind(j))
          sum=pi*real(10,srk)**i
-         k=floor(sum)
+         k=floor(sum,kind(k))
          sum=pival*real(10,srk)**i
-         l=floor(sum)
+         l=floor(sum,kind(l))
          write(*,*)i+1,j,k,l,j.eq.k,j.eq.l
          if (j.ne.l) exit
       enddo
