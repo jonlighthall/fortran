@@ -14,15 +14,15 @@ c     calculate series
       do j=1,8
          do while (ii.lt.j)
             d=2*i+1
-            c=(-1)**i
-            r=r+real(c)/d
+            c=int(-1,kind(c))**i
+            r=r+real(c,kind(r))/real(d,kind(r))
             if((mod(i,step).eq.0).or.(j.eq.1)) then
                p=4d0*r
 c     compare digits
                ii=j-1
                val_ok=.true.
                do while (val_ok)
-                  ipi=floor(p*10**ii,16)
+                  ipi=floor(p*10**real(ii,kind(p)),kind(ipi))
                   read(ipistr(1:ii+1),*)test_val
                   if ((ipi.ne.test_val)) then
                      val_ok=.false.
