@@ -15,14 +15,15 @@ c     calculate series
             d1=2*i+1
             n1=2*(i+1)
             d2=2*(i+1)+1
-            r=r*real(n1)/d1*real(n1)/d2
+            r=r*real(n1,kind(r))/real(d1,kind(r))*real(n1,kind(r))
+     &           /real(d2,kind(r))
             if((mod(i,step).eq.0).or.(j.eq.1)) then
                p=2d0*r
 c     compare digits
                ii=j-1
                val_ok=.true.
                do while (val_ok)
-                  ipi=floor(p*10**ii,16)
+                  ipi=floor(p*10**real(ii,kind(p)),kind(ipi))
                   read(ipistr(1:ii+1),*)test_val
                   if ((ipi.ne.test_val)) then
                      val_ok=.false.

@@ -20,7 +20,7 @@ c     compare digits
       ii=0
       val_ok=.true.
       do while (val_ok)
-         ipi=floor(p*10**ii,16)
+         ipi=floor(p*10**real(ii,kind(p)),kind(ipi))
          read(ipistr(1:ii+1),*)test_val
          write(*,*)ii+1,ipi,test_val,ipi.eq.test_val
          if ((ipi.ne.test_val)) then

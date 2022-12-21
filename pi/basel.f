@@ -52,7 +52,7 @@ c     calculate series
       write(*,fmt,advance='no')pival
       write(*,'(3x,g16.10)',advance='no')seq
       
-      do while ((seq.gt.1q0/real((i*i),srk)).and.(i.lt.n)) ! ensure that squence in monotonically decreasing
+      do while ((seq.gt.real(1,srk)/real((i*i),srk)).and.(i.lt.n)) ! ensure that squence in monotonically decreasing
          seq=real(1,srk)/real((i*i),srk)       
          sum=sum + seq
          pival=sqrt(real(6,srk)*sum)
