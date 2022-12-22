@@ -7,7 +7,8 @@ program pi_monte_carlo
   real(kind=srk), parameter :: pi=3.141592653589793d0
   real(kind=srk), parameter :: one=1,two=2,four=4,ten=10
   character(len=32) :: fmt1,fmt3,val,fmt4
-  write(*,'(1x,i2,a,i2,a)')dp,' decimals reqested (using ',srk,' bytes)'
+  write(*,'(1x,i2,a,i2,a)')dp,' decimals reqested'
+  write(*,'(1x,i2,a,i2,a)')precision(pi_calculated),' decimals available (using ',srk,' bytes)'
   thresh=ten**(-dp)
   error=thresh+1
   write(fmt1,'("(a,f",i0,".",i0,")")')dp+2,dp
@@ -25,10 +26,10 @@ program pi_monte_carlo
      pdp=(-ceiling(log10(error)))
      if(pdp.gt.last) then
         last=pdp
-        write(fmt3,'("(i2,a,i10,2x,a,a",i0,",2x,a,f",i0,".",i0,")")')dp+2,dp+2,dp
+        write(fmt3,'("(i2,a,i10,2x,a,a",i0,",2x,a,f",i0,".",i0,")")')dp+2,dp+2,pdp
         write(fmt4,'("(f",i0,".",i0,")")')pdp+2-1,pdp-1
         write(val,fmt4)pi_calculated
-        write(*,fmt3)pdp,": steps=",n,"pi=",val,"error= ",error
+        write(*,fmt3)pdp,": steps=",n,"pi= ",val,"error= ",error
        endif
      n=n+1
   enddo
