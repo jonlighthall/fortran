@@ -1,3 +1,6 @@
+# Fortran compiler options for for GNU Fortran 7.5.0 on Ubuntu 18.04
+# LTS (2017)
+
 # fortran compiler
 FC = gfortran
 #
@@ -6,7 +9,7 @@ compile = -c $<
 output = -o $@
 includes = -I $(INCDIR) -J $(MODDIR)
 options = -fimplicit-none
-options_new = -std=f2018
+options_new = -std=f2008
 options := $(options) $(options_new)
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
 -Wcharacter-truncation -Wimplicit-interface -Wintrinsics-std
