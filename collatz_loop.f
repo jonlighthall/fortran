@@ -225,7 +225,7 @@ c     check exit flags
             write(1,'(i4,1x,i4,1x,a)')-1,dly,trim(adjustl(dum))
             close(1)
             call format(sd,fmt_str)
-            write(*,'(i4,1x,i4,1x,a,1x,t30,i9)')-1,dly
+            write(*,'(i4,1x,i4,1x,a,1x,t30,i10)')-1,dly
      &           ,trim(adjustl(fmt_str)),t
             exit
          endif
