@@ -11,8 +11,8 @@ program calculate_pi
 
     ! Generate n random points and count the number that fall inside the circle
     do i = 1, n
-        x = random_number()
-        y = random_number()
+       call random_number(x)
+       call random_number(y)
         if (x**2 + y**2 <= 1.0) then
             count = count + 1
         end if
