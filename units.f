@@ -434,7 +434,7 @@ c     compare digits
             val_ok=.false.
             if(db>0) write(*,'(1x,i2,a)')ii
      &           ,' decimal places of precision achieved'
-            comp_real=ii
+            comp_real=int(ii,kind(comp_real))
             return
          endif
          ii=ii+1
