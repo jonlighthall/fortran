@@ -67,9 +67,9 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 
 all: $(EXES) subsystem
-	@echo "$@ done"
+	@echo "\n$@ done"
 printvars:
-	@echo $@:
+	@echo "printing variables:"
 	@echo
 	@echo "SRC = $(SRC)"
 	@echo
@@ -152,51 +152,54 @@ subsystem:
 	$(MAKE) -C pi
 #
 # clean up routines
-CMD = @rm -vfrd
+RM = @rm -vfrd
 mostlyclean:
-	@echo removing files...
 # remove compiled binaries
-	$(CMD) $(OBJDIR)/*.o
-	$(CMD) $(OBJDIR)
-	$(CMD) *.o *.obj
-	$(CMD) $(MODDIR)/*.mod
-	$(CMD) $(MODDIR)
-	$(CMD) *.mod
-	$(CMD) fort.*
+	@echo "removing compiled binary files..."
+	$(RM) $(OBJDIR)/*.o
+	$(RM) $(OBJDIR)
+	$(RM) *.o *.obj
+	$(RM) $(MODDIR)/*.mod
+	$(RM) $(MODDIR)
+	$(RM) *.mod
+	$(RM) fort.*
 	$(MAKE) $@ -C pi
 	@echo "$@ done"
 clean: mostlyclean
 # remove executables
-	$(CMD) $(BINDIR)/*.exe
-	$(CMD) $(BINDIR)
-	$(CMD) *.exe
-	$(CMD) *.out
+	@echo "\nremoving compiled executable files..."	
+	$(RM) $(BINDIR)/*.exe
+	$(RM) $(BINDIR)
+	$(RM) *.exe
+	$(RM) *.out
 	$(MAKE) $@ -C pi
 	@echo "$@ done"
 out:
 # remove outputs produced by executables
-	$(CMD) fname*.in
-	$(CMD) svp.out
-	$(CMD) svp.in
-	$(CMD) state
-	$(CMD) test
-	$(CMD) test?
+	@echo "\nremoving output files..."
+	$(RM) fname*.in
+	$(RM) svp.out
+	$(RM) svp.in
+	$(RM) state
+	$(RM) test
+	$(RM) test?
 	@echo "$@ done"
 realclean: clean out
+# remove binaries and outputs
 	$(MAKE) $@ -C pi
 	@echo "$@ done"	
 distclean: realclean
+	@echo "\nremoving backup files..."			
 # remove Git versions
-	$(CMD) *.~*~
+	$(RM) *.~*~
 # remove Emacs backup files
-	$(CMD) *~ \#*\#
+	$(RM) *~ \#*\#
 # clean sub-programs
 	$(MAKE) $@ -C pi
 	@echo "$@ done"
 #
 # test the makefile
 test: distclean printvars all
-	@echo "$@ done"
 #
 # run executables
 run: all # test all functions that run automatically
