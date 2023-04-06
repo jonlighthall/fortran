@@ -11,21 +11,19 @@ includes = -I $(INCDIR) -J $(MODDIR)
 options = -fimplicit-none
 options_new = -std=f2008
 options := $(options) $(options_new)
-warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
--Wcharacter-truncation -Wimplicit-interface -Wintrinsics-std
-warnings_new = -Wconversion-extra -Wimplicit-procedure	\
--Winteger-division -Wreal-q-constant -Wuse-without-only	\
--Wrealloc-lhs-all
+warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-truncation	\
+-Wimplicit-interface -Wintrinsics-std
+warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
+-Wuse-without-only -Wrealloc-lhs-all
 warnings := $(warnings) $(warnings_new)
-debug = -g -fbacktrace					\
--ffpe-trap=invalid,zero,overflow,underflow,denormal
+debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 debug_new = -fcheck=all
 debug:= $(debug) $(debug_new)
 #
 # fortran compiler flags
-FCFLAGS = $(includes) $(options) $(warnings) $(debug)
+FCFLAGS = $(includes) $(options) $(warnings)
 F77.FLAGS = -fd-lines-as-comments -std=legacy
-F90.FLAGS =
+F90.FLAGS = -std=f2008
 FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
@@ -68,11 +66,23 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 #
 # executables
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
+#
+# sub-programs
+SUBDIRS := $(wildcard pi*/.)
 
-all: $(EXES) subsystem
-	@echo "\n$@ done"
+all: $(EXE) $(SUBDIRS)
+
+$(SUBDIRS):
+	$(MAKE) -C $@
+
+.PHONY: all $(SUBDIRS)
+
 printvars:
 	@echo "printing variables:"
+	@echo
+	@echo "SRC.F77 = $(SRC.F77)"
+	@echo
+	@echo "SRC.F90 = $(SRC.F90)"
 	@echo
 	@echo "SRC = $(SRC)"
 	@echo
@@ -121,13 +131,13 @@ $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
 	$(FC.LINK)
 #
 # generic recipies
-$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
+$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) # $(BINDIR)
 	@echo "\nlinking generic executable $@..."
 	$(FC.LINK)
-$(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
+$(OBJDIR)/%.o: %.f $(MODS) # $(OBJDIR)
 	@echo "\ncompiling generic object $@..."
 	$(FC.COMPILE.o)
-$(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
+$(OBJDIR)/%.o: %.f90 $(MODS) # $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
 $(MODDIR)/%.mod: %.f | $(OBJDIR) $(MODDIR)
@@ -145,14 +155,16 @@ $(BINDIR):
 $(MODDIR):
 	@mkdir -v $(MODDIR)
 # keep intermediate object files
-.SECONDARY: $(DEPS) $(OBJS) $(MODS)
+#.SECONDARY: $(OBJS) $(MODS)
 #
 # recipes without outputs
-.PHONY: mostlyclean clean out realclean distclean
-#
-# sub-programs
-subsystem:
-	$(MAKE) -C pi
+.PHONY: all mostlyclean clean out realclean distclean
+
+cleanSUBDIRS = $(addprefix clean-,$(SUBDIRS))
+.PHONY: clean $(cleanSUBDIRS)
+$(cleanSUBDIRS): clean-%:
+	@echo "mostly cleaning subdir $*"
+	$(MAKE) -C $* clean
 #
 # clean up routines
 RM = @rm -vfrd
@@ -166,9 +178,8 @@ mostlyclean:
 	$(RM) $(MODDIR)
 	$(RM) *.mod
 	$(RM) fort.*
-	$(MAKE) $@ -C pi
 	@echo "$@ done"
-clean: mostlyclean
+clean: mostlyclean $(cleanSUBDIRS)
 # remove executables
 	@echo "\nremoving compiled executable files..."	
 	$(RM) $(BINDIR)/*.exe
