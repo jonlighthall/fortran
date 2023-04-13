@@ -71,7 +71,7 @@ all: $(EXES) $(SUBDIRS)
 	@echo "\n$@ done"
 
 $(SUBDIRS):
-	$(MAKE) -C $@
+	@$(MAKE) --no-print-directory -C $@
 
 printvars:
 	@echo "printing variables:"
