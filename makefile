@@ -65,17 +65,18 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 #
 # sub-programs
-SUBDIRS := $(wildcard pi*/.)
+SUBDIRS := $(wildcard pi*)
 
-all: $(EXE) $(SUBDIRS)
+all: $(EXES) $(SUBDIRS)
+	@echo "\n$@ done"
 
 $(SUBDIRS):
 	$(MAKE) -C $@
 
-.PHONY: all $(SUBDIRS)
-
 printvars:
 	@echo "printing variables:"
+	@echo
+	@echo "SUBDIRS = $(SUBDIRS)"
 	@echo
 	@echo "SRC.F77 = $(SRC.F77)"
 	@echo
@@ -128,13 +129,13 @@ $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
 	$(FC.LINK)
 #
 # generic recipies
-$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) # $(BINDIR)
+$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
 	@echo "\nlinking generic executable $@..."
 	$(FC.LINK)
-$(OBJDIR)/%.o: %.f $(MODS) # $(OBJDIR)
+$(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic object $@..."
 	$(FC.COMPILE.o)
-$(OBJDIR)/%.o: %.f90 $(MODS) # $(OBJDIR)
+$(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
 $(MODDIR)/%.mod: %.f | $(OBJDIR) $(MODDIR)
@@ -152,13 +153,13 @@ $(BINDIR):
 $(MODDIR):
 	@mkdir -v $(MODDIR)
 # keep intermediate object files
-#.SECONDARY: $(OBJS) $(MODS)
+.SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
 # recipes without outputs
-.PHONY: all mostlyclean clean out realclean distclean
+.PHONY: all $(SUBDIRS) $(cleanSUBDIRS) mostlyclean clean out realclean distclean
 
 cleanSUBDIRS = $(addprefix clean-,$(SUBDIRS))
-.PHONY: clean $(cleanSUBDIRS)
+
 $(cleanSUBDIRS): clean-%:
 	@echo "mostly cleaning subdir $*"
 	$(MAKE) -C $* clean
