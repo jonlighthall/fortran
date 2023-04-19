@@ -56,9 +56,9 @@ OBJS.F90 = $(SRC.F90:.f90=.o)
 OBJS.all = $(OBJS.F77) $(OBJS.F90)
 #
 # dependencies (non-executables)
-MODS. = 
-SUBS. = 
-FUNS. = 
+MODS. =
+SUBS. =
+FUNS. =
 DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
 DEPS.o = $(addsuffix .o,$(DEPS.))
@@ -71,16 +71,22 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 #
 # executables
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
+#
+# sub-programs
+SUBDIRS :=
 
-all: $(EXES)
+all: $(EXES) $(SUBDIRS)
 	@echo "$(THISDIR) $@ done"
+
+$(SUBDIRS):
+	@$(MAKE) --no-print-directory -C $@
 #
 # specific recipes
 $(BINDIR)/basel.exe: $(OBJDIR)/basel.o | $(BINDIR)
 	@echo "compiling specific executable $@..."
 	$(FC.LINK) -fdefault-real-8 -fdefault-integer-8
 #
-# generic recipies
+# generic recipes
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
 	@echo "\nlinking generic executable $@..."
 	$(FC.LINK)
@@ -90,10 +96,10 @@ $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
-$(MODDIR)/%.mod: %.f | $(MODDIR) # $(OBJDIR) 
+$(MODDIR)/%.mod: %.f | $(MODDIR)
 	@echo "\ncompiling generic module $@..."
 	$(FC.COMPILE.mod)
-$(MODDIR)/%.mod: %.f90 | $(MODDIR) # $(OBJDIR) 
+$(MODDIR)/%.mod: %.f90 | $(MODDIR)
 	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
@@ -108,9 +114,10 @@ $(MODDIR):
 .SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
 # recipes without outputs
-.PHONY: mostlyclean clean out realclean distclean
+.PHONY: all $(SUBDIRS) mostlyclean clean out realclean distclean
 #
 # clean up routines
+optSUBDIRS = $(addprefix $(MAKE) $@ --no-print-directory -C ,$(addsuffix ;,$(SUBDIRS)))
 RM = @rm -vfrd
 mostlyclean:
 # remove compiled binaries
@@ -120,30 +127,36 @@ mostlyclean:
 	$(RM) $(MODDIR)/*.mod
 	$(RM) *.mod
 	$(RM) fort.*
+	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 clean: mostlyclean
 # remove executables
-	@echo "\nremoving compiled executable files..."	
+	@echo "\nremoving compiled executable files..."
 	$(RM) $(BINDIR)/*.exe
 	$(RM) $(BINDIR)
 	$(RM) *.exe
 	$(RM) *.out
 	$(RM) $(OBJDIR)
 	$(RM) $(MODDIR)
+	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 out:
 # remove outputs produced by executables
 	@echo "\nremoving output files..."
+	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 realclean: clean out
 # remove binaries and outputs
-	@echo "$(THISDIR) $@ done"	
+	@$(optSUBDIRS)
+	@echo "$(THISDIR) $@ done"
 distclean: realclean
-	@echo "\nremoving backup files..."			
+	@echo "\nremoving backup files..."
 # remove Git versions
 	$(RM) *.~*~
 # remove Emacs backup files
 	$(RM) *~ \#*\#
+# clean sub-programs
+	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 #
 # test the makefile
@@ -159,3 +172,4 @@ run: all
 	./$(BINDIR)/test_pi.exe
 	./$(BINDIR)/wallis.exe
 	./$(BINDIR)/pi_monte_carlo.exe
+	@$(optSUBDIRS)
