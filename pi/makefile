@@ -1,3 +1,5 @@
+THISDIR=$(shell \pwd | sed 's%^.*/%%')
+
 # fortran compiler
 FC = gfortran
 #
@@ -5,18 +7,28 @@ FC = gfortran
 compile = -c $<
 output = -o $@
 includes = -I $(INCDIR)
+#
+# options
 options = -fimplicit-none
-warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries	\
--Wcharacter-truncation -Wconversion-extra -Wimplicit-interface	\
--Wimplicit-procedure -Winteger-division -Wintrinsics-std	\
--Wreal-q-constant -Wuse-without-only -Wrealloc-lhs-all
-debug = -g -fbacktrace -fcheck=all			\
--ffpe-trap=invalid,zero,overflow,underflow,denormal
+warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-truncation	\
+-Wimplicit-interface -Wintrinsics-std
+debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
+#
+# additional opotions for gfortran v4.5 and later
+options_new = -std=f2018
+warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
+-Wuse-without-only -Wrealloc-lhs-all
+debug_new = -fcheck=all
+#
+# concatonate options
+options := $(options) $(options_new)
+warnings := $(warnings) $(warnings_new)
+debug:= $(debug) $(debug_new)
 #
 # fortran compiler flags
-FCFLAGS = $(includes) $(options) $(warnings) $(debug)
+FCFLAGS = $(includes) $(options) $(warnings)
 F77.FLAGS = -fd-lines-as-comments -std=legacy
-F90.FLAGS =
+F90.FLAGS = -std=f2008
 FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
@@ -61,7 +73,7 @@ MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 
 all: $(EXES)
-	@echo "$@ done"
+	@echo "$(THISDIR) $@ done"
 #
 # specific recipes
 $(BINDIR)/basel.exe: $(OBJDIR)/basel.o | $(BINDIR)
@@ -70,19 +82,19 @@ $(BINDIR)/basel.exe: $(OBJDIR)/basel.o | $(BINDIR)
 #
 # generic recipies
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
-	@echo -e "\nlinking generic executable $@..."
-	$(FC.LINK)	
+	@echo "\nlinking generic executable $@..."
+	$(FC.LINK)
 $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
-	@echo -e "\ncompiling generic object $@..."
+	@echo "\ncompiling generic object $@..."
 	$(FC.COMPILE.o)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
-	@echo -e "\ncompiling generic f90 object $@..."
+	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
-$(MODDIR)/%.mod: %.f | $(OBJDIR) $(MODDIR)
-	@echo -e "\ncompiling generic module $@..."
+$(MODDIR)/%.mod: %.f | $(MODDIR) # $(OBJDIR) 
+	@echo "\ncompiling generic module $@..."
 	$(FC.COMPILE.mod)
-$(MODDIR)/%.mod: %.f90 | $(OBJDIR) $(MODDIR)
-	@echo -e "\ncompiling generic f90 module $@..."
+$(MODDIR)/%.mod: %.f90 | $(MODDIR) # $(OBJDIR) 
+	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
 # define directory creation
@@ -99,39 +111,44 @@ $(MODDIR):
 .PHONY: mostlyclean clean out realclean distclean
 #
 # clean up routines
-CMD = @rm -vfrd
+RM = @rm -vfrd
 mostlyclean:
-	@echo removing files...
 # remove compiled binaries
-	$(CMD) $(OBJDIR)/*.o
-	$(CMD) $(OBJDIR)
-	$(CMD) *.o *.obj
-	$(CMD) $(MODDIR)/*.mod
-	$(CMD) $(MODDIR)
-	$(CMD) *.mod
-	$(CMD) fort.*
-	@echo "$@ done"
+	@echo "removing compiled binary files..."
+	$(RM) $(OBJDIR)/*.o
+	$(RM) *.o *.obj
+	$(RM) $(MODDIR)/*.mod
+	$(RM) *.mod
+	$(RM) fort.*
+	@echo "$(THISDIR) $@ done"
 clean: mostlyclean
 # remove executables
-	$(CMD) $(BINDIR)/*.exe
-	$(CMD) $(BINDIR)
-	$(CMD) *.exe
-	$(CMD) *.out
-	@echo "$@ done"
+	@echo "\nremoving compiled executable files..."	
+	$(RM) $(BINDIR)/*.exe
+	$(RM) $(BINDIR)
+	$(RM) *.exe
+	$(RM) *.out
+	$(RM) $(OBJDIR)
+	$(RM) $(MODDIR)
+	@echo "$(THISDIR) $@ done"
 out:
 # remove outputs produced by executables
-	@echo "$@ done"
+	@echo "\nremoving output files..."
+	@echo "$(THISDIR) $@ done"
 realclean: clean out
+# remove binaries and outputs
+	@echo "$(THISDIR) $@ done"	
 distclean: realclean
+	@echo "\nremoving backup files..."			
 # remove Git versions
-	$(CMD) *.~*~
+	$(RM) *.~*~
 # remove Emacs backup files
-	$(CMD) *~ \#*\#
-	@echo "$@ done"
+	$(RM) *~ \#*\#
+	@echo "$(THISDIR) $@ done"
 #
 # test the makefile
 test: distclean all
-	@echo "$@ done"
+	@echo "$(THISDIR) $@ done"
 #
 # run executables
 run: all # test all functions that run automatically
