@@ -161,7 +161,7 @@ $(BINDIR):
 $(MODDIR):
 	@mkdir -v $(MODDIR)
 # keep intermediate object files
-.SECONDARY: $(OBJS) $(MODS)
+.SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
 # recipes without outputs
 .PHONY: all $(SUBDIRS) mostlyclean clean out realclean distclean
@@ -219,7 +219,8 @@ distclean: realclean
 test: distclean printvars all
 #
 # run executables
-run: all # test all functions that run automatically
+run: all
+# run executables which do no require user input
 	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
 	ar \
 	extrema \

@@ -151,7 +151,8 @@ test: distclean all
 	@echo "$(THISDIR) $@ done"
 #
 # run executables
-run: all # test all functions that run automatically
+run: all
+# run executables which do no require user input
 	./$(BINDIR)/basel.exe
 	./$(BINDIR)/borwein.exe
 	./$(BINDIR)/leibniz.exe
