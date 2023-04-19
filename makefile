@@ -136,7 +136,7 @@ $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
 	@echo "compiling specific executable $@..."
 	$(FC.LINK)
 #
-# generic recipies
+# generic recipes
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
 	@echo "\nlinking generic executable $@..."
 	$(FC.LINK)
@@ -146,10 +146,10 @@ $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
-$(MODDIR)/%.mod: %.f | $(MODDIR) # $(OBJDIR) 
+$(MODDIR)/%.mod: %.f | $(MODDIR)
 	@echo "\ncompiling generic module $@..."
 	$(FC.COMPILE.mod)
-$(MODDIR)/%.mod: %.f90 | $(MODDIR) # $(OBJDIR) 
+$(MODDIR)/%.mod: %.f90 | $(MODDIR)
 	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
@@ -161,11 +161,10 @@ $(BINDIR):
 $(MODDIR):
 	@mkdir -v $(MODDIR)
 # keep intermediate object files
-.SECONDARY: $(DEPS) $(OBJS) $(MODS)
+.SECONDARY: $(OBJS) $(MODS)
 #
 # recipes without outputs
 .PHONY: all $(SUBDIRS) mostlyclean clean out realclean distclean
-
 #
 # clean up routines
 optSUBDIRS = $(addprefix $(MAKE) $@ --no-print-directory -C ,$(addsuffix ;,$(SUBDIRS)))
@@ -204,7 +203,6 @@ out:
 	@echo "$@ done"
 realclean: clean out
 # remove binaries and outputs
-#	$(MAKE) $@ -C pi
 	@$(optSUBDIRS)
 	@echo "$@ done"	
 distclean: realclean
@@ -215,7 +213,6 @@ distclean: realclean
 	$(RM) *~ \#*\#
 # clean sub-programs
 	@$(optSUBDIRS)
-#$(MAKE) $@ -C pi
 	@echo "$@ done"
 #
 # test the makefile
