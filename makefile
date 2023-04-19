@@ -1,5 +1,4 @@
-# Fortran compiler options for for GNU Fortran 7.5.0 on Ubuntu 18.04
-# LTS (2017)
+THISDIR=$(shell \pwd | sed 's%^.*/%%')
 
 # fortran compiler
 FC = gfortran
@@ -8,16 +7,22 @@ FC = gfortran
 compile = -c $<
 output = -o $@
 includes = -I $(INCDIR) -J $(MODDIR)
+#
+# options
 options = -fimplicit-none
-options_new = -std=f2008
-options := $(options) $(options_new)
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-truncation	\
 -Wimplicit-interface -Wintrinsics-std
+debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
+#
+# additional opotions for gfortran v4.5 and later
+options_new = -std=f2018
 warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
 -Wuse-without-only -Wrealloc-lhs-all
-warnings := $(warnings) $(warnings_new)
-debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 debug_new = -fcheck=all
+#
+# concatonate options
+options := $(options) $(options_new)
+warnings := $(warnings) $(warnings_new)
 debug:= $(debug) $(debug_new)
 #
 # fortran compiler flags
@@ -71,7 +76,7 @@ EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 SUBDIRS := $(wildcard pi*)
 
 all: $(EXES) $(SUBDIRS)
-	@echo "\n$@ done"
+	@echo "$(THISDIR) $@ done"
 
 $(SUBDIRS):
 	@$(MAKE) --no-print-directory -C $@
@@ -141,10 +146,10 @@ $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
 	@echo "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
-$(MODDIR)/%.mod: %.f | $(OBJDIR) $(MODDIR)
+$(MODDIR)/%.mod: %.f | $(MODDIR) # $(OBJDIR) 
 	@echo "\ncompiling generic module $@..."
 	$(FC.COMPILE.mod)
-$(MODDIR)/%.mod: %.f90 | $(OBJDIR) $(MODDIR)
+$(MODDIR)/%.mod: %.f90 | $(MODDIR) # $(OBJDIR) 
 	@echo "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
@@ -159,35 +164,32 @@ $(MODDIR):
 .SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
 # recipes without outputs
-.PHONY: all $(SUBDIRS) $(cleanSUBDIRS) mostlyclean clean out realclean distclean
+.PHONY: all $(SUBDIRS) mostlyclean clean out realclean distclean
 
-cleanSUBDIRS = $(addprefix clean-,$(SUBDIRS))
-
-$(cleanSUBDIRS): clean-%:
-	@echo "mostly cleaning subdir $*"
-	$(MAKE) -C $* clean
 #
 # clean up routines
+optSUBDIRS = $(addprefix $(MAKE) $@ --no-print-directory -C ,$(addsuffix ;,$(SUBDIRS)))
 RM = @rm -vfrd
 mostlyclean:
 # remove compiled binaries
 	@echo "removing compiled binary files..."
 	$(RM) $(OBJDIR)/*.o
-	$(RM) $(OBJDIR)
 	$(RM) *.o *.obj
 	$(RM) $(MODDIR)/*.mod
-	$(RM) $(MODDIR)
 	$(RM) *.mod
 	$(RM) fort.*
+	@$(optSUBDIRS)
 	@echo "$@ done"
-clean: mostlyclean $(cleanSUBDIRS)
+clean: mostlyclean 
 # remove executables
 	@echo "\nremoving compiled executable files..."	
 	$(RM) $(BINDIR)/*.exe
 	$(RM) $(BINDIR)
 	$(RM) *.exe
 	$(RM) *.out
-	$(MAKE) $@ -C pi
+	$(RM) $(OBJDIR)
+	$(RM) $(MODDIR)
+	@$(optSUBDIRS)
 	@echo "$@ done"
 out:
 # remove outputs produced by executables
@@ -198,10 +200,12 @@ out:
 	$(RM) state
 	$(RM) test
 	$(RM) test?
+	@$(optSUBDIRS)
 	@echo "$@ done"
 realclean: clean out
 # remove binaries and outputs
-	$(MAKE) $@ -C pi
+#	$(MAKE) $@ -C pi
+	@$(optSUBDIRS)
 	@echo "$@ done"	
 distclean: realclean
 	@echo "\nremoving backup files..."			
@@ -210,7 +214,8 @@ distclean: realclean
 # remove Emacs backup files
 	$(RM) *~ \#*\#
 # clean sub-programs
-	$(MAKE) $@ -C pi
+	@$(optSUBDIRS)
+#$(MAKE) $@ -C pi
 	@echo "$@ done"
 #
 # test the makefile
@@ -238,6 +243,7 @@ run: all # test all functions that run automatically
 	timedate \
 	units \
 	gethost ))
+	@$(optSUBDIRS)
 
 run_man: all # test all functions that require manual input
 	./$(BINDIR)/ask.exe
