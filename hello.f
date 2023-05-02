@@ -1,9 +1,8 @@
-y      program hello
-      implicit none
+      program hello
       integer i
       write(*,'(a)') "hello world"
       write(*,'(a)') "fortan"
-      do i=1,3,1             !print beeps at end of program
+      do i=1,3,1                !print beeps at end of program
          if(i.eq.1) then
             write(*,'(i2,2(a))')i," beep", char(7)
          else
@@ -11,4 +10,4 @@ y      program hello
          endif
          call sleep(1)
       enddo
-      end 
+      end
