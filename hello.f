@@ -1,4 +1,5 @@
       program hello
+      implicit none
       integer i
       write(*,'(a)') "hello world"
       write(*,'(a)') "fortan"
