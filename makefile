@@ -6,7 +6,6 @@ FC = gfortran
 # general flags
 compile = -c $<
 output = -o $@
-includes = -I $(INCDIR) -J $(MODDIR)
 #
 # options
 options = -fimplicit-none
@@ -39,11 +38,18 @@ FLFLAGS = $(output) $^
 FC.LINK = $(FC) $(FLFLAGS)
 #
 # define subdirectories
+BINDIR := bin
 OBJDIR := obj
 MODDIR := mod
-BINDIR := bin
 INCDIR := inc
-VPATH = $(INCDIR)
+
+# add INCDIR if present
+ifneq ($(shell test -d $(INCDIR)),0)
+	VPATH = $(INCDIR)
+	includes = -I $(INCDIR)
+else
+	includes = -I .
+endif
 #
 # source files
 SRC.F77 = $(wildcard *.f)
@@ -60,6 +66,11 @@ MODS. = version
 SUBS. = f2 f format
 FUNS. = getunit opened
 DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
+
+# add MODDIR to includes if MODS. not empty
+ifneq ("$(widlcard $(MODS.))",)
+	includes:=$(includes) -J $(MODDIR)
+endif
 
 DEPS.o = $(addsuffix .o,$(DEPS.))
 OBJS.o = $(filter-out $(DEPS.o),$(OBJS.all))
@@ -162,17 +173,17 @@ $(MODDIR)/%.mod: %.f90 | $(MODDIR)
 	$(FC.COMPILE.mod)
 #
 # define directory creation
-$(OBJDIR):
-	@mkdir -v $(OBJDIR)
 $(BINDIR):
 	@mkdir -v $(BINDIR)
+$(OBJDIR):
+	@mkdir -v $(OBJDIR)
 $(MODDIR):
-	@echo $@
 ifeq ("$(widlcard $(MODS))",)
 	@echo "$(MODS) not found"
 else
 	@echo "creating $(MODDIR)"
-	@mkdir -v $(MODDIR)	
+	@mkdir -v $(MODDIR)
+	@ echo "add mods flag"
 endif
 
 # keep intermediate object files
