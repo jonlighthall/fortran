@@ -278,20 +278,23 @@ run: all
 	@$(optSUBDIRS)
 
 run_man: all # test all functions that require manual input
-	./$(BINDIR)/ask.exe
-	./$(BINDIR)/collatz.exe
-	./$(BINDIR)/collatz_glide.exe
-	./$(BINDIR)/fundem.exe
-	./$(BINDIR)/pause.exe
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	ask \
+	collatz \
+	collatz_glide \
+	fundem \
+	pause ))
 
 run_int: all # test all functions that require user interrupt
-	./$(BINDIR)/collatz_loop.exe; \
-	./$(BINDIR)/interrupt.exe; \
-	./$(BINDIR)/timer.exe
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	collatz_loop \
+	interrupt \
+	timer.exe ))
 
 run_fmt: all # test all functions that require set_fmt.f
-	./$(BINDIR)/collatz.exe
-	./$(BINDIR)/collatz_loop.exe; \
-	./$(BINDIR)/fmt.exe; \
-	./$(BINDIR)/huge.exe; \
-	./$(BINDIR)/test_system_clock.exe
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	collatz.exe
+	collatz_loop \
+	fmt \
+	huge \
+	test_system_clock.exe ))

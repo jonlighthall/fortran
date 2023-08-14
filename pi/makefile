@@ -186,10 +186,10 @@ test: distclean all
 run: all
 # run executables which do no require user input
 	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
-	basel
-	borwein
-	leibniz
-	test_pi
-	wallis
-	pi_monte_carlo
-	@$(optSUBDIRS)
+	basel \
+	borwein \
+	leibniz \
+	test_pi \
+	wallis \
+	pi_monte_carlo ))
+	@$(optSUBDIRS) 
