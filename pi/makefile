@@ -166,10 +166,11 @@ test: distclean all
 # run executables
 run: all
 # run executables which do no require user input
-	./$(BINDIR)/basel.exe
-	./$(BINDIR)/borwein.exe
-	./$(BINDIR)/leibniz.exe
-	./$(BINDIR)/test_pi.exe
-	./$(BINDIR)/wallis.exe
-	./$(BINDIR)/pi_monte_carlo.exe
-	@$(optSUBDIRS)
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	basel \
+	borwein \
+	leibniz \
+	test_pi \
+	wallis \
+	pi_monte_carlo ))
+	@$(optSUBDIRS) 
