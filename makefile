@@ -13,13 +13,13 @@ warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-trunc
 -Wimplicit-interface -Wintrinsics-std
 debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
-# additional opotions for gfortran v4.5 and later
+# additional options for gfortran v4.5 and later
 options_new = -std=f2018
 warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant \
 -Wuse-without-only -Wrealloc-lhs-all
 debug_new = -fcheck=all
 #
-# concatonate options
+# concatenate options
 options := $(options) $(options_new)
 warnings := $(warnings) $(warnings_new)
 debug:= $(debug) $(debug_new)
@@ -44,11 +44,9 @@ MODDIR := mod
 INCDIR := inc
 
 # add INCDIR if present
-ifneq ($(shell test -d $(INCDIR)),0)
+ifneq ("$(strip $(wildcard $(INCDIR)))","")
 	VPATH = $(INCDIR)
 	includes = -I $(INCDIR)
-else
-	includes = -I .
 endif
 #
 # source files
@@ -68,7 +66,7 @@ FUNS. = getunit opened
 DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
 # add MODDIR to includes if MODS. not empty
-ifneq ("$(widlcard $(MODS.))",)
+ifneq ("$(strip $(wildcard $(MODS.)))","")
 	includes:=$(includes) -J $(MODDIR)
 endif
 
@@ -85,7 +83,8 @@ EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 #
 # sub-programs
 SUBDIRS := $(wildcard pi*)
-
+#
+# recipes
 all: $(EXES) $(SUBDIRS)
 	@echo "$(THISDIR) $@ done"
 
@@ -96,12 +95,18 @@ printvars:
 	@echo
 	@echo "printing variables..."
 	@echo "----------------------------------------------------"
-
-	@echo "includes = $(includes)"
+	@echo
+	@echo "includes = '$(includes)'"
 
 	@echo
+	@echo "----------------------------------------------------"
+	@echo
+
 
 	@echo "SUBDIRS = $(SUBDIRS)"
+
+	@echo
+	@echo "----------------------------------------------------"
 	@echo
 
 	@echo "SRC.F77 = $(SRC.F77)"
@@ -178,12 +183,11 @@ $(BINDIR):
 $(OBJDIR):
 	@mkdir -v $(OBJDIR)
 $(MODDIR):
-ifeq ("$(widlcard $(MODS))",)
-	@echo "$(MODS) not found"
+ifeq ("$(wildcard $(MODS))",)
+	@echo "no modules specified"
 else
-	@echo "creating $(MODDIR)"
+	@echo "creating $(MODDIR)..."
 	@mkdir -v $(MODDIR)
-	@ echo "add mods flag"
 endif
 
 # keep intermediate object files
@@ -192,7 +196,7 @@ endif
 # recipes without outputs
 .PHONY: all $(SUBDIRS) mostlyclean clean out realclean distclean
 #
-# clean up routines
+# clean up
 optSUBDIRS = $(addprefix $(MAKE) $@ --no-print-directory -C ,$(addsuffix ;,$(SUBDIRS)))
 RM = @rm -vfrd
 mostlyclean:
@@ -229,7 +233,7 @@ out:
 	@echo "$(THISDIR) $@ done"
 realclean: clean out
 # remove binaries and outputs
-	@echo "\nremoving binary and output files..."	
+	@echo "\nremoving binary and output files..."
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 distclean: realclean
@@ -243,8 +247,9 @@ distclean: realclean
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 #
-# test the makefile
+# test
 test: distclean printvars all
+# test the makefile
 	@echo "$(THISDIR) $@ done"
 #
 # run executables
