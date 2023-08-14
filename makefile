@@ -16,7 +16,7 @@ debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
 # additional opotions for gfortran v4.5 and later
 options_new = -std=f2018
-warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
+warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant \
 -Wuse-without-only -Wrealloc-lhs-all
 debug_new = -fcheck=all
 #
@@ -82,10 +82,17 @@ $(SUBDIRS):
 	@$(MAKE) --no-print-directory -C $@
 
 printvars:
-	@echo "printing variables:"
 	@echo
+	@echo "printing variables..."
+	@echo "----------------------------------------------------"
+
+	@echo "includes = $(includes)"
+
+	@echo
+
 	@echo "SUBDIRS = $(SUBDIRS)"
 	@echo
+
 	@echo "SRC.F77 = $(SRC.F77)"
 	@echo
 	@echo "SRC.F90 = $(SRC.F90)"
@@ -128,8 +135,9 @@ printvars:
 	@echo
 	@echo "MODS = $(MODS)"
 	@echo
-
+	@echo "----------------------------------------------------"
 	@echo "$@ done"
+	@echo
 #
 # specific recipes
 $(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
@@ -159,7 +167,14 @@ $(OBJDIR):
 $(BINDIR):
 	@mkdir -v $(BINDIR)
 $(MODDIR):
-	@mkdir -v $(MODDIR)
+	@echo $@
+ifeq ("$(widlcard $(MODS))",)
+	@echo "$(MODS) not found"
+else
+	@echo "creating $(MODDIR)"
+	@mkdir -v $(MODDIR)	
+endif
+
 # keep intermediate object files
 .SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
@@ -173,21 +188,21 @@ mostlyclean:
 # remove compiled binaries
 	@echo "removing compiled binary files..."
 	$(RM) $(OBJDIR)/*.o
+	$(RM) $(OBJDIR)
 	$(RM) *.o *.obj
 	$(RM) $(MODDIR)/*.mod
+	$(RM) $(MODDIR)
 	$(RM) *.mod
 	$(RM) fort.*
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 clean: mostlyclean
-# remove executables
+# remove binaries and executables
 	@echo "\nremoving compiled executable files..."
 	$(RM) $(BINDIR)/*.exe
 	$(RM) $(BINDIR)
 	$(RM) *.exe
 	$(RM) *.out
-	$(RM) $(OBJDIR)
-	$(RM) $(MODDIR)
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 out:
@@ -203,9 +218,11 @@ out:
 	@echo "$(THISDIR) $@ done"
 realclean: clean out
 # remove binaries and outputs
+	@echo "\nremoving binary and output files..."	
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 distclean: realclean
+# remove binaries, outputs, and backups
 	@echo "\nremoving backup files..."
 # remove Git versions
 	$(RM) *.~*~
