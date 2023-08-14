@@ -15,7 +15,7 @@ debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
 # additional options for gfortran v4.5 and later
 options_new = -std=f2018
-warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant \
+warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
 -Wuse-without-only -Wrealloc-lhs-all
 debug_new = -fcheck=all
 #
@@ -66,7 +66,7 @@ FUNS. = getunit opened
 DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
 # add MODDIR to includes if MODS. not empty
-ifneq ("$(strip $(wildcard $(MODS.)))","")
+ifneq ("$(MODS.)","")
 	includes:=$(includes) -J $(MODDIR)
 endif
 
