@@ -30,11 +30,7 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 | [`timer.f`](timer.f)       | timer            | `system_clock` `common` `signal` | [`set_format.f`](set_format.f)
 | [`units.f`](units.f)       | unit conversions | `selected_real_kind` |
 | [`basel.f`](basel.f)	     | basel problem	|
-| [`test_pi.f`](test_pi.f)   | pi		| `atan`
 | [`ask.f`](ask.f)	     | read to logical	| `index`
-| [`borwein.f`](borwein.f)   | pi iteration	|
-| [`leibniz.f`](leibniz.f)   | pi iteration	|
-| [`wallis.f`](wallis.f)   | pi iteration	|
 
 ### Subroutines
 | name                       | description      | command tested | file dependencies | 
