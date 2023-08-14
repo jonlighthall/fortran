@@ -45,8 +45,8 @@ INCDIR := inc
 
 # add INCDIR if present
 ifneq ("$(strip $(wildcard $(INCDIR)))","")
-	VPATH = $(INCDIR)
-	includes = -I $(INCDIR)
+	VPATH = $(subst $(subst ,, ),:,$(strip $(INCDIR)))
+	includes = $(patsubst %,-I %,$(INCDIR))
 endif
 #
 # source files
@@ -97,6 +97,7 @@ printvars:
 	@echo "----------------------------------------------------"
 	@echo
 	@echo "includes = '$(includes)'"
+	@echo "VPATH = '$(VPATH)'"
 
 	@echo
 	@echo "----------------------------------------------------"
