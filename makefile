@@ -8,7 +8,7 @@ compile = -c $<
 output = -o $@
 #
 # options
-options = -fimplicit-none
+options = -fimplicit-none -std=f2008
 warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-truncation	\
 -Wimplicit-interface -Wintrinsics-std
 debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
@@ -25,9 +25,9 @@ warnings := $(warnings) $(warnings_new)
 debug:= $(debug) $(debug_new)
 #
 # fortran compiler flags
-FCFLAGS = $(includes) $(options) $(warnings)
+FCFLAGS = $(includes) $(options) $(warnings) $(debug)
 F77.FLAGS = -fd-lines-as-comments -std=legacy
-F90.FLAGS = -std=f2008
+F90.FLAGS =
 FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
@@ -86,11 +86,9 @@ SUBDIRS := $(wildcard pi*)
 #
 # recipes
 all: $(EXES) $(SUBDIRS)
-	@echo "$(THISDIR) $@ done"
-
+	@echo "\n$(THISDIR) $@ done"
 $(SUBDIRS):
 	@$(MAKE) --no-print-directory -C $@
-
 printvars:
 	@echo
 	@echo "printing variables..."
@@ -234,9 +232,7 @@ out:
 	@echo "$(THISDIR) $@ done"
 realclean: clean out
 # remove binaries and outputs
-	@echo "\nremoving binary and output files..."
 	@$(optSUBDIRS)
-	@echo "$(THISDIR) $@ done"
 distclean: realclean
 # remove binaries, outputs, and backups
 	@echo "\nremoving backup files..."
