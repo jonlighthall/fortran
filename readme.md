@@ -20,20 +20,17 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 | [`test_system_clock.f`](test_system_clock.f)  | system clock | `system_clock`| [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`make_svp.f`](make_svp.f) | make svp           | `system_clock` `srand` `rand`||`svp.in`
 | [`collatz.f`](collatz.f)   | Collatz sequence || [`format.f`](format.f) [`set_format.f`](set_format.f)
+| [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | [`format.f`](format.f) [`set_format.f`](set_format.f) | [`collatz.txt`](collatz.out)
+| [`collatz_glide.f`](collatz_glide.f)   | Collatz glide calculation || [`format.f`](format.f) [`set_format.f`](set_format.f)
 | [`huge.f`](huge.f)         | largest integer  |`kind` `huge` | [`format.f`](format.f) [`set_format.f`](set_format.f)
-| [`collatz_loop.f`](collatz_loop.f) | Collatz delay records | | [`format.f`](format.f) [`set_format.f`](set_format.f) | [`collatz.out`](collatz.out)
 | [`interrupt.f`](interrupt.f)| catch interrupt signal |`common` `signal`||`state`
 | [`extrema.f`](extrema.f)   | extrema          | `huge` `tiny` ||
-| [`newunit_test.f`](newunit_test.f)| newunit replacement |`inquire`|[`newunit.f`](newunit.f)|
+| [`getunit_test.f`](getunit_test.f)| newunit replacement |`inquire`|[`getunit.f`](getunit.f)|
 | [`fmt.f`](fmt.f)| comma format |              | [`format.f`](format.f) [`set_format.f`](set_format.f)|
 | [`timer.f`](timer.f)       | timer            | `system_clock` `common` `signal` | [`set_format.f`](set_format.f)
 | [`units.f`](units.f)       | unit conversions | `selected_real_kind` |
 | [`basel.f`](basel.f)	     | basel problem	|
-| [`test_pi.f`](test_pi.f)   | pi		| `atan`
 | [`ask.f`](ask.f)	     | read to logical	| `index`
-| [`borwein.f`](borwein.f)   | pi iteration	|
-| [`leibniz.f`](leibniz.f)   | pi iteration	|
-| [`wallis.f`](wallis.f)   | pi iteration	|
 
 ### Subroutines
 | name                       | description      | command tested | file dependencies | 
@@ -45,13 +42,13 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 ### Functions
 | name                       | description      |
 | -------------------------- | ---------------- |
-| [`newunit.f`](newunit.f)   | new unit replacement |
+| [`getunit.f`](getunit.f)   | newunit replacement |
 
 ### Includes
 | name                       | description      |
 | -------------------------- | ---------------- |
 | [`araydim.inc`](araydim.inc) | array dimension
-| [`set_format.f`](set_format.f) | set format
+| [`set_format.f`](set_format.f) | set integer size and display precision
 
 
 ## Installation
@@ -59,23 +56,14 @@ This repsoitory contains simple programs written as I learn FORTRAN.
 ### Prerequisites
 
 Requies a compiler for Fortran, such as GNU Fortran.
-Use the following command to install GFortran, etc, on Linux.
+Use the following commands to install GFortran, etc, on Linux.
 ```bash
 sudo apt update && sudo apt -y upgrade
 sudo apt -y install git
 sudo apt -y install make
 sudo apt -y install gfortran
 ```
-
-Use the following commands to install GFortran, etc, on MSYS2.
-```bash
-pacman -Syu --noconfirm
-pacman -S --noconfirm git
-pacman -S --noconfirm make
-pacman -S --noconfirm mingw32/mingw-w64-i686-gcc-fortran
-pacman -S --noconfirm mingw64/mingw-w64-x86_64-gcc-fortran
-pacman -S --noconfirm msys/gcc-fortran
-```
+These commands have been collected in the script [`install_packages.sh`](install_packages.sh).
 
 ### Cloning
 
@@ -87,14 +75,14 @@ Check out the folder from the repository with one of the following commands.
 
 >`git clone git@github.com:jonlighthall/fortran.git` (Git SSH)
 
-## Compiling
+### Compiling
 Compile the source files and create executables with commands such as the following.
 
 `gfortran -o hello.exe hello.f` 
 
 Alternatively, these commands can be executed by using the `make` command.
 
-## Executing
+## Execution
 The compiled executables can be run using commands such as the following.
   
 `./hello.exe`

@@ -1,10 +1,16 @@
 # Compiled Object files
 *.o
 *.obj
+obj/
+
+# Fortran module files
+*.mod
+mod/
 
 # Executables
 *.exe
 *.out
+bin/
 
 # Emacs
 *~

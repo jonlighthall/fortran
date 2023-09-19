@@ -1,8 +1,9 @@
       PROGRAM io
       integer, parameter :: n=100
       REAL, DIMENSION(N) :: A
-      parameter (maxN=10)
+      integer, parameter :: maxN=10
       logical ext
+      integer i,j,k
       A=0
       WRITE(*,'(A,I6)') 'Creating array of size ',N
       if(N.gt.maxN)then
@@ -12,7 +13,7 @@
          j=N
       end if
       DO i = 1, j
-         A(i) = i
+         A(i) = real(i)
       END DO
 
       k=size(A)
@@ -25,7 +26,7 @@
          open(1,file = 'svp.out',status='new',action='write')
       end if
       do i=1,k
-         if(A(i).ne.0)then
+         if(abs(A(i)).gt.0)then
             write(*,*) A(i)
             write(1,*) i, A(i)
          end if

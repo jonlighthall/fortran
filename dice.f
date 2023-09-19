@@ -1,6 +1,6 @@
       program dice
       implicit none
-      integer i,j,k,time,r2d,rolls
+      integer i,j,k,time,rolls
       real u(2)
       logical jail
       integer :: seed_mode=2
@@ -8,6 +8,12 @@
       integer :: n,lim
       integer :: count(6)
       real :: prob(6)
+
+      interface
+         integer function r2d(u)
+         real,intent(in) :: u
+         end function r2d
+      end interface
 
       call random_seed(size = n)
       allocate(seed(n))
@@ -41,7 +47,7 @@
          write(*,*)'see is'
          write (*, *) seed
       end select
-      
+
       jail=.false.
       count=0
       rolls=0
@@ -94,13 +100,13 @@ c     do while (.not. jail)
       prob=real(count)/real(sum(count))
       write(*,*)prob
       end
-c     
+c
       integer function r2d(u)
 c     random to dice
-      real u
+      real,intent(in) :: u
       integer n,m
       n=1
       m=6
-      r2d = n + FLOOR((m+1-n)*u) ! We want to choose one from m-n+1 integers
+      r2d = n + FLOOR(real(m+1-n)*u) ! We want to choose one from m-n+1 integers
       return
       end

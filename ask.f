@@ -1,21 +1,26 @@
       program ask
-      logical ans,yea
-      character words
-      ans=.false.
+      implicit none
+      interface
+         logical function yea(text)
+         character text
+         end function
+      end interface
+      logical answer
+      character response
+      answer=.false.
       write(*,*)'give me an answer (y/n)'
-      read(5,*)words
-      write(*,*)words
-      
-      if(index('yY',words).gt.0) then
-         ans=.true.
+      read(5,*)response
+      write(*,*)'Your answer was "',response,'"'
+      if(index('yY',response).gt.0) then
+         answer=.true.
       else
-         ans=.false.
+         answer=.false.
       endif
-      write(*,*)ans
+      write(*,*)'Conditional assignment = ',answer
 
 c     check response with function
-      ans=yea(words)
-      write(*,*)ans
+      answer=yea(response)
+      write(*,*)' Functional assignment = ',answer
       end
 
 c     check if response is positive
@@ -28,3 +33,4 @@ c     check if response is positive
       endif
       return
       end
+

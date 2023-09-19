@@ -1,7 +1,12 @@
       program globsubs
+      interface
+         subroutine f(N)
+         integer N
+         end subroutine
+      end interface
 c     I/O units & option switches
       include 'araydim.inc'
-      parameter (mr=100000,mz=mxZ,mp=10)
+      integer,parameter :: mr=100000,mz=mxZ,mp=10
       print *, "global test"
       write(*,*) 'mxZ = ',mxZ
       write(*,*) 'mr = ',mr,'mz = ',mz,'mp = ',mp

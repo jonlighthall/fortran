@@ -2,28 +2,28 @@
       implicit none
       integer (kind=16) i,d1,d2,n1,step,ii,ipi,test_val,j
       real (kind=8) r,p
-      character (len=40) ipistr
       logical  val_ok
-      ipistr = '31415926535897932384626433832795028841971693993751058'
+      include 'pi_string.f'
 c     calculate series
       i=0
       r=1
       d1=1
       step=1
       ii=0
-      do j=1,8
+      do j=1,8                  ! over 8 takes too long
          do while (ii.lt.j)
             d1=2*i+1
             n1=2*(i+1)
             d2=2*(i+1)+1
-            r=r*real(n1)/d1*real(n1)/d2
+            r=r*real(n1,kind(r))/real(d1,kind(r))*real(n1,kind(r))
+     &           /real(d2,kind(r))
             if((mod(i,step).eq.0).or.(j.eq.1)) then
                p=2d0*r
 c     compare digits
                ii=j-1
                val_ok=.true.
                do while (val_ok)
-                  ipi=floor(p*10**ii,16)
+                  ipi=floor(p*10**real(ii,kind(p)),kind(ipi))
                   read(ipistr(1:ii+1),*)test_val
                   if ((ipi.ne.test_val)) then
                      val_ok=.false.
@@ -35,7 +35,7 @@ c     compare digits
             endif
             i=i+1
          enddo
-         write(*,*)i,d1,n1,d2,r,p,ii
+         write(*,'(4i10,2f13.10,i2)')i,d1,n1,d2,r,p,ii
       enddo
       write(*,'(1x,i2,a)')ii,' decimal places of precision achieved'
       end

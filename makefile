@@ -1,109 +1,297 @@
-# (fortran) compiler
-your_f77 = gfortran
-# (fortran) compile flags
-fcflags =
-# (fortran) link flags
-flflags = -c $(fcflags)
+THISDIR=$(shell \pwd | sed 's%^.*/%%')
 
-all: hello.exe fundem.exe ar.exe global.exe sys.exe subs.exe globsubs.exe \
-	test_abs.exe sign.exe io.exe timedate.exe pause.exe \
-	test_system_clock.exe make_svp.exe collatz.exe huge.exe \
-	collatz_loop.exe interrupt.exe extrema.exe newunit_test.exe \
-	fmt.exe timer.exe units.exe ask.exe fun.exe dice.exe
+# fortran compiler
+FC = gfortran
+#
+# general flags
+compile = -c $<
+output = -o $@
+#
+# options
+options = -fimplicit-none -std=f2008
+warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-truncation	\
+-Wimplicit-interface -Wintrinsics-std
+debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
+#
+# additional options for gfortran v4.5 and later
+options_new = -std=f2018
+warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
+-Wuse-without-only -Wrealloc-lhs-all
+debug_new = -fcheck=all
+#
+# concatenate options
+options := $(options) $(options_new)
+warnings := $(warnings) $(warnings_new)
+debug:= $(debug) $(debug_new)
+#
+# fortran compiler flags
+FCFLAGS = $(includes) $(options) $(warnings) $(debug)
+F77.FLAGS = -fd-lines-as-comments -std=legacy
+F90.FLAGS =
+FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
+FC.COMPILE.o = $(FC.COMPILE)  $(output) $(F77.FLAGS)
+FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
+FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
+#
+# fortran linker flags
+FLFLAGS = $(output) $^
+FC.LINK = $(FC) $(FLFLAGS)
+#
+# define subdirectories
+BINDIR := bin
+OBJDIR := obj
+MODDIR := mod
+INCDIR := inc
 
-global.exe: global.f araydim.inc
-	@echo compiling $<...	
-	$(your_f77) $(fcflags) global.f -o $@
+# add INCDIR if present
+ifneq ("$(strip $(wildcard $(INCDIR)))","")
+	VPATH = $(subst $(subst ,, ),:,$(strip $(INCDIR)))
+	includes = $(patsubst %,-I %,$(INCDIR))
+endif
+#
+# source files
+SRC.F77 = $(wildcard *.f)
+SRC.F90 = $(wildcard *.f90)
+SRC = $(SRC.F77) $(SRC.F90)
+#
+# objects
+OBJS.F77 = $(SRC.F77:.f=.o)
+OBJS.F90 = $(SRC.F90:.f90=.o)
+OBJS.all = $(OBJS.F77) $(OBJS.F90)
+#
+# dependencies (non-executables)
+MODS. = version
+SUBS. = f2 f format
+FUNS. = getunit opened
+DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
-subs.exe: subs.f f.f f2.f
-	@echo compiling $<...	
-	$(your_f77) $^ -o $@
+# add MODDIR to includes if MODS. not empty
+ifneq ("$(MODS.)","")
+	includes:=$(includes) -J $(MODDIR)
+endif
 
-globsubs.exe: globsubs.f f.f araydim.inc
-	@echo compiling $<...	
-	$(your_f77) globsubs.f f.f -o $@
+DEPS.o = $(addsuffix .o,$(DEPS.))
+OBJS.o = $(filter-out $(DEPS.o),$(OBJS.all))
+MODS.mod = $(addsuffix .mod,$(MODS.))
 
-pause.exe: pause.f
-	@echo compiling $<...	
-	$(your_f77) -std=legacy  $^ -o $@
+DEPS := $(addprefix $(OBJDIR)/,$(DEPS.o))
+OBJS := $(addprefix $(OBJDIR)/,$(OBJS.o))
+MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
+#
+# executables
+EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
+#
+# sub-programs
+SUBDIRS := $(wildcard pi*)
+#
+# recipes
+all: $(EXES) $(SUBDIRS)
+	@echo "\n$(THISDIR) $@ done"
+$(SUBDIRS):
+	@$(MAKE) --no-print-directory -C $@
+printvars:
+	@echo
+	@echo "printing variables..."
+	@echo "----------------------------------------------------"
+	@echo
+	@echo "includes = '$(includes)'"
+	@echo "VPATH = '$(VPATH)'"
 
-test_system_clock.exe: test_system_clock.f format.f set_format.f
-	@echo compiling $<...
-	$(your_f77) test_system_clock.f format.f -o $@	
+	@echo
+	@echo "----------------------------------------------------"
+	@echo
 
-collatz.exe: collatz.f format.f set_format.f
-	@echo compiling $<...	
-	$(your_f77) -fno-range-check collatz.f -o $@
 
-collatz_loop.exe: collatz_loop.f format.f set_format.f
-	@echo compiling $<...	
-	$(your_f77) -fno-range-check collatz_loop.f format.f -o $@
+	@echo "SUBDIRS = $(SUBDIRS)"
 
-huge.exe: huge.f format.f set_format.f
-	@echo compiling $<...	
-	$(your_f77) huge.f format.f -o $@
+	@echo
+	@echo "----------------------------------------------------"
+	@echo
 
-newunit_test.exe: newunit_test.f newunit.f
-	@echo compiling $<...
-	$(your_f77) $^ -o $@
+	@echo "SRC.F77 = $(SRC.F77)"
+	@echo
+	@echo "SRC.F90 = $(SRC.F90)"
+	@echo
+	@echo "SRC = $(SRC)"
+	@echo
+	@echo "OBJS.all = $(OBJS.all)"
 
-fmt.exe: fmt.f format.f set_format.f
-	@echo compiling $<...	
-	$(your_f77) fmt.f format.f -o $@
+	@echo
+	@echo "----------------------------------------------------"
+	@echo
 
-clean:
-	@echo removing files...
-	rm -fv *.exe
-	rm -fv *.o
-	rm -fv *.f.~*~
-	rm -fv fname*.in
-	rm -fv svp.out
-	rm -fv svp.in
-	rm -fv state
-	rm -fv test?
-	rm -fv a.out
+	@echo "MODS. = $(MODS.)"
+	@echo
+	@echo "SUBS. = $(SUBS.)"
+	@echo
+	@echo "FUNS. = $(FUNS.)"
+	@echo
+	@echo "DEPS. = $(DEPS.)"
 
-%.o: %.f	
-	@echo compiling $<...	
-	$(your_f77) $(flflags) $<
+	@echo
+	@echo "----------------------------------------------------"
+	@echo
 
-%.exe: %.o
-	$(your_f77) $(fcflags) $^ -o $@	
+	@echo "OBJS.o = $(OBJS.o)"
+	@echo
+	@echo "DEPS.o = $(DEPS.o)"
+	@echo
+	@echo "MODS.mod = $(MODS.mod)"
 
-run: all # test all functions that run automatically
-	./hello.exe 
-	./ar.exe 
-	./global.exe 
-	./sys.exe 
-	./subs.exe
-	./globsubs.exe
-	./test_abs.exe
-	./sign.exe
-	./io.exe
-	./timedate.exe
-	./test_system_clock.exe
-	./make_svp.exe
-	./huge.exe
-	./extrema.exe
-	./newunit_test.exe
-	./fmt.exe
-	./units.exe
-	./fun.exe
+	@echo
+	@echo "----------------------------------------------------"
+	@echo
+
+	@echo "EXES = $(EXES)"
+	@echo
+	@echo "OBJS = $(OBJS)"
+	@echo
+	@echo "DEPS = $(DEPS)"
+	@echo
+	@echo "MODS = $(MODS)"
+	@echo
+	@echo "----------------------------------------------------"
+	@echo "$@ done"
+	@echo
+#
+# specific recipes
+$(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
+	@echo "compiling specific executable $@..."
+	$(FC.LINK)
+#
+# generic recipes
+$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
+	@echo "\nlinking generic executable $@..."
+	$(FC.LINK)
+$(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
+	@echo "\ncompiling generic object $@..."
+	$(FC.COMPILE.o)
+$(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
+	@echo "\ncompiling generic f90 object $@..."
+	$(FC.COMPILE.o.f90)
+$(MODDIR)/%.mod: %.f | $(MODDIR)
+	@echo "\ncompiling generic module $@..."
+	$(FC.COMPILE.mod)
+$(MODDIR)/%.mod: %.f90 | $(MODDIR)
+	@echo "\ncompiling generic f90 module $@..."
+	$(FC.COMPILE.mod)
+#
+# define directory creation
+$(BINDIR):
+	@mkdir -v $(BINDIR)
+$(OBJDIR):
+	@mkdir -v $(OBJDIR)
+$(MODDIR):
+ifeq ("$(wildcard $(MODS))",)
+	@echo "no modules specified"
+else
+	@echo "creating $(MODDIR)..."
+	@mkdir -v $(MODDIR)
+endif
+
+# keep intermediate object files
+.SECONDARY: $(DEPS) $(OBJS) $(MODS)
+#
+# recipes without outputs
+.PHONY: all $(SUBDIRS) mostlyclean clean out realclean distclean
+#
+# clean up
+optSUBDIRS = $(addprefix $(MAKE) $@ --no-print-directory -C ,$(addsuffix ;,$(SUBDIRS)))
+RM = @rm -vfrd
+mostlyclean:
+# remove compiled binaries
+	@echo "removing compiled binary files..."
+	$(RM) $(OBJDIR)/*.o
+	$(RM) $(OBJDIR)
+	$(RM) *.o *.obj
+	$(RM) $(MODDIR)/*.mod
+	$(RM) $(MODDIR)
+	$(RM) *.mod
+	$(RM) fort.*
+	@$(optSUBDIRS)
+	@echo "$(THISDIR) $@ done"
+clean: mostlyclean
+# remove binaries and executables
+	@echo "\nremoving compiled executable files..."
+	$(RM) $(BINDIR)/*.exe
+	$(RM) $(BINDIR)
+	$(RM) *.exe
+	$(RM) *.out
+	@$(optSUBDIRS)
+	@echo "$(THISDIR) $@ done"
+out:
+# remove outputs produced by executables
+	@echo "\nremoving output files..."
+	$(RM) fname*.in
+	$(RM) svp.out
+	$(RM) svp.in
+	$(RM) state
+	$(RM) test
+	$(RM) test?
+	@$(optSUBDIRS)
+	@echo "$(THISDIR) $@ done"
+realclean: clean out
+# remove binaries and outputs
+	@$(optSUBDIRS)
+distclean: realclean
+# remove binaries, outputs, and backups
+	@echo "\nremoving backup files..."
+# remove Git versions
+	$(RM) *.~*~
+# remove Emacs backup files
+	$(RM) *~ \#*\#
+# clean sub-programs
+	@$(optSUBDIRS)
+	@echo "$(THISDIR) $@ done"
+#
+# test
+test: distclean printvars all
+# test the makefile
+	@echo "$(THISDIR) $@ done"
+#
+# run executables
+run: all
+# run executables which do no require user input
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	ar \
+	extrema \
+	fmt \
+	fun \
+	global \
+	globsubs \
+	hello \
+	huge \
+	io \
+	make_svp \
+	test_getunit \
+	sign \
+	subs \
+	sys \
+	test_abs \
+	test_system_clock \
+	timedate \
+	units \
+	gethost ))
+	@$(optSUBDIRS)
 
 run_man: all # test all functions that require manual input
-	./fundem.exe 
-	./pause.exe
-	./collatz.exe	
-	./ask.exe
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	ask \
+	collatz \
+	collatz_glide \
+	fundem \
+	pause ))
 
 run_int: all # test all functions that require user interrupt
-	./collatz_loop.exe; \
-	./interrupt.exe; \
-	./timer.exe
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	collatz_loop \
+	interrupt \
+	timer.exe ))
 
 run_fmt: all # test all functions that require set_fmt.f
-	./test_system_clock.exe
-	./huge.exe
-	./fmt.exe
-	./collatz.exe
-	./collatz_loop.exe
+	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	collatz.exe
+	collatz_loop \
+	fmt \
+	huge \
+	test_system_clock.exe ))

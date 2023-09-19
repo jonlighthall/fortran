@@ -2,7 +2,7 @@ c     This is a replacement for the Fortran 2008 function NEWUNIT for
 c     systems running gfortran versions < 4.5
 c
 c     To use:
-c       1) Replace open(newunit=unit) with open(newunit(unit))
+c       1) Replace open(newunit=unit) with open(getunit(unit))
 c       2) Add getunit as an interger variable in the calling program
 c       3) Add getunit.f to the compile line of the calling program
 c
@@ -13,7 +13,10 @@ c
 !     argument. This allows the function to be used directly in an open
 !     statement, and optionally save the result in a local variable. 
 !     If no units are available, -1 is returned.
-      integer function newunit(unit)
+c
+c     NB newunit() has been replace with getunit() to avoid confusion.
+c
+      integer function getunit(unit)
       integer, intent(out), optional :: unit
 !     local
 c     Note: Fortran 77 allows up to 64 logical units. In some situations
@@ -22,19 +25,20 @@ c     using logical unit 1 may cause problems.
       logical :: i_open
       integer :: lun
 !     begin
-      newunit=-1
-      write(*,'(2(a,i2))')'testing units ',lun_min,' to ',lun_max
+      getunit=-1
+d     write(*,'(2(a,i2))')'testing units ',lun_min,' to ',lun_max
       do lun=lun_min,lun_max
-         write(*, '(a,i2,a)', advance = "no")' testing ',lun,'...'
+d        write(*, '(a,i2,a)', advance = "no")' testing ',lun,'...'
          inquire(unit=lun,opened=i_open)
          if (.not. i_open) then
-            newunit=lun
-            write(*,*)'available'
+            getunit=lun
+d           write(*,*)'available'
+d           write(*,'(a,i2,a)')'logical unit ',lun,' available'
             exit
-         else
-            write(*,*)'not available'
-         end if
-      end do
-      write(*,*)'done'
-      if (present(unit)) unit=newunit
-      end function newunit
+d        else
+d           write(*,*)'not available'
+         endif
+      enddo
+d     write(*,*)'done'
+      if (present(unit)) unit=getunit
+      end function getunit
