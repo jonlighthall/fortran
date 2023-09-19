@@ -19,7 +19,7 @@ program calculate_pi
     end do
 
     ! Estimate the value of pi based on the count of points inside the circle
-    pi_estimate = 4.0 * count / n
+    pi_estimate = 4.0 * real(count / n)
 
     ! Output the estimated value of pi
     write(*,*) 'Estimated value of pi = ', pi_estimate
