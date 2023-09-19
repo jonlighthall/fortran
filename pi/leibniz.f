@@ -4,13 +4,17 @@
       real (kind=8) r,p
       character (len=40) ipistr
       logical  val_ok
-      ipistr = '31415926535897932384626433832795028841971693993751058'
+      integer :: count,count_rate,count_max,start,finish,elap
+      include 'pi_string.f'
 c     calculate series
       i=int(0,kind(i))
       r=0
       d=1
       step=1
       ii=0
+c     initialize timer
+      CALL SYSTEM_CLOCK(count, count_rate, count_max)
+      start=count      
       do j=1,precision(p)
          do while (ii.lt.j)
             d=2*i+1
@@ -34,6 +38,18 @@ c     compare digits
                enddo
             endif
             i=i+1
+c     calculate elapsed time
+            CALL SYSTEM_CLOCK(finish)
+            if(finish.lt.start) then
+               write(*,*)'rollover suspected'
+               elap=(finish+count_max-start)
+            else
+               elap=(finish-start)
+            endif           
+c     if timer exceeded, exit
+            if (elap.gt.5000) then
+               exit
+            endif            
          enddo
          write(*,'(2(i10,1x),sp,i2,ss,1x,2(f12.10,1x),i2)')i,d,c,r,p,ii
       enddo
