@@ -33,4 +33,3 @@ c     check if response is positive
       endif
       return
       end
-
