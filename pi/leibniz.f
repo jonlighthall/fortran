@@ -2,7 +2,6 @@
       implicit none
       integer (kind=16) i,d,c,step,ii,ipi,test_val,j
       real (kind=8) r,p
-      character (len=40) ipistr
       logical  val_ok
       integer :: count,count_rate,count_max,start,finish,elap
       include 'pi_string.f'
