@@ -246,9 +246,14 @@ distclean: realclean
 # clean sub-programs
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
-reset: dist_clean
+reset: distclean
 # remove untracked files
+	@echo "\nresetting repository..."
+	git reset HEAD
+	git stash
 	git clean -f
+	@$(optSUBDIRS)
+	@echo "$(THISDIR) $@ done"
 #
 # test
 test: distclean printvars all
