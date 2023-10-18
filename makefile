@@ -9,20 +9,19 @@ output = -o $@
 #
 # options
 options = -fimplicit-none -std=f2008
-warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-truncation	\
--Wimplicit-interface -Wintrinsics-std
+warnings = -W -Wall -Warray-temporaries -Wcharacter-truncation -Wfatal-errors -Wimplicit-interface -Wintrinsics-std -Wsurprising -Wuninitialized -pedantic
 debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
 # additional options for gfortran v4.5 and later
 options_new = -std=f2018
-warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
+warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant \
 -Wuse-without-only -Wrealloc-lhs-all
 debug_new = -fcheck=all
 #
 # concatenate options
 options := $(options) $(options_new)
 warnings := $(warnings) $(warnings_new)
-debug:= $(debug) $(debug_new)
+debug := $(debug) $(debug_new)
 #
 # fortran compiler flags
 FCFLAGS = $(includes) $(options) $(warnings) $(debug)
@@ -37,32 +36,80 @@ FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 FLFLAGS = $(output) $^
 FC.LINK = $(FC) $(FLFLAGS)
 #
-# define subdirectories
+# define build directories
 BINDIR := bin
-INCDIR := inc
 MODDIR := mod
 OBJDIR := obj
-
-# add INCDIR if present
-ifneq ("$(strip $(wildcard $(INCDIR)))","")
-	VPATH = $(subst $(subst ,, ),:,$(strip $(INCDIR)))
-	includes = $(patsubst %,-I %,$(INCDIR))
-endif
 #
-# source files
+# define source directories
+SRCDIR := src
+INCDIR := includes
+FUNDIR := functions
+MODDIR.in := modules
+SUBDIR := subroutines
+#
+# source files - programs (executable)
 SRC.F77 = $(wildcard *.f)
 SRC.F90 = $(wildcard *.f90)
+# add SRCDIR if present
+ifneq ("$(strip $(wildcard $(SRCDIR)))","")
+	VPATH += $(subst $(subst ,, ),:,$(strip $(SRCDIR)))
+	SRC.F77 += $(wildcard $(SRCDIR)/*.f)
+	SRC.F90 += $(wildcard $(SRCDIR)/*.f90)
+endif
 SRC = $(SRC.F77) $(SRC.F90)
+#
+# "include" files (not executable, not compilable)
+# add INCDIR if present
+ifneq ("$(strip $(wildcard $(INCDIR)))","")
+	VPATH += $(subst $(subst ,, ),:,$(strip $(INCDIR)))
+	includes = $(patsubst %,-I %,$(INCDIR))
+	INCS.F77 = $(wildcard $(INCDIR)/*.f)
+	INCS.F90 = $(wildcard $(INCDIR)/*.f90)
+	INCS. +=  $(patsubst $(INCDIR)/%.f, %, $(INCS.F77)) \
+	$(patsubst $(INCDIR)/%.f90, %, $(INCS.F90))
+endif
+#
+# function files
+# add FUNDIR if present
+ifneq ("$(strip $(wildcard $(FUNDIR)))","")
+	VPATH += $(subst $(subst ,, ),:,$(strip $(FUNDIR)))
+	FUNS.F77 = $(wildcard $(FUNDIR)/*.f)
+	FUNS.F90 = $(wildcard $(FUNDIR)/*.f90)
+	FUNS. +=  $(patsubst $(FUNDIR)/%.f, %, $(FUNS.F77)) \
+	$(patsubst $(FUNDIR)/%.f90, %, $(FUNS.F90))
+endif
+#
+# module files
+# add MODDIR.in if present
+ifneq ("$(strip $(wildcard $(MODDIR.in)))","")
+	VPATH += $(subst $(subst ,, ),:,$(strip $(MODDIR.in)))
+	MODS.F77 = $(wildcard $(MODDIR.in)/*.f)
+	MODS.F90 = $(wildcard $(MODDIR.in)/*.f90)
+	MODS. +=  $(patsubst $(MODDIR.in)/%.f, %, $(MODS.F77)) \
+	$(patsubst $(MODDIR.in)/%.f90, %, $(MODS.F90))
+endif
+#
+# subroutine files
+# add SUBDIR if present
+ifneq ("$(strip $(wildcard $(SUBDIR)))","")
+	VPATH += $(subst $(subst ,, ),:,$(strip $(SUBDIR)))
+	SUBS.F77 = $(wildcard $(SUBDIR)/*.f)
+	SUBS.F90 = $(wildcard $(SUBDIR)/*.f90)
+	SUBS. +=  $(patsubst $(SUBDIR)/%.f, %, $(SUBS.F77)) \
+	$(patsubst $(SUBDIR)/%.f90, %, $(SUBS.F90))
+endif
 #
 # objects
 OBJS.F77 = $(SRC.F77:.f=.o)
 OBJS.F90 = $(SRC.F90:.f90=.o)
 OBJS.all = $(OBJS.F77) $(OBJS.F90)
+OBJS.all := $(OBJS.all:$(SRCDIR)/%=%)
 #
 # dependencies (non-executables)
-MODS. = version
-SUBS. = f2 f format
-FUNS. = getunit opened
+MODS. +=
+SUBS. +=
+FUNS. +=
 DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
 
 # add MODDIR to includes if MODS. not empty
@@ -120,6 +167,8 @@ printvars:
 	@echo "----------------------------------------------------"
 	@echo
 
+	@echo "INCS. = $(INCS.)"
+	@echo
 	@echo "MODS. = $(MODS.)"
 	@echo
 	@echo "SUBS. = $(SUBS.)"
@@ -193,7 +242,7 @@ endif
 .SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
 # recipes without outputs
-.PHONY: all $(SUBDIRS) mostlyclean clean out realclean distclean
+.PHONY: all $(SUBDIRS) mostlyclean clean force out realclean distclean reset
 #
 # clean up
 optSUBDIRS = $(addprefix $(MAKE) $@ --no-print-directory -C ,$(addsuffix ;,$(SUBDIRS)))
@@ -221,7 +270,7 @@ clean: mostlyclean
 	@echo "$(THISDIR) $@ done"
 force: clean
 # force re-make
-	@$(MAKE) --no-print-directory	
+	@$(MAKE) --no-print-directory
 out:
 # remove outputs produced by executables
 	@echo "\nremoving output files..."
