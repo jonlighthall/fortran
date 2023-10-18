@@ -25,7 +25,7 @@ debug := $(debug) $(debug_new)
 #
 # fortran compiler flags
 FCFLAGS = $(includes) $(options) $(warnings) $(debug)
-F77.FLAGS = -fd-lines-as-comments -std=legacy
+F77.FLAGS = -fd-lines-as-comments -fall-intrinsics
 F90.FLAGS =
 FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE) $(output) $(F77.FLAGS)
