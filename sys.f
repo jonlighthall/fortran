@@ -16,17 +16,17 @@ c     base file name
          call system(cmd)
       endif
 
-      do 10 i=0,2,1 
+      do i=0,2,1 
          cg_itr=i
 c     for each iteration, copy the input file with unique name
          write(cmd,'(3a,i0.3,a)')'cp ',trim(sfx),' fname',cg_itr
      &        ,'.in'
          write(*,*) 'command is: ', cmd
          call system(cmd)
- 10   continue
+      enddo
 c     test variable format
       do i=1, 10
-      fmt = '(a,i0.2)' ! add leading zero
+         fmt = '(a,i0.2)'       ! add leading zero
          write (filename,fmt) "sys", i
          print *, trim(filename)
       enddo
