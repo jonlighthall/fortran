@@ -8,8 +8,9 @@ compile = -c $<
 output = -o $@
 #
 # options
-options = -fimplicit-none -std=f2008
-warnings = -W -Wall -Warray-temporaries -Wcharacter-truncation -Wfatal-errors -Wimplicit-interface -Wintrinsics-std -Wsurprising -Wuninitialized -pedantic
+options = -fimplicit-none
+warnings = -W -Wall -Warray-temporaries -Wcharacter-truncation -Wfatal-errors	\
+-Wimplicit-interface -Wintrinsics-std -Wsurprising -Wuninitialized -pedantic
 debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
 # additional options for gfortran v4.5 and later
@@ -27,10 +28,9 @@ debug := $(debug) $(debug_new)
 FCFLAGS = $(includes) $(options) $(warnings) $(debug)
 F77.FLAGS = -fd-lines-as-comments -fall-intrinsics
 F90.FLAGS =
-FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
+FC.COMPILE = $(FC) $(compile) $(FCFLAGS) 
 FC.COMPILE.o = $(FC.COMPILE) $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
-FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 #
 # fortran linker flags
 FLFLAGS = $(output) $^
@@ -38,20 +38,15 @@ FC.LINK = $(FC) $(FLFLAGS)
 #
 # define build directories
 BINDIR := bin
-MODDIR := mod
 OBJDIR := obj
 #
-# define source directories
-SRCDIR := src
-INCDIR := includes
-FUNDIR := functions
-MODDIR.in := modules
-SUBDIR := subroutines
+# build source file lists
 #
-# source files - programs (executable)
+# program files (executable)
 SRC.F77 = $(wildcard *.f)
 SRC.F90 = $(wildcard *.f90)
 # add SRCDIR if present
+SRCDIR := src
 ifneq ("$(strip $(wildcard $(SRCDIR)))","")
 	VPATH += $(subst $(subst ,, ),:,$(strip $(SRCDIR)))
 	SRC.F77 += $(wildcard $(SRCDIR)/*.f)
@@ -60,6 +55,7 @@ endif
 SRC = $(SRC.F77) $(SRC.F90)
 #
 # "include" files (not executable, not compilable)
+INCDIR := includes
 # add INCDIR if present
 ifneq ("$(strip $(wildcard $(INCDIR)))","")
 	VPATH += $(subst $(subst ,, ),:,$(strip $(INCDIR)))
@@ -70,17 +66,13 @@ ifneq ("$(strip $(wildcard $(INCDIR)))","")
 	$(patsubst $(INCDIR)/%.f90, %, $(INCS.F90))
 endif
 #
-# function files
-# add FUNDIR if present
-ifneq ("$(strip $(wildcard $(FUNDIR)))","")
-	VPATH += $(subst $(subst ,, ),:,$(strip $(FUNDIR)))
-	FUNS.F77 = $(wildcard $(FUNDIR)/*.f)
-	FUNS.F90 = $(wildcard $(FUNDIR)/*.f90)
-	FUNS. +=  $(patsubst $(FUNDIR)/%.f, %, $(FUNS.F77)) \
-	$(patsubst $(FUNDIR)/%.f90, %, $(FUNS.F90))
-endif
-#
 # module files
+# fortran module complier flags
+FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
+# build directory for compiled modules
+MODDIR := mod
+# source directory
+MODDIR.in := modules
 # add MODDIR.in if present
 ifneq ("$(strip $(wildcard $(MODDIR.in)))","")
 	VPATH += $(subst $(subst ,, ),:,$(strip $(MODDIR.in)))
@@ -89,8 +81,34 @@ ifneq ("$(strip $(wildcard $(MODDIR.in)))","")
 	MODS. +=  $(patsubst $(MODDIR.in)/%.f, %, $(MODS.F77)) \
 	$(patsubst $(MODDIR.in)/%.f90, %, $(MODS.F90))
 endif
+# add additional modules
+MODS. +=
+# add MODDIR to includes if MODS. not empty
+ifneq ("$(MODS.)","")
+	includes:=$(includes) -J $(MODDIR)
+endif
+# build list of modules
+MODS.mod = $(addsuffix .mod,$(MODS.))
+MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
+#
+# Add any external procudures below. Note: shared procedures should be included in a module
+# unless written in a different language.
+#
+# function files
+FUNDIR := functions
+# add FUNDIR if present
+ifneq ("$(strip $(wildcard $(FUNDIR)))","")
+	VPATH += $(subst $(subst ,, ),:,$(strip $(FUNDIR)))
+	FUNS.F77 = $(wildcard $(FUNDIR)/*.f)
+	FUNS.F90 = $(wildcard $(FUNDIR)/*.f90)
+	FUNS. +=  $(patsubst $(FUNDIR)/%.f, %, $(FUNS.F77)) \
+	$(patsubst $(FUNDIR)/%.f90, %, $(FUNS.F90))
+endif
+# add additional fucntions
+FUNS. +=
 #
 # subroutine files
+SUBDIR := subroutines
 # add SUBDIR if present
 ifneq ("$(strip $(wildcard $(SUBDIR)))","")
 	VPATH += $(subst $(subst ,, ),:,$(strip $(SUBDIR)))
@@ -99,40 +117,32 @@ ifneq ("$(strip $(wildcard $(SUBDIR)))","")
 	SUBS. +=  $(patsubst $(SUBDIR)/%.f, %, $(SUBS.F77)) \
 	$(patsubst $(SUBDIR)/%.f90, %, $(SUBS.F90))
 endif
+# add additional subroutines
+SUBS. +=
 #
-# objects
+# concatonate procedure lists (non-executables)
+DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
+#
+# build object lists
 OBJS.F77 = $(SRC.F77:.f=.o)
 OBJS.F90 = $(SRC.F90:.f90=.o)
 OBJS.all = $(OBJS.F77) $(OBJS.F90)
 OBJS.all := $(OBJS.all:$(SRCDIR)/%=%)
 #
-# dependencies (non-executables)
-MODS. +=
-SUBS. +=
-FUNS. +=
-DEPS. = $(MODS.) $(SUBS.) $(FUNS.)
-
-# add MODDIR to includes if MODS. not empty
-ifneq ("$(MODS.)","")
-	includes:=$(includes) -J $(MODDIR)
-endif
-
 DEPS.o = $(addsuffix .o,$(DEPS.))
 OBJS.o = $(filter-out $(DEPS.o),$(OBJS.all))
-MODS.mod = $(addsuffix .mod,$(MODS.))
-
 DEPS := $(addprefix $(OBJDIR)/,$(DEPS.o))
 OBJS := $(addprefix $(OBJDIR)/,$(OBJS.o))
-MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 #
 # executables
+TARGET = 
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
 #
 # sub-programs
 SUBDIRS := $(wildcard pi*)
 #
 # recipes
-all: $(EXES) $(SUBDIRS)
+all: $(TARGET) $(EXES) $(SUBDIRS)
 	@echo "\n$(THISDIR) $@ done"
 $(SUBDIRS):
 	@$(MAKE) --no-print-directory -C $@
@@ -304,9 +314,8 @@ reset: distclean
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 #
-# test
-test: distclean printvars all
 # test the makefile
+test: distclean printvars all
 	@echo "$(THISDIR) $@ done"
 #
 # run executables
