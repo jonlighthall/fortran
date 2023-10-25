@@ -16,7 +16,7 @@ debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 # additional options for gfortran v4.5 and later
 options_new = -std=f2018
 warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant \
--Wuse-without-only -Wrealloc-lhs-all
+-Wrealloc-lhs-all -Wuse-without-only
 debug_new = -fcheck=all
 #
 # concatenate options
