@@ -36,11 +36,11 @@ FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
 FLFLAGS = $(output) $^
 FC.LINK = $(FC) $(FLFLAGS)
 #
-# define build directories
+# build directories
 BINDIR := bin
 OBJDIR := obj
 #
-# build source file lists
+# source file lists
 #
 # program files (executable)
 SRC.F77 = $(wildcard *.f)
