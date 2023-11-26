@@ -69,8 +69,9 @@ program readme
   endif
   do
      read(read_unit,'(a)',iostat=ierr) line
-     print*,trim(line)
-     if (ierr<0) then
+     if (ierr.ge.0) then
+        print*,trim(line)
+     else
         print'(/a)','EOF'
         exit
      endif
