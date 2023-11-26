@@ -137,6 +137,7 @@ OBJS := $(addprefix $(OBJDIR)/,$(OBJS.o))
 # executables
 TARGET = 
 EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
+EXES := $(filter-out $(wildcard *readme*), $(EXES))
 #
 # sub-programs
 SUBDIRS := $(wildcard pi*)
