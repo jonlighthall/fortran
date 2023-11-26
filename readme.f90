@@ -57,10 +57,13 @@
 ! culpa qui officia deserunt mollit anim id est laborum.
 ! ----------------------------------------------------------------------
 
+! stop print
+
 program readme
   implicit none
   integer read_unit,ierr
   character(len=132) :: line
+  character(len=132), parameter :: flag='! stop print'
   open(newunit=read_unit,file='readme.f90',iostat=ierr,status='old',action='read')
   if (ierr==0) then
      print*,'OK'
@@ -70,7 +73,11 @@ program readme
   do
      read(read_unit,'(a)',iostat=ierr) line
      if (ierr.ge.0) then
-        print*,trim(line)
+        if(index(line,flag).ne.0) then
+           exit
+        else
+           print*,trim(line)
+        endif
      else
         print'(/a)','EOF'
         exit
