@@ -98,19 +98,19 @@ $(BINDIR)/basel.exe: $(OBJDIR)/basel.o | $(BINDIR)
 #
 # generic recipes
 $(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
-	@echo "\nlinking generic executable $@..."
+	@/bin/echo -e "\nlinking generic executable $@..."
 	$(FC.LINK)
 $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
-	@echo "\ncompiling generic object $@..."
+	@/bin/echo -e "\ncompiling generic object $@..."
 	$(FC.COMPILE.o)
 $(OBJDIR)/%.o: %.f90 $(MODS) | $(OBJDIR)
-	@echo "\ncompiling generic f90 object $@..."
+	@/bin/echo -e "\ncompiling generic f90 object $@..."
 	$(FC.COMPILE.o.f90)
 $(MODDIR)/%.mod: %.f | $(MODDIR)
-	@echo "\ncompiling generic module $@..."
+	@/bin/echo -e "\ncompiling generic module $@..."
 	$(FC.COMPILE.mod)
 $(MODDIR)/%.mod: %.f90 | $(MODDIR)
-	@echo "\ncompiling generic f90 module $@..."
+	@/bin/echo -e "\ncompiling generic f90 module $@..."
 	$(FC.COMPILE.mod)
 #
 # define directory creation
@@ -149,7 +149,7 @@ mostlyclean:
 	@echo "$(THISDIR) $@ done"
 clean: mostlyclean
 # remove binaries and executables
-	@echo "\nremoving compiled executable files..."
+	@/bin/echo -e "\nremoving compiled executable files..."
 	$(RM) $(BINDIR)/*.exe
 	$(RM) $(BINDIR)
 	$(RM) *.exe
@@ -158,17 +158,17 @@ clean: mostlyclean
 	@echo "$(THISDIR) $@ done"
 out:
 # remove outputs produced by executables
-	@echo "\nremoving output files..."
+	@/bin/echo -e "\nremoving output files..."
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 realclean: clean out
 # remove binaries and outputs
-	@echo "\nremoving binary and output files..."
+	@/bin/echo -e "\nremoving binary and output files..."
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
 distclean: realclean
 # remove binaries, outputs, and backups
-	@echo "\nremoving backup files..."
+	@/bin/echo -e "\nremoving backup files..."
 # remove Git versions
 	$(RM) *.~*~
 # remove Emacs backup files
