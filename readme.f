@@ -15,6 +15,27 @@ c     reprehenderit in voluptate velit esse cillum dolore eu fugiat
 c     nulla pariatur. Excepteur sint occaecat cupidatat non proident,
 c     sunt in culpa qui officia deserunt mollit anim id est laborum.
 c     {----------------------------------------------------------------}
-      
+
       program readme
+      implicit none
+      character(len=100) :: filename
+      character(len=100) :: line
+      integer ierr
+
+      ! Set the file name using a variable
+      filename = "example.txt"
+
+      ! Open the file for reading
+      open(unit=10, file=trim(filename), status='old', action='read')
+
+      ! Read and print each line of the file
+      do while (.true.)
+       read(10, '(A)', iostat=ierr) line
+       if (ierr /= 0) exit
+       write(*, '(A)') trim(line)
+      end do
+
+      ! Close the file
+      close(10)
+
       end
