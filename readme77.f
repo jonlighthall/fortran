@@ -26,7 +26,15 @@ c     {----------------------------------------------------------------}
       filename = "readme.f"
 
       ! Open the file for reading
-      open(unit=10, file=trim(filename), status='old', action='read')
+      open(unit=10, file=trim(filename), status='old', action='read',
+     > iostat=ierr)
+
+      if (ierr==0) then
+       print*,'OK'
+      else
+       print*,'ERROR: ',trim(filename),' not found'
+        endif
+
 
       ! Read and print each line of the file
       do while (.true.)
