@@ -22,28 +22,27 @@ c     {----------------------------------------------------------------}
       character(len=100) :: line
       integer ierr
 
-      ! Set the file name using a variable
-      filename = "readme.f"
+c     Set the file name using a variable
+      filename = "readme77.f"
 
-      ! Open the file for reading
+c     Open the file for reading
       open(unit=10, file=trim(filename), status='old', action='read',
-     > iostat=ierr)
+     >     iostat=ierr)
 
       if (ierr==0) then
-       print*,'OK'
+         print*,'OK'
       else
-       print*,'ERROR: ',trim(filename),' not found'
-        endif
+         print*,'ERROR: ',trim(filename),' not found'
+      endif
 
-
-      ! Read and print each line of the file
+c     Read and print each line of the file
       do while (.true.)
-       read(10, '(A)', iostat=ierr) line
-       if (ierr /= 0) exit
-       write(*, '(A)') trim(line)
+         read(10, '(A)', iostat=ierr) line
+         if (ierr /= 0) exit
+         write(*, '(A)') trim(line)
       end do
 
-      ! Close the file
+c     Close the file
       close(10)
 
       end
