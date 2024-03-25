@@ -23,7 +23,7 @@ c     {----------------------------------------------------------------}
       integer ierr
 
       ! Set the file name using a variable
-      filename = "example.txt"
+      filename = "readme.f"
 
       ! Open the file for reading
       open(unit=10, file=trim(filename), status='old', action='read')
