@@ -136,7 +136,7 @@ OBJS := $(addprefix $(OBJDIR)/,$(OBJS.o))
 #
 # executables
 TARGET = 
-EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
+EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=))
 #
 # sub-programs
 SUBDIRS := $(wildcard pi*)
@@ -214,12 +214,12 @@ printvars:
 	@echo
 #
 # specific recipes
-$(BINDIR)/ar.exe: $(OBJDIR)/ar.o | $(BINDIR)
+$(BINDIR)/ar: $(OBJDIR)/ar.o | $(BINDIR)
 	@echo "compiling specific executable $@..."
 	$(FC.LINK)
 #
 # generic recipes
-$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
+$(BINDIR)/%: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
 	@/bin/echo -e "\nlinking generic executable $@..."
 	$(FC.LINK)
 $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
@@ -272,7 +272,7 @@ mostlyclean:
 clean: mostlyclean
 # remove binaries and executables
 	@/bin/echo -e "\nremoving compiled executable files..."
-	$(RM) $(BINDIR)/*.exe
+	$(RM) $(BINDIR)/*
 	$(RM) $(BINDIR)
 	$(RM) *.exe
 	$(RM) *.out
@@ -321,7 +321,7 @@ test: distclean printvars all
 # run executables
 run: all
 # run executables which do no require user input
-	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	$(addprefix ./$(BINDIR)/,\
 	ar \
 	extrema \
 	fmt \
@@ -340,27 +340,27 @@ run: all
 	test_system_clock \
 	timedate \
 	units \
-	gethost ))
+	gethost )
 	@$(optSUBDIRS)
 
 run_man: all # test all functions that require manual input
-	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	$(addprefix ./$(BINDIR)/,\
 	ask \
 	collatz \
 	collatz_glide \
 	fundem \
-	pause ))
+	pause )
 
 run_int: all # test all functions that require user interrupt
-	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	$(addprefix ./$(BINDIR)/,\
 	collatz_loop \
 	interrupt \
-	timer.exe ))
+	timer )
 
 run_fmt: all # test all functions that require set_fmt.f
-	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
-	collatz.exe
+	$(addprefix ./$(BINDIR)/,\
+	collatz
 	collatz_loop \
 	fmt \
 	huge \
-	test_system_clock.exe ))
+	test_system_clock ))
