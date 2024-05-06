@@ -9,20 +9,20 @@ output = -o $@
 #
 # options
 options = -fimplicit-none
-warnings = -Wall -Wsurprising -W -pedantic -Warray-temporaries -Wcharacter-truncation	\
--Wimplicit-interface -Wintrinsics-std
+warnings = -W -Wall -Warray-temporaries -Wcharacter-truncation -Wfatal-errors	\
+-Wimplicit-interface -Wintrinsics-std -Wsurprising -Wuninitialized -pedantic
 debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
 # additional options for gfortran v4.5 and later
 options_new = -std=f2018
-warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
--Wuse-without-only -Wrealloc-lhs-all
+warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant \
+-Wrealloc-lhs-all -Wuse-without-only
 debug_new = -fcheck=all
 #
 # concatenate options
 options := $(options) $(options_new)
 warnings := $(warnings) $(warnings_new)
-debug:= $(debug) $(debug_new)
+debug := $(debug) $(debug_new)
 #
 # fortran compiler flags
 FCFLAGS = $(includes) $(options) $(warnings)
@@ -49,7 +49,9 @@ ifneq ("$(strip $(wildcard $(INCDIR)))","")
 	includes = -I $(INCDIR)
 endif
 #
-# source files
+# source file lists
+#
+# program files (executable)
 SRC.F77 = $(wildcard *.f)
 SRC.F90 = $(wildcard *.f90)
 SRC = $(SRC.F77) $(SRC.F90)
@@ -79,7 +81,7 @@ OBJS := $(addprefix $(OBJDIR)/,$(OBJS.o))
 MODS := $(addprefix $(MODDIR)/,$(MODS.mod))
 #
 # executables
-EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=.exe))
+EXES = $(addprefix $(BINDIR)/,$(OBJS.o:.o=))
 #
 # sub-programs
 SUBDIRS :=
@@ -92,12 +94,12 @@ $(SUBDIRS):
 	@$(MAKE) --no-print-directory -C $@
 #
 # specific recipes
-$(BINDIR)/basel.exe: $(OBJDIR)/basel.o | $(BINDIR)
+$(BINDIR)/basel: $(OBJDIR)/basel.o | $(BINDIR)
 	@echo "compiling specific executable $@..."
 	$(FC.LINK) -fdefault-real-8 -fdefault-integer-8
 #
 # generic recipes
-$(BINDIR)/%.exe: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
+$(BINDIR)/%: $(OBJDIR)/%.o $(DEPS) | $(BINDIR)
 	@/bin/echo -e "\nlinking generic executable $@..."
 	$(FC.LINK)
 $(OBJDIR)/%.o: %.f $(MODS) | $(OBJDIR)
@@ -150,7 +152,7 @@ mostlyclean:
 clean: mostlyclean
 # remove binaries and executables
 	@/bin/echo -e "\nremoving compiled executable files..."
-	$(RM) $(BINDIR)/*.exe
+	$(RM) $(BINDIR)/*
 	$(RM) $(BINDIR)
 	$(RM) *.exe
 	$(RM) *.out
@@ -185,11 +187,11 @@ test: distclean all
 # run executables
 run: all
 # run executables which do no require user input
-	$(addprefix ./$(BINDIR)/,$(addsuffix .exe;,\
+	$(addprefix ./$(BINDIR)/,\
 	basel \
 	borwein \
 	leibniz \
 	test_pi \
 	wallis \
-	pi_monte_carlo ))
+	pi_monte_carlo )
 	@$(optSUBDIRS) 
