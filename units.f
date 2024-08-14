@@ -20,7 +20,7 @@
       end interface
 
       include "metrics_revised2.inc"
-      logical,parameter :: do_check=.false.
+      logical,parameter :: do_check=.true.
       integer dummy,pdp,spa,dpa,qpa,strpa
       real(kind = set_kind), parameter :: dB_yd2m=real(-20,set_kind)
      &     *log10(real(3,set_kind)
