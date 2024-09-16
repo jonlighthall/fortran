@@ -1,19 +1,19 @@
-[/]: # (This is a comment.)
-[/]: # (This is a comment on a new line.)
-[/]: # (-----------------------------------------------------------------------)
-[/]: # (80-column punch card)
-[/]: # ()
-[/]: # (.1....,....2....,....3....,....4....,....5....,....6....,....7....,....)
-[/]: # (90123456789012345678901234567890123456789012345678901234567890123456789)
-[/]: # (-----------------------------------------------------------------------)
-[/]: # (Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.)
-[/]: # (-----------------------------------------------------------------------)
+<!-- This is a comment. --!>
+<!-- This is a comment on a new line. --!>
+<!-- ---------------------------------------------------------------------- --!>
+<!-- 80-column punch card --!>
+<!--  --!>
+<!-- ....1....,....2....,....3....,....4....,....5....,....6....,....7....,.--!>
+<!-- 6789012345678901234567890123456789012345678901234567890123456789012389 --!>
+<!-- ---------------------------------------------------------------------- --!>
+<!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+     veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+     commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+     velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+     cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+     est laborum. --!>
+<!-- ---------------------------------------------------------------------- --!>
 
 # Fortran 
 This repsoitory contains simple programs written as I learn FORTRAN.
