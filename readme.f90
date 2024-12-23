@@ -69,13 +69,14 @@ program readme
   character(len=132), parameter :: flag='! stop print'
   ! define file name
   character(len=32), parameter :: fname='readme.f90'
-  write(*,'(1x,3a)',advance='no')'opening ',trim(fname),'... '
+  write(*,'(1x,3a)',advance='no')'opening ',trim(fname),'...'
   open(newunit=read_unit,file='readme.f90',iostat=ierr,status='old',action='read')
   if (ierr==0) then
      print*,'OK'
   else
      print*,'ERROR'
   endif
+  print*,'contents:'
   do
      read(read_unit,'(a)',iostat=ierr) line
      if (ierr.ge.0) then
