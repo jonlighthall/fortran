@@ -61,9 +61,15 @@
 
 program readme
   implicit none
+  ! define I/O variables
   integer read_unit,ierr
+  ! create variable to store file lines
   character(len=132) :: line
+  ! define flag to stop printing file
   character(len=132), parameter :: flag='! stop print'
+  ! define file name
+  character(len=32), parameter :: fname='readme.f90'
+  write(*,'(1x,3a)',advance='no')'opening ',trim(fname),'... '
   open(newunit=read_unit,file='readme.f90',iostat=ierr,status='old',action='read')
   if (ierr==0) then
      print*,'OK'
