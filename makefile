@@ -1,3 +1,4 @@
+# get name of this directory
 THISDIR=$(shell \pwd | sed 's%^.*/%%')
 
 # fortran compiler
@@ -9,15 +10,18 @@ output = -o $@
 #
 # options
 options = -fimplicit-none
-warnings = -W -Wall -Warray-temporaries -Wcharacter-truncation -Wfatal-errors	\
--Wimplicit-interface -Wintrinsics-std -Wsurprising -Wuninitialized -pedantic
+warnings = -W -Wall -Warray-temporaries -Wcharacter-truncation -Wextra				\
+		-Wfatal-errors -Wfrontend-loop-interchange -Wimplicit-interface								\
+		-Wintrinsics-std -Wsurprising -Wuninitialized -pedantic
 debug = -g -fbacktrace -ffpe-trap=invalid,zero,overflow,underflow,denormal
 #
 # additional options for gfortran v4.5 and later
-options_new = -std=f2018
-warnings_new = -Wconversion-extra -Wimplicit-procedure -Winteger-division -Wreal-q-constant \
+options_new = -std=f2018 -pedantic-errors
+warnings_new = -Wimplicit-procedure -Winteger-division -Wreal-q-constant	\
 -Wrealloc-lhs-all -Wuse-without-only
 debug_new = -fcheck=all
+# the following warnings may flood the screen and thereby obscure more important warnings
+warnings_extra += -Wconversion-extra 
 #
 # concatenate options
 options := $(options) $(options_new)
@@ -31,6 +35,7 @@ F90.FLAGS =
 FC.COMPILE = $(FC) $(compile) $(FCFLAGS) 
 FC.COMPILE.o = $(FC.COMPILE) $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
+FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 #
 # fortran linker flags
 FLFLAGS = $(output) $^
@@ -38,6 +43,7 @@ FC.LINK = $(FC) $(FLFLAGS)
 #
 # build directories
 BINDIR := bin
+MODDIR := mod
 OBJDIR := obj
 #
 # source file lists
@@ -54,7 +60,7 @@ ifneq ("$(strip $(wildcard $(SRCDIR)))","")
 endif
 SRC = $(SRC.F77) $(SRC.F90)
 #
-# "include" files (not executable, not compilable)
+# directory for "include" files (not executable, not compilable)
 INCDIR := includes
 # add INCDIR if present
 ifneq ("$(strip $(wildcard $(INCDIR)))","")
@@ -69,8 +75,6 @@ endif
 # module files
 # fortran module complier flags
 FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
-# build directory for compiled modules
-MODDIR := mod
 # source directory
 MODDIR.in := modules
 # add MODDIR.in if present
@@ -237,17 +241,19 @@ $(MODDIR)/%.mod: %.f90 | $(MODDIR)
 #
 # define directory creation
 $(BINDIR):
-	@mkdir -v $(BINDIR)
+	@echo "making $(BINDIR)..."
+	@mkdir -pv $(BINDIR)
 $(OBJDIR):
-	@mkdir -v $(OBJDIR)
+	@echo "making $(OBJDIR)..."
+	@mkdir -pv $(OBJDIR)
 $(MODDIR):
 ifeq ("$(wildcard $(MODS))",)
 	@echo "no modules specified"
 else
-	@echo "creating $(MODDIR)..."
-	@mkdir -v $(MODDIR)
+	@echo "making $(MODDIR)..."
+	@mkdir -pv $(MODDIR)
 endif
-
+#
 # keep intermediate object files
 .SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
