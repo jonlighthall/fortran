@@ -5,7 +5,7 @@
       integer,parameter :: intsize2 = 1
       integer(kind=intsize2) :: sz,ln
       character(len=fmtsize) str
-      character(len=256) fmt
+      character(len=256) :: fmt=''
       interface
          subroutine format(int,str)
          implicit none
