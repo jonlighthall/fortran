@@ -1,18 +1,20 @@
       subroutine format(int,str)
       implicit none
       include 'set_format.f'
+!     arguments
       integer(kind=intsize),intent(in)::int
-      character(len=*), parameter :: sep=','
       character(fmtsize), intent(out)::str
+!     local
+      character(len=*), parameter :: sep=',' ! divider
       character(fmtsize) copy
       integer, parameter :: div=3 ! divider spacing
       integer sln,pos,pos2,numdiv,numcom,i,spc
-      write(copy,*)int
-      copy=adjustl(copy)
-      sln=len(trim(copy))       ! string length
-      numcom=(sln-1)/div        ! number of commas
-      numdiv=numcom+1           ! number of divisions
-      spc=numdiv*div-sln        ! number of leading spaces
+      write(copy,*)int          ! copy input
+      copy=adjustl(copy)        ! shift left
+      sln=len(trim(copy))       ! get string length
+      numcom=(sln-1)/div        ! get number of commas
+      numdiv=numcom+1           ! get number of divisions
+      spc=numdiv*div-sln        ! get number of leading spaces
       write(str,*)
       str(spc+1:sln+spc)=copy(1:sln)
       copy=str
