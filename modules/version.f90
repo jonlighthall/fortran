@@ -8,4 +8,14 @@ module version
 !   subroutine writedays()
 !     write(*,*) dayname(1)
 !   end subroutine writedays
+  contains
+    subroutine print_version()
+      write(*,*) 'nspe version ',nspe_ver
+    end subroutine print_version
+    function inc(i)
+        integer, intent(in) :: i
+        integer :: inc
+        inc = i + 1
+        end function inc
+
 end module version
