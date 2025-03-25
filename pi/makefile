@@ -1,7 +1,8 @@
-THISDIR=$(shell \pwd | sed 's%^.*/%%')
-
+# get name of this directory
+THISDIR=$(shell basename $$PWD)
+#
 # fortran compiler
-FC = gfortran
+FC := gfortran
 #
 # general flags
 compile = -c $<
@@ -37,7 +38,7 @@ FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 FLFLAGS = $(output) $^
 FC.LINK = $(FC) $(FLFLAGS)
 #
-# define subdirectories
+# define build directories
 BINDIR := bin
 OBJDIR := obj
 MODDIR := mod
@@ -117,17 +118,19 @@ $(MODDIR)/%.mod: %.f90 | $(MODDIR)
 #
 # define directory creation
 $(BINDIR):
-	@mkdir -v $(BINDIR)
+	@echo "making $(BINDIR)..."
+	@mkdir -pv $(BINDIR)
 $(OBJDIR):
-	@mkdir -v $(OBJDIR)
+	@echo "making $(OBJDIR)..."
+	@mkdir -pv $(OBJDIR)
 $(MODDIR):
 ifeq ("$(wildcard $(MODS))",)
 	@echo "no modules specified"
 else
-	@echo "creating $(MODDIR)..."
-	@mkdir -v $(MODDIR)
+	@echo "making $(MODDIR)..."
+	@mkdir -pv $(MODDIR)
 endif
-
+#
 # keep intermediate object files
 .SECONDARY: $(DEPS) $(OBJS) $(MODS)
 #
@@ -158,6 +161,9 @@ clean: mostlyclean
 	$(RM) *.out
 	@$(optSUBDIRS)
 	@echo "$(THISDIR) $@ done"
+force: clean
+# force re-make
+	@$(MAKE) --no-print-directory
 out:
 # remove outputs produced by executables
 	@/bin/echo -e "\nremoving output files..."

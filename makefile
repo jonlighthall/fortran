@@ -1,8 +1,8 @@
 # get name of this directory
-THISDIR=$(shell \pwd | sed 's%^.*/%%')
-
+THISDIR=$(shell basename $$PWD)
+#
 # fortran compiler
-FC = gfortran
+FC := gfortran
 #
 # general flags
 compile = -c $<
@@ -32,7 +32,7 @@ debug := $(debug) $(debug_new)
 FCFLAGS = $(includes) $(options) $(warnings) $(debug)
 F77.FLAGS = -fd-lines-as-comments -fall-intrinsics
 F90.FLAGS =
-FC.COMPILE = $(FC) $(compile) $(FCFLAGS) 
+FC.COMPILE = $(FC) $(FCFLAGS) $(compile)
 FC.COMPILE.o = $(FC.COMPILE) $(output) $(F77.FLAGS)
 FC.COMPILE.o.f90 = $(FC.COMPILE) $(output) $(F90.FLAGS)
 FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
@@ -41,7 +41,7 @@ FC.COMPILE.mod = $(FC.COMPILE) -o $(OBJDIR)/$*.o $(F90.FLAGS)
 FLFLAGS = $(output) $^
 FC.LINK = $(FC) $(FLFLAGS)
 #
-# build directories
+# define build directories
 BINDIR := bin
 MODDIR := mod
 OBJDIR := obj
@@ -155,6 +155,7 @@ printvars:
 	@echo "printing variables..."
 	@echo "----------------------------------------------------"
 	@echo
+	@echo "THISDIR = '$(THISDIR)'"
 	@echo "includes = '$(includes)'"
 	@echo "VPATH = '$(VPATH)'"
 
