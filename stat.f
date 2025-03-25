@@ -12,9 +12,12 @@
          WRITE (*, FMT="('Device where located:', T30, I19)") buff(7)
          WRITE (*, FMT="('File size:', T30, I19)") buff(8)
          WRITE (*, FMT="('Last access time:', T30, A19)") CTIME(buff(9))
-         WRITE (*, FMT="('Last modification time', T30, A19)") CTIME(buff(10))
-         WRITE (*, FMT="('Last status change time:', T30, A19)") CTIME(buff(11))
+         WRITE (*, FMT="('Last modification time', T30, A19)")
+     >        CTIME(buff(10))
+         WRITE (*, FMT="('Last status change time:', T30, A19)")
+     >        CTIME(buff(11))
          WRITE (*, FMT="('Preferred block size:', T30, I19)") buff(12)
-         WRITE (*, FMT="('No. of blocks allocated:', T30, I19)") buff(13)
+         WRITE (*, FMT="('No. of blocks allocated:', T30, I19)")
+     >        buff(13)
       END IF
       END PROGRAM
