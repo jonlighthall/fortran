@@ -1,5 +1,5 @@
 # get name of this directory
-THISDIR=$(shell basename $$PWD)
+DIR.NAME=$(shell basename $$PWD)
 #
 # fortran compiler
 FC := gfortran
@@ -147,7 +147,7 @@ SUBDIRS := $(wildcard pi*)
 #
 # recipes
 all: $(TARGET) $(EXES) $(SUBDIRS)
-	@/bin/echo -e "\n$(THISDIR) $@ done"
+	@/bin/echo -e "\n$(DIR.NAME) $@ done"
 $(SUBDIRS):
 	@$(MAKE) --no-print-directory -C $@
 printvars:
@@ -155,7 +155,7 @@ printvars:
 	@echo "printing variables..."
 	@echo "----------------------------------------------------"
 	@echo
-	@echo "THISDIR = '$(THISDIR)'"
+	@echo "DIR.NAME = '$(DIR.NAME)'"
 	@echo "includes = '$(includes)'"
 	@echo "VPATH = '$(VPATH)'"
 
@@ -275,7 +275,7 @@ mostlyclean:
 	$(RM) *.mod
 	$(RM) fort.*
 	@$(optSUBDIRS)
-	@echo "$(THISDIR) $@ done"
+	@echo "$(DIR.NAME) $@ done"
 clean: mostlyclean
 # remove binaries and executables
 	@/bin/echo -e "\nremoving compiled executable files..."
@@ -284,7 +284,7 @@ clean: mostlyclean
 	$(RM) *.exe
 	$(RM) *.out
 	@$(optSUBDIRS)
-	@echo "$(THISDIR) $@ done"
+	@echo "$(DIR.NAME) $@ done"
 force: clean
 # force re-make
 	@$(MAKE) --no-print-directory
@@ -298,7 +298,7 @@ out:
 	$(RM) test
 	$(RM) test?
 	@$(optSUBDIRS)
-	@echo "$(THISDIR) $@ done"
+	@echo "$(DIR.NAME) $@ done"
 realclean: clean out
 # remove binaries and outputs
 	@$(optSUBDIRS)
@@ -311,7 +311,7 @@ distclean: realclean
 	$(RM) *~ \#*\#
 # clean sub-programs
 	@$(optSUBDIRS)
-	@echo "$(THISDIR) $@ done"
+	@echo "$(DIR.NAME) $@ done"
 reset: distclean
 # remove untracked files
 	@/bin/echo -e "\nresetting repository..."
@@ -319,11 +319,11 @@ reset: distclean
 	git stash
 	git clean -f
 	@$(optSUBDIRS)
-	@echo "$(THISDIR) $@ done"
+	@echo "$(DIR.NAME) $@ done"
 #
 # test the makefile
 test: distclean printvars all
-	@echo "$(THISDIR) $@ done"
+	@echo "$(DIR.NAME) $@ done"
 #
 # run executables
 run: all
